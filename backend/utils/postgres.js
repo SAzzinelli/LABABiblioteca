@@ -4,35 +4,46 @@ import bcrypt from 'bcryptjs';
 const { Pool } = pkg;
 
 // Configurazione Supabase
-if (!process.env.DATABASE_URL) {
-  console.error('❌ Variabile d\'ambiente DATABASE_URL mancante. Impostala per avviare il servizio.');
-  throw new Error('DATABASE_URL non configurata');
+// Validazione lazy: controlla solo quando necessario, non all'import
+function getDatabaseUrl() {
+  if (!process.env.DATABASE_URL) {
+    console.error('❌ Variabile d\'ambiente DATABASE_URL mancante. Impostala per avviare il servizio.');
+    throw new Error('DATABASE_URL non configurata');
+  }
+  return process.env.DATABASE_URL;
 }
 
-// Configurazione pool con retry e limiti per evitare circuit breaker
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  },
-  max: 2, // Ridotto per evitare troppe connessioni simultanee
-  idleTimeoutMillis: 30000, // Chiudi client inattivi dopo 30 secondi
-  connectionTimeoutMillis: 20000, // Timeout connessione aumentato a 20 secondi
-  statement_timeout: 30000, // Timeout per le query
-  query_timeout: 30000
-});
+// Lazy initialization: crea pool solo quando necessario
+let poolInstance = null;
+function getPool() {
+  if (!poolInstance) {
+    poolInstance = new Pool({
+      connectionString: getDatabaseUrl(),
+      ssl: {
+        rejectUnauthorized: false
+      },
+      max: 2, // Ridotto per evitare troppe connessioni simultanee
+      idleTimeoutMillis: 30000, // Chiudi client inattivi dopo 30 secondi
+      connectionTimeoutMillis: 20000, // Timeout connessione aumentato a 20 secondi
+      statement_timeout: 30000, // Timeout per le query
+      query_timeout: 30000
+    });
+    
+    // Test connessione
+    poolInstance.on('connect', () => {
+      console.log('✅ Connesso a PostgreSQL/Supabase');
+    });
 
-// Test connessione
-pool.on('connect', () => {
-  console.log('✅ Connesso a PostgreSQL/Supabase');
-});
-
-pool.on('error', (err) => {
-  console.error('❌ Errore connessione PostgreSQL:', err);
-});
+    poolInstance.on('error', (err) => {
+      console.error('❌ Errore pool PostgreSQL:', err);
+    });
+  }
+  return poolInstance;
+}
 
 // Funzione per inizializzare il database con retry logic
 async function connectWithRetry(maxRetries = 2, initialDelay = 10000) {
+  const pool = getPool(); // Lazy initialization
   for (let i = 0; i < maxRetries; i++) {
     try {
       const client = await pool.connect();
@@ -394,6 +405,7 @@ export async function initDatabase() {
 
 // Wrapper per query con gestione errori
 export async function query(text, params = []) {
+  const pool = getPool(); // Lazy initialization
   const client = await pool.connect();
   try {
     const result = await client.query(text, params);
@@ -408,6 +420,7 @@ export async function query(text, params = []) {
 
 // Wrapper per transazioni
 export async function transaction(callback) {
+  const pool = getPool(); // Lazy initialization
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
