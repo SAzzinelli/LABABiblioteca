@@ -251,14 +251,14 @@ const SystemStatus = () => {
             <div className="p-6 border-t border-gray-200">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Memory Usage */}
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6">
+                <div className="bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-gray-900">Memoria</h4>
                     <span className="text-2xl font-bold text-teal-600">{Math.round(systemData.metrics.memoryUsage)}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div 
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-teal-500 to-teal-600 h-3 rounded-full transition-all duration-500"
                       style={{ width: `${systemData.metrics.memoryUsage}%` }}
                     ></div>
                   </div>
@@ -279,14 +279,14 @@ const SystemStatus = () => {
                 </div>
 
                 {/* Disk Usage */}
-                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6">
+                <div className="bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-gray-900">Disco</h4>
                     <span className="text-2xl font-bold text-teal-600">{Math.round(systemData.metrics.diskUsage)}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div 
-                      className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-teal-500 to-teal-600 h-3 rounded-full transition-all duration-500"
                       style={{ width: `${systemData.metrics.diskUsage}%` }}
                     ></div>
                   </div>

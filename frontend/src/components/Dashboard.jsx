@@ -997,7 +997,7 @@ function StatCard({ title, value, description }) {
  };
 
 const colorMap = {
-  'Inventario': 'bg-gradient-to-br from-green-100 to-green-200 ',
+  'Inventario': 'bg-gradient-to-br from-teal-100 to-teal-200 ',
   'Richieste': 'bg-gradient-to-br from-amber-100 to-amber-200 ', 
   'Segnalazioni': 'bg-gradient-to-br from-orange-100 to-orange-200 '
 };
@@ -1027,8 +1027,8 @@ const colorMap = {
 // Quick Action Button Component 
 function QuickActionButton({ title, description, icon, onClick, color = 'blue' }) {
  const colorClasses = {
- blue: 'bg-gradient-to-br from-green-500 to-green-600',
- green: 'bg-gradient-to-br from-green-500 to-green-600', 
+ blue: 'bg-gradient-to-br from-teal-500 to-teal-600',
+ green: 'bg-gradient-to-br from-teal-500 to-teal-600', 
  orange: 'bg-gradient-to-br from-orange-500 to-orange-600',
  purple: 'bg-gradient-to-br from-purple-500 to-purple-600'
  };

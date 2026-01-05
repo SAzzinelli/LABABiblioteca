@@ -608,7 +608,7 @@ const Inventory = () => {
             <div className="flex flex-wrap gap-4 items-center">
               <button
                 onClick={() => setShowAddModal(true)}
-                className="group bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-medium hover:from-green-600 hover:to-green-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
+                className="group bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-medium hover:from-teal-600 hover:to-teal-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
               >
                 <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

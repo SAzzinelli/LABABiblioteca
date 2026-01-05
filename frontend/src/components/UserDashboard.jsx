@@ -182,7 +182,7 @@ const UserDashboard = () => {
 
       {/* Welcome/Info Section for new users */}
       {recentData.activeLoans.length === 0 && !welcomeSectionDismissed && (
-        <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-sm border border-teal-200 p-6 relative">
+        <div className="mb-8 bg-gradient-to-r from-teal-50 to-teal-100 rounded-lg shadow-sm border border-teal-200 p-6 relative">
           <button
             onClick={handleDismissWelcome}
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"

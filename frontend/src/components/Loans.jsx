@@ -326,7 +326,7 @@ const getStatusBadge = (status) => {
  <div className="flex items-center space-x-4">
         <button
           onClick={() => setShowLoanModal(true)}
-          className="group bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
+          className="group bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-medium hover:from-teal-600 hover:to-teal-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
         >
           <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -680,7 +680,7 @@ const getStatusBadge = (status) => {
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
                   {(item.utente_nome || '').charAt(0)}{(item.utente_cognome || '').charAt(0)}
                 </div>
                 <div className="ml-3">
