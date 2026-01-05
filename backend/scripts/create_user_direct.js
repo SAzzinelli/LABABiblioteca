@@ -5,6 +5,8 @@ async function createUserDirect() {
   console.log('👤 Creazione utente diretto...');
   
   try {
+    // ATTENZIONE: Questo script contiene una password hashata hardcoded per scopi di test
+    // In produzione, le password dovrebbero essere generate dinamicamente
     // Crea utente di test con password hashata
     const result = await query(`
       INSERT INTO users (email, password_hash, name, surname, phone, matricola, ruolo, corso_accademico)
@@ -12,7 +14,7 @@ async function createUserDirect() {
       RETURNING id, email, name, surname
     `, [
       'test@laba.it',
-      '***REMOVED***', // password: ***REMOVED***
+      '***REMOVED***', // password: ***REMOVED*** - SOLO PER TEST
       'Mario',
       'Rossi',
       '1234567890',

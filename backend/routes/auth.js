@@ -7,11 +7,20 @@ import { requireAuth, requireRole } from '../middleware/auth.js';
 import { normalizeUser, normalizeRole } from '../utils/roles.js';
 
 const r = Router();
-const JWT_SECRET = process.env.JWT_SECRET || '***REMOVED***';
+
+// IMPORTANTE: JWT_SECRET deve essere configurato come variabile d'ambiente per sicurezza
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET deve essere configurato come variabile d\'ambiente');
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // === Special admin (non persistente richiesto) ===
-const SPECIAL_ADMIN_USERNAME = 'admin';
-const SPECIAL_ADMIN_PASSWORD = '***REMOVED***';
+// IMPORTANTE: Le credenziali admin devono essere configurate come variabili d'ambiente per sicurezza
+const SPECIAL_ADMIN_USERNAME = process.env.SPECIAL_ADMIN_USERNAME || 'admin';
+const SPECIAL_ADMIN_PASSWORD = process.env.SPECIAL_ADMIN_PASSWORD;
+if (!SPECIAL_ADMIN_PASSWORD) {
+  throw new Error('SPECIAL_ADMIN_PASSWORD deve essere configurato come variabile d\'ambiente');
+}
 function isSpecialAdminLogin(identifier, password) {
   const id = (identifier || '').trim().toLowerCase();
   const pw = (password ?? '').toString().normalize('NFKC').replace(/\u00A0/g, ' ').trim();

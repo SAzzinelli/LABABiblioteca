@@ -3,17 +3,23 @@ import { createClient } from '@supabase/supabase-js';
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
 // Configurazione Supabase - Biblioteca LABA
-const supabaseUrl = process.env.SUPABASE_URL || 'https://blqoxovrrldfedgzwufa.supabase.co';
-const supabaseKey = process.env.SUPABASE_ANON_KEY || '***REMOVED***Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc2MjY4MjAsImV4cCI6MjA4MzIwMjgyMH0.Z7NT3zZSvlr5Oo-ZgVBFrSQSGakHBC0SYw7zazogJIA';
+// IMPORTANTE: Le credenziali devono essere fornite tramite variabili d'ambiente per sicurezza
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) {
+  throw new Error('SUPABASE_URL e SUPABASE_ANON_KEY devono essere configurate come variabili d\'ambiente');
+}
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 // Configurazione Storage S3-compatibile
-// NOTA: Le credenziali S3 devono essere configurate nel progetto Supabase della Biblioteca
-// e impostate come variabili d'ambiente per sicurezza
+// IMPORTANTE: Le credenziali S3 devono essere configurate come variabili d'ambiente per sicurezza
+if (!process.env.SUPABASE_STORAGE_ACCESS_KEY_ID || !process.env.SUPABASE_STORAGE_SECRET_ACCESS_KEY) {
+  throw new Error('SUPABASE_STORAGE_ACCESS_KEY_ID e SUPABASE_STORAGE_SECRET_ACCESS_KEY devono essere configurate come variabili d\'ambiente');
+}
 const storageConfig = {
-  endpoint: 'https://blqoxovrrldfedgzwufa.storage.supabase.co/storage/v1/s3',
-  region: 'eu-central-1',
-  accessKeyId: process.env.SUPABASE_STORAGE_ACCESS_KEY_ID || '',
-  secretAccessKey: process.env.SUPABASE_STORAGE_SECRET_ACCESS_KEY || ''
+  endpoint: process.env.SUPABASE_STORAGE_ENDPOINT || `${supabaseUrl.replace('.supabase.co', '.storage.supabase.co')}/storage/v1/s3`,
+  region: process.env.SUPABASE_STORAGE_REGION || 'eu-central-1',
+  accessKeyId: process.env.SUPABASE_STORAGE_ACCESS_KEY_ID,
+  secretAccessKey: process.env.SUPABASE_STORAGE_SECRET_ACCESS_KEY
 };
 
 const supabase = createClient(supabaseUrl, supabaseKey);
