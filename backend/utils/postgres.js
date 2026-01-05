@@ -32,20 +32,26 @@ pool.on('error', (err) => {
 });
 
 // Funzione per inizializzare il database con retry logic
-async function connectWithRetry(maxRetries = 3, delay = 5000) {
+async function connectWithRetry(maxRetries = 2, initialDelay = 10000) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       const client = await pool.connect();
       return client;
     } catch (error) {
       if (error.message.includes('Circuit breaker')) {
-        console.error('❌ Circuit breaker attivo su Supabase. Attendi 5-10 minuti prima di riprovare.');
-        console.error('💡 Suggerimento: Usa la connection string diretta invece del pooler');
+        console.error('❌ Circuit breaker attivo su Supabase Pooler.');
+        console.error('⏳ Il circuit breaker si resetta automaticamente dopo 5-10 minuti.');
+        console.error('💡 Soluzione: Attendi 5-10 minuti senza fare deploy, poi riprova.');
+        // Non fare più tentativi se il circuit breaker è attivo
+        throw new Error('Circuit breaker attivo. Attendi 5-10 minuti prima di riprovare.');
       }
-      if (i === maxRetries - 1) throw error;
+      if (i === maxRetries - 1) {
+        console.error('❌ Tutti i tentativi di connessione sono falliti.');
+        throw error;
+      }
+      const delay = initialDelay * Math.pow(2, i); // Backoff esponenziale: 10s, 20s
       console.log(`⚠️ Tentativo connessione ${i + 1}/${maxRetries} fallito, riprovo tra ${delay/1000}s...`);
       await new Promise(resolve => setTimeout(resolve, delay));
-      delay *= 1.5; // Backoff esponenziale
     }
   }
 }

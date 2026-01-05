@@ -34,7 +34,25 @@ try {
   console.log('✅ Database PostgreSQL/Supabase inizializzato con successo!');
 } catch (error) {
   console.error('❌ Errore durante l\'inizializzazione del database:', error.message);
-  console.error('Verifica la configurazione DATABASE_URL e la connessione a Supabase');
+  if (error.message.includes('Circuit breaker')) {
+    console.error('');
+    console.error('═══════════════════════════════════════════════════════════');
+    console.error('⚠️  CIRCUIT BREAKER ATTIVO SU SUPABASE POOLER');
+    console.error('═══════════════════════════════════════════════════════════');
+    console.error('');
+    console.error('Il pooler di Supabase ha bloccato le connessioni a causa di');
+    console.error('troppi tentativi falliti.');
+    console.error('');
+    console.error('✅ SOLUZIONE:');
+    console.error('   1. Attendi 5-10 minuti senza fare deploy/riavvii');
+    console.error('   2. Il circuit breaker si resetta automaticamente');
+    console.error('   3. Poi riprova il deploy');
+    console.error('');
+    console.error('💡 Verifica anche che la password nel DATABASE_URL sia corretta');
+    console.error('═══════════════════════════════════════════════════════════');
+  } else {
+    console.error('Verifica la configurazione DATABASE_URL e la connessione a Supabase');
+  }
   process.exit(1);
 }
 
