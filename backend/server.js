@@ -167,7 +167,14 @@ if (frontendExists) {
   console.warn('⚠️ Solo API disponibile. Esegui "npm run build" nella cartella frontend.');
 }
 
-app.get("/health", (_, res) => res.type("text").send("ok"));
+app.get("/health", (_, res) => {
+  res.json({ 
+    ok: true, 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    frontend: frontendExists
+  });
+});
 
 app.get("*", (req, res) => {
   if (req.path.startsWith("/api/"))
@@ -183,6 +190,10 @@ app.get("*", (req, res) => {
   }
 });
 
-app.listen(PORT, HOST, () =>
-  console.log(`API + Web on http://${HOST}:${PORT}`),
-);
+app.listen(PORT, HOST, () => {
+  console.log(`✅ Server avviato con successo!`);
+  console.log(`🌐 API + Web disponibile su http://${HOST}:${PORT}`);
+  console.log(`📊 Health check: http://${HOST}:${PORT}/health`);
+  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📦 Frontend build: ${frontendExists ? '✅ Disponibile' : '❌ Non trovato'}`);
+});
