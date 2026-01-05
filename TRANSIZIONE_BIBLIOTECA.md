@@ -70,7 +70,7 @@ SUPABASE_SERVICE_ROLE_KEY=***REMOVED***Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6M
 DATABASE_URL=postgresql://postgres.blqoxovrrldfedgzwufa:[YOUR-PASSWORD]@aws-1-eu-central-1.pooler.supabase.com:6543/postgres
 
 # JWT
-JWT_SECRET=your-super-secret-jwt-key
+JWT_SECRET=PEEex2waNc0ESUjJmk6diVOdPVoOZe/yRIeVMOTxkIvyzkdClGw1g/4KfIYJyD0XHVcFiVzRF1DOwCiZJTYB0g==
 JWT_EXPIRES_IN=24h
 
 # Server
@@ -78,16 +78,19 @@ PORT=3001
 NODE_ENV=production
 
 # CORS
-CORS_ORIGIN=https://your-domain.railway.app
+CORS_ORIGIN=https://biblioteca.laba.biz
 
 # Storage S3 (da configurare in Supabase)
-SUPABASE_STORAGE_ACCESS_KEY_ID=your-access-key-id
-SUPABASE_STORAGE_SECRET_ACCESS_KEY=your-secret-access-key
+SUPABASE_STORAGE_ACCESS_KEY_ID=9f59fc508910d08c24f74f124bdac370
+SUPABASE_STORAGE_SECRET_ACCESS_KEY=15153748c7bc2ea8144c8fb3e6a005ccbbb24a781cfd4948af7a5c0c5325cdf1
 ```
 
 #### Frontend (.env o Railway)
 ```env
-VITE_API_BASE_URL=https://your-backend.railway.app
+# Se backend e frontend sono sullo stesso dominio, lascia vuoto o usa il dominio stesso
+VITE_API_BASE_URL=https://biblioteca.laba.biz
+# Oppure se vuoi usare percorsi relativi (raccomandato):
+# VITE_API_BASE_URL=
 VITE_NODE_ENV=production
 ```
 
