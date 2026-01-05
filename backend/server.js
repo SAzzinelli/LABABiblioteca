@@ -190,10 +190,28 @@ app.get("*", (req, res) => {
   }
 });
 
-app.listen(PORT, HOST, () => {
+const server = app.listen(PORT, HOST, () => {
   console.log(`✅ Server avviato con successo!`);
   console.log(`🌐 API + Web disponibile su http://${HOST}:${PORT}`);
   console.log(`📊 Health check: http://${HOST}:${PORT}/health`);
   console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📦 Frontend build: ${frontendExists ? '✅ Disponibile' : '❌ Non trovato'}`);
+  console.log(`🔌 Porta utilizzata: ${PORT} (da ${process.env.PORT ? 'variabile PORT' : 'default 3001'})`);
+});
+
+// Gestione errori del server
+server.on('error', (error) => {
+  console.error('❌ Errore server:', error);
+  if (error.code === 'EADDRINUSE') {
+    console.error(`⚠️ Porta ${PORT} già in uso`);
+  }
+});
+
+// Gestione chiusura graceful
+process.on('SIGTERM', () => {
+  console.log('🛑 SIGTERM ricevuto, chiudo il server...');
+  server.close(() => {
+    console.log('✅ Server chiuso correttamente');
+    process.exit(0);
+  });
 });
