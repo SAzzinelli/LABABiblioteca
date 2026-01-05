@@ -105,17 +105,18 @@ app.get("/api/keepalive", async (_, res) => {
     // Usa una tabella dedicata 'keepalive_log' che non contiene dati sensibili
     // RLS è abilitato con policy permissiva (vedi migrations/rls_keepalive_policies.sql)
     let restActivity = null;
-    if (supabase) {
-      try {
-        const supabaseUrl = process.env.SUPABASE_URL || 'https://blqoxovrrldfedgzwufa.supabase.co';
-        console.log('🔄 Chiamata REST Supabase su tabella keepalive_log...', {
-          url: supabaseUrl,
-          hasAnonKey: !!process.env.SUPABASE_ANON_KEY
-        });
-        // Query su tabella dedicata (senza dati sensibili, RLS con policy permissiva)
-        const result = await supabase
-          .from('keepalive_log')
-          .select('id', { count: 'exact', head: true });
+    try {
+      // Prova a usare Supabase client se disponibile (lazy initialization)
+      const supabaseUrl = process.env.SUPABASE_URL || 'https://blqoxovrrldfedgzwufa.supabase.co';
+      console.log('🔄 Chiamata REST Supabase su tabella keepalive_log...', {
+        url: supabaseUrl,
+        hasAnonKey: !!process.env.SUPABASE_ANON_KEY
+      });
+      // Query su tabella dedicata (senza dati sensibili, RLS con policy permissiva)
+      const supabaseClient = supabase.client; // Lazy initialization
+      const result = await supabaseClient
+        .from('keepalive_log')
+        .select('id', { count: 'exact', head: true });
         
         console.log('📊 Risultato completo Supabase:', {
           hasError: !!result.error,
