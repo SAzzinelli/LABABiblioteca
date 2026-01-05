@@ -167,7 +167,7 @@ const AdvancedStats = () => {
  <div className="flex justify-between items-center">
  <div>
  <h1 className="text-2xl font-bold text-gray-900">Statistiche Avanzate</h1>
- <p className="text-gray-600">Analisi dettagliate del sistema di gestione attrezzature</p>
+ <p className="text-gray-600">Analisi dettagliate del sistema di gestione biblioteca</p>
  </div>
  <div className="flex space-x-2">
  <select

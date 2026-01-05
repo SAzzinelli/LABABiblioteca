@@ -108,7 +108,7 @@ detail: {
 type: 'success',
 data: { 
 title: 'Richiesta Approvata!', 
-body: 'La tua richiesta di noleggio è stata approvata. Puoi ritirare l\'attrezzatura.',
+body: 'La tua richiesta di prestito è stata approvata. Puoi ritirare il libro.',
 icon: '/favicon.ico'
 }
 }

@@ -199,9 +199,9 @@ const UserDashboard = () => {
               </svg>
             </div>
             <div className="ml-4 flex-1 pr-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Benvenuto nel Service Attrezzatura!</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Benvenuto nella Biblioteca LABA!</h3>
               <p className="text-sm text-gray-700 mb-4">
-                Inizia a noleggiare le attrezzature per il tuo corso. Ecco come funziona:
+                Inizia a richiedere i libri per il tuo corso. Ecco come funziona:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                 <div className="bg-white rounded-lg p-4 border border-blue-100">
@@ -209,7 +209,7 @@ const UserDashboard = () => {
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm mr-2">1</div>
                     <h4 className="font-semibold text-gray-900">Sfoglia</h4>
                   </div>
-                  <p className="text-xs text-gray-600">Vai su "Articoli Disponibili" per vedere tutte le attrezzature disponibili per il tuo corso.</p>
+                  <p className="text-xs text-gray-600">Vai su "Articoli Disponibili" per vedere libri, cataloghi, riviste, tesi e progetti disponibili per il tuo corso.</p>
                 </div>
                 <div className="bg-white rounded-lg p-4 border border-blue-100">
                   <div className="flex items-center mb-2">
@@ -223,7 +223,7 @@ const UserDashboard = () => {
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm mr-2">3</div>
                     <h4 className="font-semibold text-gray-900">Ritira</h4>
                   </div>
-                  <p className="text-xs text-gray-600">Una volta approvata, potrai ritirare l'attrezzatura presso il Service.</p>
+                  <p className="text-xs text-gray-600">Una volta approvata, potrai ritirare il libro presso la Biblioteca.</p>
                 </div>
               </div>
             </div>
@@ -294,7 +294,7 @@ const UserDashboard = () => {
               }`}>
                 {userPenalties.isBlocked ? (
                   <div className="space-y-2">
-                    <p className="font-medium">Non puoi effettuare nuove richieste di noleggio.</p>
+                    <p className="font-medium">Non puoi effettuare nuove richieste di prestito.</p>
                     <p><strong>Motivo:</strong> {userPenalties.blockedReason}</p>
                     <p><strong>Penalità accumulate:</strong> {userPenalties.strikes} strike</p>
                     <div className="mt-3 p-3 bg-red-100 rounded-lg">

@@ -298,7 +298,7 @@ const handleCancelRepair = async (repairId) => {
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
  <div>
  <h1 className="text-2xl font-bold text-primary">Gestione Riparazioni</h1>
- <p className="text-secondary mt-1">Gestisci le riparazioni delle attrezzature</p>
+ <p className="text-secondary mt-1">Gestisci le riparazioni dei materiali</p>
  </div>
  <div className="flex items-center">
         <button

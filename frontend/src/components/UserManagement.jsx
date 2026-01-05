@@ -1263,7 +1263,7 @@ Sblocca Utente e Azzera Strike
 </button>
 </div>
 <p className="text-xs text-red-700 mt-2">
-⚠️ Dopo lo sblocco, l'utente potrà nuovamente effettuare richieste di noleggio.
+⚠️ Dopo lo sblocco, l'utente potrà nuovamente effettuare richieste di prestito.
 </p>
 </div>
 )}

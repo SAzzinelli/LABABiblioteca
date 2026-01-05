@@ -382,7 +382,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
           ).join(', ');
           
           return res.status(400).json({ 
-            error: `⚠️ Avviso: Stai modificando questo parametro con un noleggio in corso. Non puoi farlo, lo potrai fare quando rientreranno tutti. Prestiti attivi: ${loanInfo}${loanDetails.length === 3 ? '...' : ''}` 
+            error: `⚠️ Avviso: Stai modificando questo parametro con un prestito in corso. Non puoi farlo, lo potrai fare quando rientreranno tutti. Prestiti attivi: ${loanInfo}${loanDetails.length === 3 ? '...' : ''}` 
           });
         }
         

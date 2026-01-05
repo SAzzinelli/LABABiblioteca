@@ -41,7 +41,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.get("/api/health", (_, res) => res.json({ ok: true, version: "2.0.0", build: "100" }));
+app.get("/api/health", (_, res) => res.json({ ok: true, version: "1.0.1-alpha" }));
 
 // Keepalive endpoint per mantenere attivo il database Supabase
 app.get("/api/keepalive", async (_, res) => {
@@ -59,7 +59,7 @@ app.get("/api/keepalive", async (_, res) => {
     let restActivity = null;
     if (supabase) {
       try {
-        const supabaseUrl = process.env.SUPABASE_URL || 'https://kzqabwmtpmlhaueqiuoc.supabase.co';
+        const supabaseUrl = process.env.SUPABASE_URL || 'https://blqoxovrrldfedgzwufa.supabase.co';
         console.log('🔄 Chiamata REST Supabase su tabella keepalive_log...', {
           url: supabaseUrl,
           hasAnonKey: !!process.env.SUPABASE_ANON_KEY

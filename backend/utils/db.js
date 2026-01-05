@@ -206,7 +206,7 @@ export async function initDatabase() {
 
   // Inserisci categorie di esempio
   const categorie = [
-    ['Regia e Videomaking', 'Attrezzature Video'],
+    ['Regia e Videomaking', 'Libri e Cataloghi'],
     ['Graphic Design & Multimedia', 'Computer e Software'],
     ['Fashion Design', 'Macchine da Cucire'],
     ['Pittura', 'Pennelli e Colori'],

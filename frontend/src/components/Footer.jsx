@@ -9,13 +9,13 @@ const Footer = ({ onSystemClick }) => {
           <div className="flex items-center space-x-2">
             <img src="/logoSito.svg" alt="LABA Logo" className="h-8 w-auto" />
             <div>
-              <h3 className="text-sm font-semibold text-gray-900">Service Attrezzatura</h3>
-              <p className="text-xs text-gray-600">Sistema di gestione inventario e prestiti</p>
+              <h3 className="text-sm font-semibold text-gray-900">Biblioteca LABA</h3>
+              <p className="text-xs text-gray-600">Sistema di gestione biblioteca e prestiti</p>
             </div>
           </div>
           
           <div className="text-xs text-gray-600">
-            <p>Versione 2.0.0 (build 100)</p>
+            <p>Versione 1.0.1 alpha</p>
             <p>© 2026 LABA Firenze</p>
           </div>
         </div>
@@ -25,7 +25,7 @@ const Footer = ({ onSystemClick }) => {
           <div className="flex items-center space-x-2">
             <img src="/logoSito.svg" alt="LABA Logo" className="h-6 w-auto" />
             <div className="text-xs text-gray-600">
-              <p className="font-medium">v2.0.0</p>
+              <p className="font-medium">v1.0.1 alpha</p>
               <p>© 2026 LABA</p>
             </div>
           </div>

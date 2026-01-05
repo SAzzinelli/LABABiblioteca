@@ -1,5 +1,5 @@
 // Service Worker per notifiche push
-const CACHE_NAME = 'laba-gestione-v1';
+const CACHE_NAME = 'laba-biblioteca-v1';
 const urlsToCache = [
   '/',
   '/static/js/bundle.js',
@@ -50,7 +50,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('LABA Gestione Attrezzature', options)
+    self.registration.showNotification('LABA Biblioteca', options)
   );
 });
 

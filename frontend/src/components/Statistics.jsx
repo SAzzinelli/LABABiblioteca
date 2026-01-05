@@ -12,7 +12,7 @@ const Statistics = () => {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Statistiche</h1>
-          <p className="text-gray-600 text-lg">Analisi e monitoraggio del sistema di gestione attrezzature</p>
+          <p className="text-gray-600 text-lg">Analisi e monitoraggio del sistema di gestione biblioteca</p>
         </div>
       </div>
     </div>

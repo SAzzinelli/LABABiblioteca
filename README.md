@@ -1,6 +1,6 @@
-# 🎓 LABA Gestionale Attrezzature v2.1.0
+# 📚 LABA Biblioteca v1.0.1 alpha
 
-**Sistema completo di gestione attrezzature per il laboratorio LABA Firenze**
+**Sistema completo di gestione biblioteca per LABA Firenze**
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app)
 [![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
@@ -24,7 +24,7 @@
 
 ## 🎯 Panoramica
 
-Il **LABA Gestionale Attrezzature** è un sistema web completo per la gestione delle attrezzature del laboratorio LABA Firenze. Il sistema permette agli studenti di richiedere prestiti di attrezzature, agli amministratori di gestire inventario e utenti, e fornisce un'interfaccia moderna e responsive per tutti i dispositivi.
+Il **LABA Biblioteca** è un sistema web completo per la gestione della biblioteca LABA Firenze. Il sistema permette agli studenti di richiedere prestiti di libri, cataloghi, riviste, tesi di laurea e progetti, agli amministratori di gestire inventario e utenti, e fornisce un'interfaccia moderna e responsive per tutti i dispositivi.
 
 ### 🎨 Design Philosophy
 
@@ -37,13 +37,13 @@ Il **LABA Gestionale Attrezzature** è un sistema web completo per la gestione d
 
 ### 👨‍🎓 **Area Studenti**
 - **Dashboard Personalizzata**: Panoramica prestiti attivi, richieste e segnalazioni
-- **Catalogo Attrezzature**: Visualizzazione filtrata per corso accademico
+- **Catalogo Biblioteca**: Visualizzazione filtrata per corso accademico
 - **Gestione Prestiti**: Richiesta, visualizzazione e tracciamento prestiti
 - **Segnalazione Guasti**: Sistema integrato per report problemi
 - **Profilo Utente**: Gestione dati personali e preferenze
 
 ### 👨‍💼 **Area Amministratori**
-- **Gestione Inventario**: CRUD completo per attrezzature e unità
+- **Gestione Inventario**: CRUD completo per libri, cataloghi, riviste, tesi di laurea e progetti
 - **Gestione Utenti**: Creazione, modifica e amministrazione utenti
 - **Gestione Prestiti**: Approvazione, modifica e tracciamento richieste
 - **Statistiche Avanzate**: Dashboard con metriche e KPI
@@ -54,7 +54,7 @@ Il **LABA Gestionale Attrezzature** è un sistema web completo per la gestione d
 - **Autenticazione JWT**: Sistema sicuro con refresh token
 - **Responsive Design**: Ottimizzato per mobile, tablet e desktop
 - **Real-Time Updates**: Notifiche push e aggiornamenti live
-- **Sistema Categorie**: Organizzazione gerarchica attrezzature
+- **Sistema Categorie**: Organizzazione gerarchica di libri, cataloghi, riviste, tesi di laurea e progetti
 - **QR Code**: Generazione automatica per identificazione rapida
 - **Export Excel**: Esportazione dati per analisi
 
@@ -96,10 +96,10 @@ backend/
 
 ### **Database** (PostgreSQL)
 - **Utenti**: Gestione studenti e amministratori
-- **Inventario**: Attrezzature e unità specifiche
+- **Inventario**: Libri, cataloghi, riviste, tesi di laurea e progetti
 - **Prestiti**: Richieste e prestiti attivi
 - **Categorie**: Organizzazione gerarchica
-- **Segnalazioni**: Sistema report guasti
+- **Segnalazioni**: Sistema report problemi
 
 ## 🚀 Quick Start
 
@@ -110,8 +110,8 @@ backend/
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/SAzzinelli/laba-gestionale-attrezzature.git
-cd laba-gestionale-attrezzature
+git clone https://github.com/SAzzinelli/LABABiblioteca.git
+cd LABABiblioteca
 ```
 
 ### 2. Installazione Dipendenze
@@ -127,7 +127,7 @@ cd ../frontend && npm install
 ### 3. Configurazione Database
 ```bash
 # Crea database PostgreSQL
-createdb laba_gestionale
+createdb laba_biblioteca
 
 # Esegui migrazioni
 cd backend
@@ -137,7 +137,7 @@ npm run migrate
 ### 4. Variabili d'Ambiente
 ```bash
 # Backend (.env)
-DATABASE_URL=postgresql://user:password@localhost:5432/laba_gestionale
+DATABASE_URL=postgresql://user:password@localhost:5432/laba_biblioteca
 JWT_SECRET=your-secret-key
 PORT=3001
 
@@ -428,7 +428,7 @@ npm install -g heroku
 
 # Login e deploy
 heroku login
-heroku create laba-gestionale
+heroku create laba-biblioteca
 git push heroku main
 ```
 
@@ -539,8 +539,8 @@ git push origin feature/nuova-funzionalita
 ## 📞 Supporto
 
 - **Email**: simone.azzinelli@labafirenze.com
-- **GitHub Issues**: [Crea una issue](https://github.com/SAzzinelli/laba-gestionale-attrezzature/issues)
-- **Documentazione**: [Wiki del progetto](https://github.com/SAzzinelli/laba-gestionale-attrezzature/wiki)
+- **GitHub Issues**: [Crea una issue](https://github.com/SAzzinelli/LABABiblioteca/issues)
+- **Documentazione**: [Wiki del progetto](https://github.com/SAzzinelli/LABABiblioteca/wiki)
 
 ## 📄 Licenza
 
@@ -550,4 +550,4 @@ Questo progetto è proprietario di **LABA Firenze**. Tutti i diritti riservati.
 
 **Sviluppato con ❤️ per LABA Firenze**
 
-*Versione 2.0.0 - Build 100 - 2026*
+*Versione 1.0.1 alpha - 2026*

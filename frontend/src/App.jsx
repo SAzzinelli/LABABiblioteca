@@ -575,7 +575,7 @@ function UserBadge() {
 
 function Gate() {
  const { isAuthenticated } = useAuth();
- if (!isAuthenticated) return <Login branding="LABA – Service" />;
+ if (!isAuthenticated) return <Login branding="LABA – Biblioteca" />;
  return <AppInner />;
 }
 

@@ -70,7 +70,7 @@ const Login = ({ branding = "LABA Gestione" }) => {
  </h2>
  <p className="mt-2 text-sm text-gray-600">
  {isLogin 
-? 'Accedi al tuo account per gestire il Service Attrezzatura'
+? 'Accedi al tuo account per gestire la Biblioteca LABA'
  : 'Crea un nuovo account per accedere al sistema'
  }
  </p>
