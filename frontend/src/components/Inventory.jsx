@@ -521,7 +521,7 @@ const Inventory = () => {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex-1">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestione Inventario</h1>
-            <p className="text-gray-600 text-lg">Gestisci e monitora tutti gli articoli del laboratorio</p>
+            <p className="text-gray-600 text-lg">Gestisci e monitora tutti i materiali della biblioteca</p>
           </div>
         </div>
       </div>
@@ -547,7 +547,7 @@ const Inventory = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Oggetti Totali</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">Materiali Totali</p>
                 <p className="text-3xl font-bold text-gray-900">
                   {inventory.reduce((total, item) => total + (item.quantita_totale || 0), 0)}
                 </p>
@@ -602,7 +602,7 @@ const Inventory = () => {
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">Articoli in Inventario</h2>
-              <p className="text-gray-600 text-lg">Gestisci e monitora tutti gli articoli del laboratorio</p>
+              <p className="text-gray-600 text-lg">Gestisci e monitora tutti i materiali della biblioteca</p>
             </div>
             
             <div className="flex flex-wrap gap-4 items-center">

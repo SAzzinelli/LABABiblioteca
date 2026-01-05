@@ -289,13 +289,13 @@ r.get('/inventario/template', requireAuth, requireRole('admin'), async (req, res
   try {
         const templateData = [
           {
-            'Nome': 'Esempio: Macchina Fotografica Canon',
+            'Nome': 'Esempio: Storia del Cinema Italiano',
             'Quantità Totale': '5',
-            'Corso': 'Fotografia',
-            'Categoria': 'Fotocamere',
-            'Posizione': 'Armadio A - Ripiano 1',
-            'Note': 'Esempio: Macchina professionale per corsi di fotografia',
-            'Immagine URL': 'https://example.com/fotocamera.jpg',
+            'Corso': 'Cinema e Audiovisivi',
+            'Categoria': 'Libri',
+            'Posizione': 'Scaffale A - Ripiano 1',
+            'Note': 'Esempio: Libro di testo per corsi di cinema',
+            'Immagine URL': 'https://example.com/libro.jpg',
             'In Manutenzione': 'No (Sì/No)',
             'Soglia Minima': '2',
             'Fornitore': 'Esempio: Canon Italia',

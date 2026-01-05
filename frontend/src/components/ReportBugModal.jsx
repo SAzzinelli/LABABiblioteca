@@ -290,7 +290,7 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
                 <div>
                   <h3 className="text-lg font-medium text-gray-900">Dettagli Segnalazione</h3>
                   <p className="text-sm text-gray-600">
-                    Oggetto: <strong>{selectedLoan.articolo_nome}</strong> - ID: <strong>{selectedUnit.codice_univoco}</strong>
+                    Materiale: <strong>{selectedLoan.articolo_nome}</strong> - ID: <strong>{selectedUnit.codice_univoco}</strong>
                   </p>
                 </div>
                 <button

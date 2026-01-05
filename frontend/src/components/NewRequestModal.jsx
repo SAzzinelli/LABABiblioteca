@@ -248,7 +248,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
 
   const getStepTitle = () => {
     switch (step) {
-      case 1: return 'Seleziona Oggetto';
+      case 1: return 'Seleziona Materiale';
       case 2: return 'Seleziona ID Univoco';
       case 3: return 'Scegli Tipo Utilizzo';
       case 4: return 'Date e Note';
@@ -279,10 +279,10 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
 
         {/* Content */}
         <div className="p-6">
-          {/* Step 1: Seleziona Oggetto */}
+          {/* Step 1: Seleziona Materiale */}
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Seleziona l'oggetto da richiedere</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Seleziona il materiale da richiedere</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
                 {inventory.map((item) => (
                   <div

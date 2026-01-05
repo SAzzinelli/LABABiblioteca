@@ -41,7 +41,7 @@ const Repairs = () => {
  // Get step title
  const getStepTitle = () => {
    switch (step) {
-     case 1: return 'Seleziona Oggetto';
+     case 1: return 'Seleziona Materiale';
      case 2: return 'Seleziona ID Specifico';
      case 3: return 'Dettagli Riparazione';
      default: return 'Nuova Riparazione';
@@ -141,7 +141,7 @@ const handleCancelRepair = async (repairId) => {
  e.preventDefault();
  
  if (!selectedObject || !selectedUnit) {
-   setError('Seleziona oggetto e ID specifico');
+   setError('Seleziona materiale e ID specifico');
    return;
  }
  
@@ -541,10 +541,10 @@ const handleCancelRepair = async (repairId) => {
  </div>
 
  <div className="p-6">
-          {/* Step 1: Seleziona Oggetto */}
+          {/* Step 1: Seleziona Materiale */}
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Seleziona l'oggetto da riparare</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Seleziona il materiale da riparare</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
                 {inventory.map((item) => (
                   <div

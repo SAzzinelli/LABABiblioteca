@@ -206,11 +206,11 @@ export async function initDatabase() {
 
   // Inserisci categorie di esempio
   const categorie = [
-    ['Regia e Videomaking', 'Libri e Cataloghi'],
-    ['Graphic Design & Multimedia', 'Computer e Software'],
-    ['Fashion Design', 'Macchine da Cucire'],
-    ['Pittura', 'Pennelli e Colori'],
-    ['Fotografia', 'Macchine Fotografiche']
+    ['Cinema e Audiovisivi', 'Libri'],
+    ['Graphic Design & Multimedia', 'Cataloghi'],
+    ['Fashion Design', 'Riviste'],
+    ['Pittura', 'Tesi di laurea'],
+    ['Fotografia', 'Progetti']
   ];
 
   const insertCategoria = db.prepare('INSERT OR IGNORE INTO categorie (madre, figlia) VALUES (?, ?)');

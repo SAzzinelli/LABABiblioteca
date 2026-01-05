@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
 const AdvancedLoanModal = ({ isOpen, onClose, onSuccess }) => {
- const [step, setStep] = useState(1); // 1: Seleziona oggetto, 2: Seleziona utente, 3: Seleziona unità, 4: Tipo utilizzo, 5: Date
+ const [step, setStep] = useState(1); // 1: Seleziona materiale, 2: Seleziona utente, 3: Seleziona unità, 4: Tipo utilizzo, 5: Date
  const [inventory, setInventory] = useState([]);
  const [users, setUsers] = useState([]);
  const [selectedItem, setSelectedItem] = useState(null);
@@ -219,7 +219,7 @@ body: JSON.stringify({
 
  const getStepTitle = () => {
  switch (step) {
- case 1: return 'Seleziona Oggetto';
+    case 1: return 'Seleziona Materiale';
  case 2: return 'Seleziona Utente';
  case 3: return 'Seleziona Unità';
  case 4: return 'Tipo Utilizzo';
@@ -283,7 +283,7 @@ body: JSON.stringify({
  {step === 1 && (
  <div className="space-y-4">
  <h3 className="text-lg font-semibold text-gray-800 ">
- Seleziona l'oggetto da prestare
+                Seleziona il materiale da prestare
  </h3>
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
  {inventory.map(item => (
@@ -480,7 +480,7 @@ body: JSON.stringify({
        <div>
          <h3 className="text-lg font-medium text-gray-900">Scegli il tipo di utilizzo</h3>
          <p className="text-sm text-gray-600">
-           Oggetto: <strong>{selectedItem.nome}</strong> - Unità: <strong>{selectedUnits.map(u => u.codice_univoco).join(', ')}</strong>
+           Materiale: <strong>{selectedItem.nome}</strong> - Unità: <strong>{selectedUnits.map(u => u.codice_univoco).join(', ')}</strong>
          </p>
        </div>
        <button
@@ -498,9 +498,9 @@ body: JSON.stringify({
            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
          </svg>
          <div>
-           <h4 className="text-sm font-medium text-purple-800">Come intendi utilizzare questo oggetto?</h4>
+           <h4 className="text-sm font-medium text-purple-800">Come intendi utilizzare questo materiale?</h4>
            <p className="text-xs text-purple-700 mt-1">
-             Questo oggetto può essere utilizzato sia internamente che esternamente. Scegli come intendi utilizzarlo.
+             Questo materiale può essere utilizzato sia internamente che esternamente. Scegli come intendi utilizzarlo.
            </p>
          </div>
        </div>

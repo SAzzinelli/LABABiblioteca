@@ -303,7 +303,7 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
  <div className="flex items-center justify-between">
  <div>
  <p className="font-medium text-primary">Mario Rossi</p>
- <p className="text-sm text-secondary">Macchina Fotografica Canon</p>
+                <p className="text-sm text-secondary">Storia del Cinema Italiano</p>
  </div>
  <div className="flex gap-2">
  <button className="btn-success btn-small">Approva</button>
