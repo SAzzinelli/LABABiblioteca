@@ -9,22 +9,30 @@ import { normalizeUser, normalizeRole } from '../utils/roles.js';
 const r = Router();
 
 // IMPORTANTE: JWT_SECRET deve essere configurato come variabile d'ambiente per sicurezza
-if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET deve essere configurato come variabile d\'ambiente');
+// Validazione lazy: controlla solo quando necessario, non all'import
+function getJWTSecret() {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET deve essere configurato come variabile d\'ambiente');
+  }
+  return process.env.JWT_SECRET;
 }
-const JWT_SECRET = process.env.JWT_SECRET;
 
 // === Special admin (non persistente richiesto) ===
 // IMPORTANTE: Le credenziali admin devono essere configurate come variabili d'ambiente per sicurezza
+// Validazione lazy: controlla solo quando necessario, non all'import
 const SPECIAL_ADMIN_USERNAME = process.env.SPECIAL_ADMIN_USERNAME || 'admin';
-const SPECIAL_ADMIN_PASSWORD = process.env.SPECIAL_ADMIN_PASSWORD;
-if (!SPECIAL_ADMIN_PASSWORD) {
-  throw new Error('SPECIAL_ADMIN_PASSWORD deve essere configurato come variabile d\'ambiente');
+function getSpecialAdminPassword() {
+  const password = process.env.SPECIAL_ADMIN_PASSWORD;
+  if (!password) {
+    throw new Error('SPECIAL_ADMIN_PASSWORD deve essere configurato come variabile d\'ambiente');
+  }
+  return password;
 }
 function isSpecialAdminLogin(identifier, password) {
   const id = (identifier || '').trim().toLowerCase();
   const pw = (password ?? '').toString().normalize('NFKC').replace(/\u00A0/g, ' ').trim();
-  return id === SPECIAL_ADMIN_USERNAME && pw === SPECIAL_ADMIN_PASSWORD;
+  const adminPassword = getSpecialAdminPassword();
+  return id === SPECIAL_ADMIN_USERNAME && pw === adminPassword;
 }
 function specialAdminUser() {
   return {
@@ -45,7 +53,7 @@ function signUser(user) {
     ruolo: u.ruolo,
     corso_accademico: u.corso_accademico
   };
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(payload, getJWTSecret(), { expiresIn: '7d' });
 }
 
 // POST /api/auth/login
@@ -154,7 +162,7 @@ r.post('/forgot-password', async (req, res) => {
     }
 
     // Generate reset token
-    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ email }, getJWTSecret(), { expiresIn: '1h' });
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     // Store reset request
@@ -182,7 +190,7 @@ r.post('/reset-password', async (req, res) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJWTSecret());
     const email = decoded.email;
 
     // Check if reset request exists and is valid
