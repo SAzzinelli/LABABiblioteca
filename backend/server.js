@@ -236,6 +236,15 @@ const server = app.listen(PORT, HOST, () => {
   console.log(`📊 Health check: http://${HOST}:${PORT}/health`);
   console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📦 Frontend build: ${frontendExists ? '✅ Disponibile' : '❌ Non trovato'}`);
+  console.log(`🔌 Porta utilizzata: ${PORT} (da variabile PORT)`);
+  
+  // Log per debug Railway custom domain
+  if (process.env.RAILWAY_ENVIRONMENT) {
+    console.log(`🚂 Railway Environment: ${process.env.RAILWAY_ENVIRONMENT}`);
+  }
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+    console.log(`🌍 Railway Public Domain: ${process.env.RAILWAY_PUBLIC_DOMAIN}`);
+  }
   console.log(`🔌 Porta utilizzata: ${PORT} (da ${process.env.PORT ? 'variabile PORT' : 'default 3001'})`);
 });
 
