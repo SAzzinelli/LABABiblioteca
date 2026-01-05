@@ -87,11 +87,10 @@ r.post('/setup-categories', async (req, res) => {
           INSERT INTO users (email, password, name, surname, ruolo, corso_accademico)
           VALUES ($1, $2, $3, $4, $5, $6)
         `, ['admin@laba.biz', hashedPassword, 'Admin', 'Sistema', 'admin', 'Fotografia']);
+        console.log('✅ Creato utente admin');
+      } else {
+        console.log('✅ Utente admin già esistente');
       }
-    }
-      console.log('✅ Creato utente admin');
-    } else {
-      console.log('✅ Utente admin già esistente');
     }
     
     res.json({ 
