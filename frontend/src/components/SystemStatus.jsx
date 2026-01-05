@@ -63,7 +63,7 @@ const SystemStatus = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'healthy': return 'text-green-500';
+      case 'healthy': return 'text-teal-500';
       case 'warning': return 'text-yellow-500';
       case 'error': return 'text-red-500';
       default: return 'text-gray-500';
@@ -72,7 +72,7 @@ const SystemStatus = () => {
 
   const getStatusBg = (status) => {
     switch (status) {
-      case 'healthy': return 'bg-green-100';
+      case 'healthy': return 'bg-teal-100';
       case 'warning': return 'bg-yellow-100';
       case 'error': return 'bg-red-100';
       default: return 'bg-gray-100';
@@ -135,7 +135,7 @@ const SystemStatus = () => {
             <h2 className="text-2xl font-bold text-gray-900">Stato Generale</h2>
             <div className="flex items-center space-x-3">
               <div className={`relative w-4 h-4 rounded-full ${getStatusBg(systemData.overall)} ${getPulseAnimation(systemData.overall)}`}>
-                <div className={`w-full h-full rounded-full ${systemData.overall === 'healthy' ? 'bg-green-500' : systemData.overall === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
+                <div className={`w-full h-full rounded-full ${systemData.overall === 'healthy' ? 'bg-teal-500' : systemData.overall === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
                 {getSonarEffect(systemData.overall)}
               </div>
               <span className={`text-lg font-semibold ${getStatusColor(systemData.overall)}`}>
@@ -147,11 +147,11 @@ const SystemStatus = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-1">{systemData.metrics.totalRequests.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-teal-600 mb-1">{systemData.metrics.totalRequests.toLocaleString()}</div>
               <div className="text-sm text-gray-600">Richieste Totali</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-600 mb-1">{systemData.metrics.activeUsers}</div>
+              <div className="text-3xl font-bold text-teal-600 mb-1">{systemData.metrics.activeUsers}</div>
               <div className="text-sm text-gray-600">Utenti Attivi</div>
             </div>
             <div className="text-center">
@@ -178,7 +178,7 @@ const SystemStatus = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className={`relative w-3 h-3 rounded-full ${getStatusBg(data.status)} ${getPulseAnimation(data.status)}`}>
-                        <div className={`w-full h-full rounded-full ${data.status === 'healthy' ? 'bg-green-500' : data.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
+                        <div className={`w-full h-full rounded-full ${data.status === 'healthy' ? 'bg-teal-500' : data.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
                         {getSonarEffect(data.status)}
                       </div>
                       <div>
@@ -206,8 +206,8 @@ const SystemStatus = () => {
             <div className="p-6">
               {systemData.recentIncidents.length === 0 ? (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
@@ -254,7 +254,7 @@ const SystemStatus = () => {
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-gray-900">Memoria</h4>
-                    <span className="text-2xl font-bold text-blue-600">{Math.round(systemData.metrics.memoryUsage)}%</span>
+                    <span className="text-2xl font-bold text-teal-600">{Math.round(systemData.metrics.memoryUsage)}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div 
@@ -282,7 +282,7 @@ const SystemStatus = () => {
                 <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-gray-900">Disco</h4>
-                    <span className="text-2xl font-bold text-green-600">{Math.round(systemData.metrics.diskUsage)}%</span>
+                    <span className="text-2xl font-bold text-teal-600">{Math.round(systemData.metrics.diskUsage)}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div 
@@ -324,12 +324,12 @@ const SystemStatus = () => {
                   <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                     <div className="flex items-center space-x-4">
                       <div className={`relative w-3 h-3 rounded-full ${getStatusBg(api.status)} ${getPulseAnimation(api.status)}`}>
-                        <div className={`w-full h-full rounded-full ${api.status === 'healthy' ? 'bg-green-500' : api.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
+                        <div className={`w-full h-full rounded-full ${api.status === 'healthy' ? 'bg-teal-500' : api.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
                         {getSonarEffect(api.status)}
                       </div>
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className={`px-2 py-1 text-xs font-medium rounded ${api.method === 'GET' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                          <span className={`px-2 py-1 text-xs font-medium rounded ${api.method === 'GET' ? 'bg-teal-100 text-teal-800' : 'bg-teal-100 text-teal-800'}`}>
                             {api.method}
                           </span>
                           <span className="font-mono text-sm text-gray-900">{api.endpoint}</span>

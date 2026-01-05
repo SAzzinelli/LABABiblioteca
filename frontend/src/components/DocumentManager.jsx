@@ -135,7 +135,7 @@ const DocumentManager = ({ item, isOpen, onClose, onSave }) => {
  {/* Upload Area */}
  <div
  className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 ${
- dragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+ dragOver ? 'border-teal-500 bg-teal-50' : 'border-gray-300'
  }`}
  onDragOver={(e) => {
  e.preventDefault();
@@ -168,7 +168,7 @@ const DocumentManager = ({ item, isOpen, onClose, onSave }) => {
  />
  <label
  htmlFor="file-upload"
- className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer"
+ className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 cursor-pointer"
  >
  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -182,7 +182,7 @@ const DocumentManager = ({ item, isOpen, onClose, onSave }) => {
  {uploading && (
  <div className="mb-6">
  <div className="flex items-center justify-center">
- <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+ <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
  <span className="ml-3 text-gray-600">Caricamento in corso...</span>
  </div>
  </div>
@@ -221,7 +221,7 @@ const DocumentManager = ({ item, isOpen, onClose, onSave }) => {
  <div className="flex space-x-2 ml-4">
  <button
  onClick={() => handleDownload(doc)}
- className="text-blue-600 hover:text-blue-800"
+ className="text-teal-600 hover:text-teal-800"
  title="Scarica"
  >
  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

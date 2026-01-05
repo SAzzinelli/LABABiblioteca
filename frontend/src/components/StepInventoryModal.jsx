@@ -291,13 +291,13 @@ const canProceed = () => {
  <div className="flex flex-col items-center">
  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-300 ${
  stepData.num <= step 
- ? 'bg-blue-600 text-white shadow-lg scale-110' 
+ ? 'bg-teal-600 text-white shadow-lg scale-110' 
  : 'bg-gray-200 text-gray-500'
  }`}>
  {stepData.num <= step ? stepData.icon : stepData.num}
  </div>
  <span className={`text-xs mt-2 font-medium ${
- stepData.num <= step ? 'text-blue-600' : 'text-gray-500'
+ stepData.num <= step ? 'text-teal-600' : 'text-gray-500'
  }`}>
  {stepData.label}
  </span>
@@ -305,7 +305,7 @@ const canProceed = () => {
  {index < 4 && (
  <div className={`w-16 h-1 mx-2 rounded transition-all duration-300 ${
  stepData.num < step 
- ? 'bg-blue-600' 
+ ? 'bg-teal-600' 
  : 'bg-gray-200'
  }`} />
  )}
@@ -437,7 +437,7 @@ Tipo di Utilizzo
         value="solo_esterno"
         checked={formData.tipo_prestito === 'solo_esterno'}
         onChange={(e) => setFormData(prev => ({ ...prev, tipo_prestito: e.target.value }))}
-        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+        className="w-4 h-4 text-teal-600 border-gray-300 focus:ring-teal-500"
       />
       <div>
         <span className="text-sm font-medium text-gray-900">📅 Uso Esterno</span>
@@ -452,7 +452,7 @@ Tipo di Utilizzo
         value="solo_interno"
         checked={formData.tipo_prestito === 'solo_interno'}
         onChange={(e) => setFormData(prev => ({ ...prev, tipo_prestito: e.target.value }))}
-        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+        className="w-4 h-4 text-teal-600 border-gray-300 focus:ring-teal-500"
       />
       <div>
         <span className="text-sm font-medium text-gray-900">🏠 Uso Interno</span>
@@ -467,7 +467,7 @@ Tipo di Utilizzo
         value="entrambi"
         checked={formData.tipo_prestito === 'entrambi'}
         onChange={(e) => setFormData(prev => ({ ...prev, tipo_prestito: e.target.value }))}
-        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+        className="w-4 h-4 text-teal-600 border-gray-300 focus:ring-teal-500"
       />
       <div>
         <span className="text-sm font-medium text-gray-900">🔄 Entrambi</span>
@@ -475,8 +475,8 @@ Tipo di Utilizzo
       </div>
     </label>
   </div>
-  <div className="mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
-    <p className="text-xs text-blue-700">
+  <div className="mt-2 p-3 bg-teal-50 rounded-lg border border-teal-200">
+    <p className="text-xs text-teal-700">
       {formData.tipo_prestito === 'solo_esterno' && (
         <>📅 <strong>Solo Prestito Esterno:</strong> Gli studenti possono richiedere prestiti per più giorni e portare l'oggetto fuori dall'accademia</>
       )}
@@ -521,7 +521,7 @@ Tipo di Utilizzo
  }));
  }
  }}
- className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-gray-400"
+ className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-gray-400"
  />
  <span className="text-sm text-gray-700">{course.nome}</span>
  </label>
@@ -532,7 +532,7 @@ Tipo di Utilizzo
  <p className="text-xs text-gray-500 mb-2">Corsi Selezionati ({formData.corsi_assegnati.length}):</p>
  <div className="flex flex-wrap gap-2">
  {formData.corsi_assegnati.map(courseName => (
- <span key={courseName} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+ <span key={courseName} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-teal-100 text-teal-800">
  {courseName}
  <button
  type="button"
@@ -542,7 +542,7 @@ Tipo di Utilizzo
  corsi_assegnati: prev.corsi_assegnati.filter(c => c !== courseName)
  }));
  }}
- className="ml-1 text-blue-600 hover:text-blue-800"
+ className="ml-1 text-teal-600 hover:text-teal-800"
  >
  ×
  </button>
@@ -597,8 +597,8 @@ Tipo di Utilizzo
  <div className="bg-gray-50 rounded-lg p-3 max-h-60 overflow-y-auto border border-gray-200">
  <div className="space-y-2">
  {formData.unita.map((unit, index) => (
- <div key={index} className="flex items-center space-x-2 p-2 bg-white rounded border border-gray-200 hover:border-blue-300 transition-colors">
- <div className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">
+ <div key={index} className="flex items-center space-x-2 p-2 bg-white rounded border border-gray-200 hover:border-teal-300 transition-colors">
+ <div className="flex-shrink-0 w-6 h-6 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-xs font-medium">
  {index + 1}
  </div>
  <div className="flex-1">
@@ -613,8 +613,8 @@ Tipo di Utilizzo
  <div className="flex-shrink-0 flex items-center space-x-2">
  {editingItem && unit.stato && (
  <span className={`text-xs px-2 py-1 rounded ${
- unit.stato === 'disponibile' ? 'bg-green-100 text-green-800' :
- unit.stato === 'in_prestito' ? 'bg-blue-100 text-blue-800' :
+ unit.stato === 'disponibile' ? 'bg-teal-100 text-teal-800' :
+ unit.stato === 'in_prestito' ? 'bg-teal-100 text-teal-800' :
  unit.stato === 'in_riparazione' ? 'bg-orange-100 text-orange-800' :
  'bg-gray-100 text-gray-800'
  }`}>

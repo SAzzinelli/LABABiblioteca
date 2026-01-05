@@ -69,7 +69,7 @@ const AvailableItems = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'disponibile': return 'bg-green-100 text-green-800';
+      case 'disponibile': return 'bg-teal-100 text-teal-800';
       case 'in_prestito': return 'bg-amber-100 text-amber-800';
       case 'in_riparazione': return 'bg-orange-100 text-orange-800';
       case 'non_disponibile': return 'bg-red-100 text-red-800';

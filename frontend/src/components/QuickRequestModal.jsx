@@ -115,10 +115,10 @@ const QuickRequestModal = ({ isOpen, onClose, request, onSuccess }) => {
  <div className="space-y-4">
  <div className="alert-card alert-info">
  <div className="flex items-center">
- <svg className="icon text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+ <svg className="icon text-teal-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
  </svg>
- <p className="text-blue-800 ">
+ <p className="text-teal-800 ">
  Confermi l'approvazione di questa richiesta? Verrà creato automaticamente un prestito attivo.
  </p>
  </div>

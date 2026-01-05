@@ -53,7 +53,7 @@ const getRoleBadge = (role) => {
   if (normalized === 'supervisor') {
     return { text: 'Supervisore', className: 'bg-purple-100 text-purple-800' };
   }
-  return { text: 'Utente', className: 'bg-green-100 text-green-800' };
+  return { text: 'Utente', className: 'bg-teal-100 text-teal-800' };
 };
 
 const currentRole = normalizeRole(currentUser?.ruolo);
@@ -411,7 +411,7 @@ return (
           onClick={() => setActiveTab('users')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'users'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -420,7 +420,7 @@ return (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             <span>Utenti</span>
-            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+            <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">
               {regularUsers.length}
             </span>
           </div>
@@ -430,7 +430,7 @@ return (
           onClick={() => setActiveTab('supervisors')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'supervisors'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -439,7 +439,7 @@ return (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
             <span>Supervisori</span>
-            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+            <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">
               {supervisorUsers.length}
             </span>
           </div>
@@ -449,7 +449,7 @@ return (
           onClick={() => setActiveTab('admins')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'admins'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -458,7 +458,7 @@ return (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a4 4 0 004 4h10a4 4 0 004-4V7M16 3v4M8 3v4m-5 4h18" />
             </svg>
             <span>Amministratori</span>
-            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+            <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">
               {adminUsers.length}
             </span>
           </div>
@@ -549,7 +549,7 @@ return (
                   <div className="flex flex-col sm:flex-row gap-2 justify-center items-center">
                     <button
                       onClick={() => openEditModal(user)}
-                      className="inline-flex items-center px-3 py-2 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 hover:shadow-md transition-all duration-200 hover:scale-105"
+                      className="inline-flex items-center px-3 py-2 text-xs font-medium text-teal-700 bg-teal-100 rounded-lg hover:bg-teal-200 hover:shadow-md transition-all duration-200 hover:scale-105"
                     >
                       <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -696,7 +696,7 @@ return (
             {/* Row 1: Modifica + Reset */}
             <button
               onClick={() => openEditModal(user)}
-              className="inline-flex items-center justify-center px-3 py-2 text-xs font-medium text-blue-700 bg-blue-100 rounded-lg hover:bg-blue-200 hover:shadow-md transition-all duration-200 hover:scale-105"
+              className="inline-flex items-center justify-center px-3 py-2 text-xs font-medium text-teal-700 bg-teal-100 rounded-lg hover:bg-teal-200 hover:shadow-md transition-all duration-200 hover:scale-105"
             >
               <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -1186,7 +1186,7 @@ BLOCCATO
 </span>
 )}
 {selectedUserForPenalty.penalty_strikes === 0 && !selectedUserForPenalty.is_blocked && (
-<span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+<span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
 <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
 </svg>
@@ -1257,7 +1257,7 @@ Sblocca Utente (Mantieni Strike)
 </button>
 <button
 onClick={() => handleUnblockUser(selectedUserForPenalty.id, true)}
-className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
 >
 Sblocca Utente e Azzera Strike
 </button>

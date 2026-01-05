@@ -62,7 +62,7 @@ const AdvancedStats = () => {
  rank === 1 ? 'bg-yellow-500' : 
  rank === 2 ? 'bg-gray-400' : 
  rank === 3 ? 'bg-orange-500' : 
- 'bg-blue-500'
+ 'bg-teal-500'
  }`}>
  {rank}
  </div>
@@ -72,7 +72,7 @@ const AdvancedStats = () => {
  </div>
  </div>
  <div className="text-right">
- <p className="font-bold text-blue-600">{count}</p>
+ <p className="font-bold text-teal-600">{count}</p>
  <p className="text-xs text-gray-500">richieste</p>
  </div>
  </div>
@@ -85,7 +85,7 @@ const AdvancedStats = () => {
  rank === 1 ? 'bg-yellow-500' : 
  rank === 2 ? 'bg-gray-400' : 
  rank === 3 ? 'bg-orange-500' : 
- 'bg-blue-500'
+ 'bg-teal-500'
  }`}>
  {rank}
  </div>
@@ -95,7 +95,7 @@ const AdvancedStats = () => {
  </div>
  </div>
  <div className="text-right">
- <p className="font-bold text-green-600">{count}</p>
+ <p className="font-bold text-teal-600">{count}</p>
  <p className="text-xs text-gray-500">richieste</p>
  </div>
  </div>
@@ -108,7 +108,7 @@ const AdvancedStats = () => {
  rank === 1 ? 'bg-yellow-500' : 
  rank === 2 ? 'bg-gray-400' : 
  rank === 3 ? 'bg-orange-500' : 
- 'bg-blue-500'
+ 'bg-teal-500'
  }`}>
  {rank}
  </div>
@@ -138,7 +138,7 @@ const AdvancedStats = () => {
  </div>
  <div className="flex-1 bg-gray-200 rounded-full h-2">
  <div 
- className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+ className="bg-teal-500 h-2 rounded-full transition-all duration-300"
  style={{ width: `${(item.count / maxValue) * 100}%` }}
  />
  </div>
@@ -155,7 +155,7 @@ const AdvancedStats = () => {
  if (loading) {
  return (
  <div className="flex items-center justify-center h-64">
- <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+ <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
  <span className="ml-2 text-gray-600">Caricamento statistiche...</span>
  </div>
  );
@@ -203,7 +203,7 @@ const AdvancedStats = () => {
  {stats.topItems.slice(0, 5).map((item, index) => (
  <div key={index} className="flex items-center justify-between">
  <span className="text-sm text-gray-600">{item.categoria_madre}</span>
- <span className="text-sm font-medium text-blue-600">{item.count}</span>
+ <span className="text-sm font-medium text-teal-600">{item.count}</span>
  </div>
  ))}
  </div>

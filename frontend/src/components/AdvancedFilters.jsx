@@ -227,7 +227,7 @@ const AdvancedFilters = ({
  <div key={index} className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
  <button
  onClick={() => handleLoadFilter(savedFilter)}
- className="text-sm text-green-600 hover:text-green-800 mr-2"
+ className="text-sm text-teal-600 hover:text-teal-800 mr-2"
  >
  {savedFilter.name}
  </button>
@@ -270,7 +270,7 @@ const AdvancedFilters = ({
  </button>
  <button
  onClick={handleApply}
- className="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700"
+ className="px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-transparent rounded-lg hover:bg-teal-700"
  >
  Applica Filtri
  </button>
@@ -298,7 +298,7 @@ const AdvancedFilters = ({
  </button>
  <button
  onClick={handleSaveFilter}
- className="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700"
+ className="px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-transparent rounded-lg hover:bg-teal-700"
  >
  Salva
  </button>

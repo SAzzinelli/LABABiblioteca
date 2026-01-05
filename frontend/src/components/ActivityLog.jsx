@@ -62,16 +62,16 @@ const ActivityLog = ({ isOpen, onClose }) => {
 
  const getActivityColor = (type) => {
  switch (type) {
- case 'create': return 'text-green-600 bg-green-100';
- case 'update': return 'text-blue-600 bg-blue-100';
+ case 'create': return 'text-teal-600 bg-teal-100';
+ case 'update': return 'text-teal-600 bg-teal-100';
  case 'delete': return 'text-red-600 bg-red-100';
  case 'login': return 'text-purple-600 bg-purple-100';
  case 'logout': return 'text-gray-600 bg-gray-100';
  case 'loan': return 'text-orange-600 bg-orange-100';
- case 'return': return 'text-green-600 bg-green-100';
+ case 'return': return 'text-teal-600 bg-teal-100';
  case 'repair': return 'text-yellow-600 bg-yellow-100';
  case 'request': return 'text-indigo-600 bg-indigo-100';
- case 'approve': return 'text-green-600 bg-green-100';
+ case 'approve': return 'text-teal-600 bg-teal-100';
  case 'reject': return 'text-red-600 bg-red-100';
  default: return 'text-gray-600 bg-gray-100';
  }
@@ -163,7 +163,7 @@ const ActivityLog = ({ isOpen, onClose }) => {
  <div className="space-y-4">
  {loading ? (
  <div className="flex items-center justify-center py-8">
- <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+ <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
  <span className="ml-3 text-gray-600">Caricamento...</span>
  </div>
  ) : activities.length === 0 ? (
@@ -219,7 +219,7 @@ const ActivityLog = ({ isOpen, onClose }) => {
  <div className="mt-6 flex justify-center">
  <button
  onClick={fetchActivities}
- className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100"
+ className="px-4 py-2 text-sm font-medium text-teal-600 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100"
  >
  Carica altre attività
  </button>

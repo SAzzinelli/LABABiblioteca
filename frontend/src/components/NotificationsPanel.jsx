@@ -20,8 +20,8 @@ function NotificationsPanel({ isOpen, onClose, notifications = [], onMarkAsRead,
  {/* Header */}
  <div className="flex items-center justify-between p-6 border-b border-gray-200 ">
  <div className="flex items-center">
- <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
- <svg className="w-5 h-5 text-blue-600 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+ <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-3">
+ <svg className="w-5 h-5 text-teal-600 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
  </svg>
  </div>
@@ -59,8 +59,8 @@ function NotificationsPanel({ isOpen, onClose, notifications = [], onMarkAsRead,
                   onClick={() => onClick && onClick(notification)}
                   className={`p-4 rounded-lg border-l-4 transform transition-all duration-300 ease-out cursor-pointer hover:shadow-md ${
                     notification.type === 'password_reset' ? 'border-l-red-500 bg-red-50 hover:bg-red-100' :
-                    notification.type === 'inventory' ? 'border-l-green-500 bg-green-50 hover:bg-green-100' :
-                    notification.type === 'info' ? 'border-l-blue-500 bg-blue-50 hover:bg-blue-100' :
+                    notification.type === 'inventory' ? 'border-l-green-500 bg-teal-50 hover:bg-teal-100' :
+                    notification.type === 'info' ? 'border-l-blue-500 bg-teal-50 hover:bg-teal-100' :
                     notification.type === 'warning' ? 'border-l-orange-500 bg-orange-50 hover:bg-orange-100' :
                     'border-l-gray-500 bg-gray-50 hover:bg-gray-100'
                   } ${!notification.isRead ? 'ring-2 ring-blue-200 ' : ''} ${
@@ -73,8 +73,8 @@ function NotificationsPanel({ isOpen, onClose, notifications = [], onMarkAsRead,
  <div className="flex items-start">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   notification.type === 'password_reset' ? 'bg-orange-100 ' :
-                  notification.type === 'inventory' ? 'bg-green-100 ' :
-                  notification.type === 'info' ? 'bg-blue-100 ' :
+                  notification.type === 'inventory' ? 'bg-teal-100 ' :
+                  notification.type === 'info' ? 'bg-teal-100 ' :
                   notification.type === 'warning' ? 'bg-orange-100 ' :
                   'bg-gray-100 '
                 }`}>
@@ -83,11 +83,11 @@ function NotificationsPanel({ isOpen, onClose, notifications = [], onMarkAsRead,
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   ) : notification.type === 'inventory' ? (
-                    <svg className="w-4 h-4 text-green-600 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-teal-600 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                   ) : notification.type === 'info' ? (
-                    <svg className="w-4 h-4 text-blue-600 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-teal-600 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   ) : notification.type === 'warning' ? (
@@ -104,7 +104,7 @@ function NotificationsPanel({ isOpen, onClose, notifications = [], onMarkAsRead,
  <div className="flex items-center justify-between">
  <h3 className="text-sm font-medium text-gray-900 ">{notification.title}</h3>
  <div className="flex items-center space-x-2">
- {!notification.isRead && <div className="w-2 h-2 bg-blue-600 rounded-full"></div>}
+ {!notification.isRead && <div className="w-2 h-2 bg-teal-600 rounded-full"></div>}
  <button 
  onClick={() => onDelete(notification.id)}
  className="p-1 rounded hover:bg-gray-200 transition-colors"
@@ -120,7 +120,7 @@ function NotificationsPanel({ isOpen, onClose, notifications = [], onMarkAsRead,
  {!notification.isRead && (
  <button 
  onClick={() => onMarkAsRead(notification.id)}
- className="mt-2 text-xs text-blue-600 hover:text-blue-800 transition-colors"
+ className="mt-2 text-xs text-teal-600 hover:text-teal-800 transition-colors"
  >
  Segna come letta
  </button>

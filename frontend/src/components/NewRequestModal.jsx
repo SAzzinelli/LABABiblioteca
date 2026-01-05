@@ -288,7 +288,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                   <div
                     key={item.id}
                     onClick={() => handleObjectSelect(item)}
-                    className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md cursor-pointer transition-all flex flex-col"
+                    className="p-4 border border-gray-200 rounded-lg hover:border-teal-500 hover:shadow-md cursor-pointer transition-all flex flex-col"
                   >
                     {/* Titolo e disponibilità */}
                     <div className="mb-2">
@@ -296,7 +296,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                         {item.nome}
                       </h4>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full whitespace-nowrap">
+                        <span className="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full whitespace-nowrap">
                           {item.unita_disponibili} disponibili
                         </span>
                       </div>
@@ -342,7 +342,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                 </div>
                 <button
                   onClick={() => setStep(1)}
-                  className="text-blue-600 hover:text-blue-800 text-sm whitespace-nowrap flex-shrink-0"
+                  className="text-teal-600 hover:text-teal-800 text-sm whitespace-nowrap flex-shrink-0"
                 >
                   ← Cambia oggetto
                 </button>
@@ -353,14 +353,14 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                   <div
                     key={unit.id}
                     onClick={() => handleUnitSelect(unit)}
-                    className="p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md cursor-pointer transition-all"
+                    className="p-3 border border-gray-200 rounded-lg hover:border-teal-500 hover:shadow-md cursor-pointer transition-all"
                   >
                     <div className="flex flex-col">
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-medium text-gray-900 text-sm break-words">{unit.codice_univoco}</span>
                       </div>
                       <div className="flex items-center justify-between mt-auto">
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full whitespace-nowrap">
+                        <span className="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full whitespace-nowrap">
                           Disponibile
                         </span>
                       </div>
@@ -393,7 +393,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="text-blue-600 hover:text-blue-800 text-sm"
+                  className="text-teal-600 hover:text-teal-800 text-sm"
                 >
                   ← Cambia ID
                 </button>
@@ -470,7 +470,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                   type="button"
                   onClick={() => setStep(4)}
                   disabled={!tipoUtilizzo}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   Continua →
                 </button>
@@ -498,7 +498,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                       setStep(2);
                     }
                   }}
-                  className="text-blue-600 hover:text-blue-800 text-sm"
+                  className="text-teal-600 hover:text-teal-800 text-sm"
                 >
                   ← Indietro
                 </button>
@@ -555,7 +555,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                     value={dateRange.dal}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   />
                 </div>
                 <div>
@@ -576,7 +576,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                     required
                     disabled={selectedObject.tipo_prestito === 'solo_interno' || 
                              (selectedObject.tipo_prestito === 'entrambi' && tipoUtilizzo === 'interno')}
-                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                    className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
                       (selectedObject.tipo_prestito === 'solo_interno' || 
                        (selectedObject.tipo_prestito === 'entrambi' && tipoUtilizzo === 'interno')) 
                       ? 'bg-gray-100 cursor-not-allowed' : ''
@@ -595,7 +595,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                   value={note}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                   placeholder="Note aggiuntive (opzionale)"
                 />
               </div>
@@ -618,7 +618,7 @@ const NewRequestModal = ({ isOpen, onClose, selectedItem, onSuccess }) => {
                 <button
                   type="submit"
                   disabled={loading || (selectedObject.tipo_prestito === 'entrambi' && !tipoUtilizzo)}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {loading ? (
                     <>

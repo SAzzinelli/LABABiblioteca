@@ -63,7 +63,7 @@ const MobileMenu = ({ isOpen, onClose, sidebarItems, activeView, onNavigate, use
                 }}
                 className={`w-full flex items-center px-4 py-3 rounded-lg text-left transition-colors ${
                   activeView === item.id 
-                    ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                    ? 'bg-teal-50 text-teal-700 border border-teal-200' 
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >

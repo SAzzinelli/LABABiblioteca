@@ -42,11 +42,11 @@ const MyLoansModal = ({ isOpen, onClose }) => {
 
  const getStatusColor = (status) => {
  switch (status) {
- case 'attivo': return 'bg-green-100 text-green-800';
+ case 'attivo': return 'bg-teal-100 text-teal-800';
  case 'scaduto': return 'bg-red-100 text-red-800';
  case 'restituito': return 'bg-gray-100 text-gray-800';
  case 'in_ritardo': return 'bg-orange-100 text-orange-800';
- default: return 'bg-blue-100 text-blue-800';
+ default: return 'bg-teal-100 text-teal-800';
  }
  };
 
@@ -103,7 +103,7 @@ const MyLoansModal = ({ isOpen, onClose }) => {
  onClick={() => setActiveTab('active')}
  className={`py-4 px-1 border-b-2 font-medium text-sm ${
  activeTab === 'active'
- ? 'border-blue-500 text-blue-600'
+ ? 'border-teal-500 text-teal-600'
  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
  }`}
  >
@@ -113,7 +113,7 @@ const MyLoansModal = ({ isOpen, onClose }) => {
  onClick={() => setActiveTab('completed')}
  className={`py-4 px-1 border-b-2 font-medium text-sm ${
  activeTab === 'completed'
- ? 'border-blue-500 text-blue-600'
+ ? 'border-teal-500 text-teal-600'
  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
  }`}
  >
@@ -126,7 +126,7 @@ const MyLoansModal = ({ isOpen, onClose }) => {
  <div className="p-6">
  {loading ? (
  <div className="flex items-center justify-center h-32">
- <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+ <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
  <span className="ml-2 text-gray-600">Caricamento prestiti...</span>
  </div>
  ) : error ? (

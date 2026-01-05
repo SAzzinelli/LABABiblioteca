@@ -18,27 +18,27 @@
   --border-primary: #e5e7eb;
   --border-secondary: #d1d5db;
   
-  /* Palette Biblioteca - Verde elegante e marrone carta */
-  --brand-primary: #059669; /* Verde elegante */
-  --brand-secondary: #047857; /* Verde scuro */
-  --brand-accent: #10b981; /* Verde chiaro */
+  /* Palette Biblioteca - Teal/Tiffany elegante */
+  --brand-primary: #14B8A6; /* Teal Tiffany principale */
+  --brand-secondary: #0D9488; /* Teal scuro */
+  --brand-accent: #5EEAD4; /* Teal chiaro */
   
-  --success: #059669;
+  --success: #14B8A6;
   --warning: #d97706;
   --error: #dc2626;
-  --info: #2563eb;
+  --info: #14B8A6;
   
-  /* Enhanced Design System - Biblioteca Palette */
-  --primary-50: #ecfdf5; /* Verde chiarissimo */
-  --primary-100: #d1fae5; /* Verde chiaro */
-  --primary-500: #10b981; /* Verde principale */
-  --primary-600: #059669; /* Verde scuro */
-  --primary-700: #047857; /* Verde molto scuro */
-  --primary-900: #064e3b; /* Verde quasi nero */
+  /* Enhanced Design System - Biblioteca Palette Teal/Tiffany */
+  --primary-50: #f0fdfa; /* Teal chiarissimo */
+  --primary-100: #ccfbf1; /* Teal chiaro */
+  --primary-500: #14B8A6; /* Teal principale */
+  --primary-600: #0D9488; /* Teal scuro */
+  --primary-700: #0F766E; /* Teal molto scuro */
+  --primary-900: #134E4A; /* Teal quasi nero */
   
-  --success-50: #ecfdf5;
-  --success-500: #10b981;
-  --success-600: #059669;
+  --success-50: #f0fdfa;
+  --success-500: #14B8A6;
+  --success-600: #0D9488;
   
   --warning-50: #fffbeb;
   --warning-500: #f59e0b;

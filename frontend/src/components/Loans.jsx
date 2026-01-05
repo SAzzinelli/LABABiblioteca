@@ -374,7 +374,7 @@ const getStatusBadge = (status) => {
           onClick={() => setActiveTab('active')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'active'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -382,7 +382,7 @@ const getStatusBadge = (status) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
           </svg>
           Prestiti Attivi
-          <span className="ml-2 bg-green-100 text-green-900 text-xs px-2 py-1 rounded-full">
+          <span className="ml-2 bg-teal-100 text-teal-900 text-xs px-2 py-1 rounded-full">
             {loans.filter(l => l.stato === 'attivo').length}
           </span>
         </button>
@@ -391,7 +391,7 @@ const getStatusBadge = (status) => {
           onClick={() => setActiveTab('pending')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'pending'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -408,7 +408,7 @@ const getStatusBadge = (status) => {
           onClick={() => setActiveTab('processed')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'processed'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -416,7 +416,7 @@ const getStatusBadge = (status) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           Completati
-          <span className="ml-2 bg-blue-100 text-blue-900 text-xs px-2 py-1 rounded-full">
+          <span className="ml-2 bg-teal-100 text-teal-900 text-xs px-2 py-1 rounded-full">
             {loans.filter(l => l.stato === 'restituito').length}
           </span>
         </button>
@@ -430,7 +430,7 @@ const getStatusBadge = (status) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cerca prestiti..."
-              className="w-64 px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-64 px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <svg className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -497,7 +497,7 @@ const getStatusBadge = (status) => {
                             )}
                           </h3>
                           {item.inventario_id && (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
                               ID: {item.inventario_id}
                             </span>
                           )}
@@ -531,8 +531,8 @@ const getStatusBadge = (status) => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* User Info */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
@@ -559,7 +559,7 @@ const getStatusBadge = (status) => {
                   {item.stato === 'restituito' && item.data_rientro && (
                     <div>
                       <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Restituito</p>
-                      <p className="text-sm font-semibold text-green-600">{formatDate(item.data_rientro)}</p>
+                      <p className="text-sm font-semibold text-teal-600">{formatDate(item.data_rientro)}</p>
                     </div>
                   )}
                   {item.stato === 'attivo' && (item.al || item.data_rientro) && (
@@ -591,7 +591,7 @@ const getStatusBadge = (status) => {
                             e.stopPropagation();
                             handleApprove(item.id);
                           }}
-                          className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors"
+                          className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 transition-colors"
                         >
                           <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -624,7 +624,7 @@ const getStatusBadge = (status) => {
                         disabled={!canTerminateLoan(item)}
                         className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md transition-colors ${
                           canTerminateLoan(item) 
-                            ? 'text-white bg-green-600 hover:bg-green-700' 
+                            ? 'text-white bg-teal-600 hover:bg-teal-700' 
                             : 'text-gray-400 bg-gray-200 cursor-not-allowed'
                         }`}
                         title={getTerminateButtonTooltip(item)}
@@ -724,7 +724,7 @@ const getStatusBadge = (status) => {
                 {item.stato === 'restituito' && item.data_rientro && (
                   <div className="col-span-2 flex flex-col">
                     <span className="text-tertiary text-xs uppercase tracking-wide mb-1">Restituito</span>
-                    <span className="text-green-600 font-semibold text-base">{formatDate(item.data_rientro)}</span>
+                    <span className="text-teal-600 font-semibold text-base">{formatDate(item.data_rientro)}</span>
                   </div>
                 )}
                 {item.stato === 'attivo' && (item.al || item.data_rientro) && (
@@ -836,8 +836,8 @@ const getStatusBadge = (status) => {
  <div>
  <label className="form-label">Richiedente</label>
  <div className="flex items-center gap-2">
- <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
- <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
+<svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
  </svg>
  </div>

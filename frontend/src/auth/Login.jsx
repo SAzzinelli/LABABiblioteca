@@ -224,7 +224,7 @@ const Login = ({ branding = "LABA Gestione" }) => {
  <button
  type="submit"
  disabled={loading}
- className="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-700 hover:via-blue-800 hover:to-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+ className="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 hover:from-blue-700 hover:via-blue-800 hover:to-blue-900 focus:outline-none focus:ring-4 focus:ring-teal-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
  >
  {loading ? (
  <div className="flex items-center">
@@ -251,7 +251,7 @@ const Login = ({ branding = "LABA Gestione" }) => {
  <button
  type="button"
  onClick={handleForgotPassword}
- className="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-200"
+ className="text-sm text-teal-600 hover:text-teal-800 transition-colors duration-200"
  >
  Hai dimenticato la password?
  </button>
@@ -274,7 +274,7 @@ const Login = ({ branding = "LABA Gestione" }) => {
  corso_accademico: ''
  });
  }}
- className="text-sm text-blue-600 hover:text-blue-500 font-medium transition-colors duration-200"
+ className="text-sm text-teal-600 hover:text-teal-500 font-medium transition-colors duration-200"
  >
  {isLogin 
  ? 'Non hai un account? Registrati' 

@@ -181,7 +181,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  onClick={() => setActiveTab('profile')}
  className={`py-4 px-1 border-b-2 font-medium text-sm ${
  activeTab === 'profile'
- ? 'border-blue-500 text-blue-600'
+ ? 'border-teal-500 text-teal-600'
  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
  }`}
  >
@@ -191,7 +191,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  onClick={() => setActiveTab('password')}
  className={`py-4 px-1 border-b-2 font-medium text-sm ${
  activeTab === 'password'
- ? 'border-blue-500 text-blue-600'
+ ? 'border-teal-500 text-teal-600'
  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
  }`}
  >
@@ -201,7 +201,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  onClick={() => setActiveTab('notifications')}
  className={`py-4 px-1 border-b-2 font-medium text-sm ${
  activeTab === 'notifications'
- ? 'border-blue-500 text-blue-600'
+ ? 'border-teal-500 text-teal-600'
  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
  }`}
  >
@@ -292,7 +292,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  )}
 
  {success && (
- <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+ <div className="bg-teal-50 border border-teal-200 text-teal-700 px-4 py-3 rounded-lg">
  {success}
  </div>
  )}
@@ -308,7 +308,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  <button
  type="submit"
  disabled={loading}
- className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+ className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
  >
  {loading ? 'Salvataggio...' : 'Salva Modifiche'}
  </button>
@@ -319,18 +319,18 @@ const UserProfile = ({ onClose, onUpdate }) => {
  {/* Password Tab */}
  {activeTab === 'password' && (
  <div className="space-y-6">
- <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+ <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
  <div className="flex">
  <div className="flex-shrink-0">
- <svg className="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+ <svg className="h-5 w-5 text-teal-400" fill="currentColor" viewBox="0 0 20 20">
  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
  </svg>
  </div>
  <div className="ml-3">
- <h3 className="text-sm font-medium text-blue-800">
+ <h3 className="text-sm font-medium text-teal-800">
  Modifica Password
  </h3>
- <div className="mt-2 text-sm text-blue-700">
+ <div className="mt-2 text-sm text-teal-700">
  <p>Per modificare la password, richiedi un reset password. Riceverai un'email con le istruzioni.</p>
  </div>
  </div>
@@ -341,7 +341,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  <button
  onClick={handlePasswordResetRequest}
  disabled={loading}
- className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 font-medium"
+ className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 font-medium"
  >
  {loading ? 'Invio in corso...' : 'Richiedi Reset Password'}
  </button>
@@ -354,7 +354,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  )}
 
  {success && (
- <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+ <div className="bg-teal-50 border border-teal-200 text-teal-700 px-4 py-3 rounded-lg">
  {success}
  </div>
  )}
@@ -378,7 +378,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  onChange={handleInputChange}
  className="sr-only peer"
  />
- <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+ <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
  </label>
  </div>
 
@@ -403,7 +403,7 @@ const UserProfile = ({ onClose, onUpdate }) => {
  <button
  onClick={handleProfileUpdate}
  disabled={loading}
- className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+ className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
  >
  {loading ? 'Salvataggio...' : 'Salva Impostazioni'}
  </button>

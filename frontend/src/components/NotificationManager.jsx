@@ -222,7 +222,7 @@ const NotificationManager = () => {
  {permission === 'default' && (
  <button
  onClick={requestNotificationPermission}
- className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
+ className="bg-teal-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-teal-700 transition-colors"
  >
  Attiva Notifiche
  </button>

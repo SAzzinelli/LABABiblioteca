@@ -182,7 +182,7 @@ const UserDashboard = () => {
 
       {/* Welcome/Info Section for new users */}
       {recentData.activeLoans.length === 0 && !welcomeSectionDismissed && (
-        <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-sm border border-blue-200 p-6 relative">
+        <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow-sm border border-teal-200 p-6 relative">
           <button
             onClick={handleDismissWelcome}
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
@@ -194,7 +194,7 @@ const UserDashboard = () => {
           </button>
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -204,23 +204,23 @@ const UserDashboard = () => {
                 Inizia a richiedere i libri per il tuo corso. Ecco come funziona:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                <div className="bg-white rounded-lg p-4 border border-blue-100">
+                <div className="bg-white rounded-lg p-4 border border-teal-100">
                   <div className="flex items-center mb-2">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm mr-2">1</div>
+                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold text-sm mr-2">1</div>
                     <h4 className="font-semibold text-gray-900">Sfoglia</h4>
                   </div>
                   <p className="text-xs text-gray-600">Vai su "Articoli Disponibili" per vedere libri, cataloghi, riviste, tesi e progetti disponibili per il tuo corso.</p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-blue-100">
+                <div className="bg-white rounded-lg p-4 border border-teal-100">
                   <div className="flex items-center mb-2">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm mr-2">2</div>
+                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold text-sm mr-2">2</div>
                     <h4 className="font-semibold text-gray-900">Richiedi</h4>
                   </div>
                   <p className="text-xs text-gray-600">Clicca su "Richiedi" per selezionare l'ID specifico e le date di utilizzo.</p>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-blue-100">
+                <div className="bg-white rounded-lg p-4 border border-teal-100">
                   <div className="flex items-center mb-2">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm mr-2">3</div>
+                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold text-sm mr-2">3</div>
                     <h4 className="font-semibold text-gray-900">Ritira</h4>
                   </div>
                   <p className="text-xs text-gray-600">Una volta approvata, potrai ritirare il libro presso la Biblioteca.</p>
@@ -344,7 +344,7 @@ const UserDashboard = () => {
         {/* Active Loans */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <svg className="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 mr-2 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             Prestiti Attivi
@@ -352,12 +352,12 @@ const UserDashboard = () => {
           {recentData.activeLoans.length > 0 ? (
             <div className="space-y-3">
               {recentData.activeLoans.map((loan, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200 shadow-md shadow-green-100/30">
+                <div key={index} className="flex items-center justify-between p-3 bg-teal-50 rounded-lg border border-teal-200 shadow-md shadow-green-100/30">
                   <div>
                     <p className="font-medium text-gray-900">{loan.articolo_nome || loan.oggetto_nome || 'Oggetto'}</p>
                     <p className="text-sm text-gray-600">Scadenza: {formatDate(loan.data_rientro || loan.data_fine)}</p>
                   </div>
-                  <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                  <span className="px-2 py-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full">
                     Attivo
                   </span>
                 </div>
@@ -396,9 +396,9 @@ const UserDashboard = () => {
                       };
                     case 'approvata':
                       return {
-                        cardBg: 'bg-green-50 border-green-200 shadow-green-100/30',
-                        pillBg: 'bg-green-100',
-                        pillText: 'text-green-800'
+                        cardBg: 'bg-teal-50 border-teal-200 shadow-green-100/30',
+                        pillBg: 'bg-teal-100',
+                        pillText: 'text-teal-800'
                       };
                     case 'rifiutata':
                       return {
@@ -450,7 +450,7 @@ const UserDashboard = () => {
               <p className="text-xs text-gray-400 mt-1">Le tue richieste appariranno qui</p>
               <button
                 onClick={() => setShowQuickRequestModal(true)}
-                className="mt-4 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                className="mt-4 text-sm text-teal-600 hover:text-teal-800 font-medium"
               >
                 Crea la tua prima richiesta →
               </button>
@@ -511,8 +511,8 @@ function StatCard({ title, value }) {
   };
 
   const colorMap = {
-    'Articoli Disponibili': 'bg-blue-100',
-    'Le Mie Richieste': 'bg-green-100',
+    'Articoli Disponibili': 'bg-teal-100',
+    'Le Mie Richieste': 'bg-teal-100',
     'Le Mie Segnalazioni': 'bg-red-100',
     'I Miei Prestiti': 'bg-yellow-100'
   };
@@ -521,8 +521,8 @@ function StatCard({ title, value }) {
     <div className="kpi-card bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 transition-transform">
       <div className="flex items-center w-full">
         <div className={`w-12 h-12 ${colorMap[title]} rounded-lg flex items-center justify-center ${
-          title === 'Articoli Disponibili' ? 'text-blue-600' :
-          title === 'Le Mie Richieste' ? 'text-green-600' :
+          title === 'Articoli Disponibili' ? 'text-teal-600' :
+          title === 'Le Mie Richieste' ? 'text-teal-600' :
           title === 'Le Mie Segnalazioni' ? 'text-red-600' :
           title === 'I Miei Prestiti' ? 'text-yellow-600' : 'text-gray-600'
         }`}>

@@ -36,10 +36,10 @@ const ReportFault = () => {
     const statusConfig = {
       'aperta': { className: 'bg-red-100 text-red-800', label: 'Aperta' },
       'in_corso': { className: 'bg-yellow-100 text-yellow-800', label: 'In Corso' },
-      'risolta': { className: 'bg-green-100 text-green-800', label: 'Risolta' },
+      'risolta': { className: 'bg-teal-100 text-teal-800', label: 'Risolta' },
       'chiusa': { className: 'bg-gray-100 text-gray-800', label: 'Chiusa' }
     };
-    const config = statusConfig[status] || { className: 'bg-blue-100 text-blue-800', label: status };
+    const config = statusConfig[status] || { className: 'bg-teal-100 text-teal-800', label: status };
     
     return (
       <span className={`px-3 py-1 text-xs font-medium rounded-full ${config.className}`}>
@@ -53,7 +53,7 @@ const ReportFault = () => {
       'critica': { className: 'bg-red-600 text-white', label: 'Critica' },
       'alta': { className: 'bg-orange-100 text-orange-800', label: 'Alta' },
       'media': { className: 'bg-yellow-100 text-yellow-800', label: 'Media' },
-      'bassa': { className: 'bg-green-100 text-green-800', label: 'Bassa' }
+      'bassa': { className: 'bg-teal-100 text-teal-800', label: 'Bassa' }
     };
     const config = urgencyConfig[urgenza] || { className: 'bg-gray-100 text-gray-800', label: urgenza };
     
@@ -105,8 +105,8 @@ const ReportFault = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
               </svg>
             </div>
@@ -133,8 +133,8 @@ const ReportFault = () => {
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>

@@ -47,7 +47,7 @@ if (embedded) {
     <div className="text-center">
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
           <span className="ml-2 text-gray-600">Generazione QR Code...</span>
         </div>
       ) : (
@@ -63,7 +63,7 @@ if (embedded) {
           <div className="mt-4">
             <button
               onClick={downloadQRCode}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+              className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-colors text-sm"
             >
               Scarica QR Code
             </button>
@@ -92,7 +92,7 @@ return (
       <div className="text-center">
         {loading ? (
           <div className="flex items-center justify-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
           </div>
         ) : (
           <div className="space-y-3">
@@ -108,7 +108,7 @@ return (
 
             <button
               onClick={downloadQRCode}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+              className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-colors text-sm"
             >
               Scarica QR Code
             </button>

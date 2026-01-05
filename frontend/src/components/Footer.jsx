@@ -51,9 +51,9 @@ const Footer = ({ onSystemClick }) => {
                 }
               }
             }}
-            className="flex items-center space-x-1 text-xs text-gray-600 hover:text-blue-600 transition-colors cursor-pointer"
+            className="flex items-center space-x-1 text-xs text-gray-600 hover:text-teal-600 transition-colors cursor-pointer"
           >
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
             <span>Sistema</span>
           </button>
         </div>

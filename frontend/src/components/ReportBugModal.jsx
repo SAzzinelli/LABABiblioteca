@@ -149,11 +149,11 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      'attivo': { className: 'bg-green-100 text-green-800', label: 'Attivo' },
+      'attivo': { className: 'bg-teal-100 text-teal-800', label: 'Attivo' },
       'restituito': { className: 'bg-gray-100 text-gray-800', label: 'Restituito' },
       'scaduto': { className: 'bg-red-100 text-red-800', label: 'Scaduto' }
     };
-    const config = statusConfig[status] || { className: 'bg-blue-100 text-blue-800', label: status };
+    const config = statusConfig[status] || { className: 'bg-teal-100 text-teal-800', label: status };
     
     return (
       <span className={`px-2 py-1 text-xs font-medium rounded-full ${config.className}`}>
@@ -218,7 +218,7 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
                     <div className="text-sm text-gray-600">
                       <p>Uscita: {formatDate(loan.data_uscita)} - Rientro: {formatDate(loan.data_rientro)}</p>
                       {loan.data_rientro && (
-                        <p className="text-green-600 mt-1">Restituito: {formatDate(loan.data_rientro)}</p>
+                        <p className="text-teal-600 mt-1">Restituito: {formatDate(loan.data_rientro)}</p>
                       )}
                     </div>
                   </div>
@@ -261,7 +261,7 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-gray-900">{unit.codice_univoco}</span>
                       <span className={`text-xs px-2 py-1 rounded-full ${
-                        unit.stato === 'disponibile' ? 'bg-green-100 text-green-800' :
+                        unit.stato === 'disponibile' ? 'bg-teal-100 text-teal-800' :
                         unit.stato === 'prestato' ? 'bg-yellow-100 text-yellow-800' :
                         'bg-gray-100 text-gray-800'
                       }`}>

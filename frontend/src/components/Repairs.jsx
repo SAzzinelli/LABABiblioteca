@@ -325,7 +325,7 @@ const handleCancelRepair = async (repairId) => {
           onClick={() => setActiveTab('in_corso')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'in_corso'
-              ? 'border-green-500 text-green-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -343,7 +343,7 @@ const handleCancelRepair = async (repairId) => {
           onClick={() => setActiveTab('completate')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'completate'
-              ? 'border-green-500 text-green-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -351,7 +351,7 @@ const handleCancelRepair = async (repairId) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           Completate
-          <span className="ml-2 bg-green-100 text-green-900 text-xs px-2 py-1 rounded-full">
+          <span className="ml-2 bg-teal-100 text-teal-900 text-xs px-2 py-1 rounded-full">
             {repairs.filter(r => r.stato === 'completata').length}
           </span>
         </button>
@@ -360,7 +360,7 @@ const handleCancelRepair = async (repairId) => {
           onClick={() => setActiveTab('annullate')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'annullate'
-              ? 'border-green-500 text-green-600'
+              ? 'border-teal-500 text-teal-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -382,7 +382,7 @@ const handleCancelRepair = async (repairId) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cerca segnalazioni..."
-              className="w-64 px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-64 px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
             />
             <svg className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -550,12 +550,12 @@ const handleCancelRepair = async (repairId) => {
                   <div
                     key={item.id}
                     onClick={() => handleObjectSelect(item)}
-                    className="p-4 border border-gray-200 rounded-lg hover:border-green-500 hover:shadow-md cursor-pointer transition-all"
+                    className="p-4 border border-gray-200 rounded-lg hover:border-teal-500 hover:shadow-md cursor-pointer transition-all"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium text-gray-900">{item.nome}</h4>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        item.stato_effettivo === 'disponibile' ? 'bg-green-100 text-green-800' :
+                        item.stato_effettivo === 'disponibile' ? 'bg-teal-100 text-teal-800' :
                         item.stato_effettivo === 'non_disponibile' ? 'bg-red-100 text-red-800' :
                         'bg-yellow-100 text-yellow-800'
                       }`}>
@@ -584,7 +584,7 @@ const handleCancelRepair = async (repairId) => {
                 </div>
                 <button
                   onClick={() => setStep(1)}
-                  className="text-green-600 hover:text-green-800 text-sm"
+                  className="text-teal-600 hover:text-teal-800 text-sm"
                 >
                   ← Cambia oggetto
                 </button>
@@ -595,13 +595,13 @@ const handleCancelRepair = async (repairId) => {
                   <div
                     key={unit.id}
                     onClick={() => handleUnitSelect(unit)}
-                    className="p-3 border border-gray-200 rounded-lg hover:border-green-500 hover:shadow-md cursor-pointer transition-all"
+                    className="p-3 border border-gray-200 rounded-lg hover:border-teal-500 hover:shadow-md cursor-pointer transition-all"
                   >
                     <div className="text-center">
                       <div className="font-medium text-gray-900 mb-1">{unit.codice_univoco}</div>
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        unit.stato === 'disponibile' ? 'bg-green-100 text-green-800' :
-                        unit.stato === 'prestato' ? 'bg-green-100 text-green-800' :
+                        unit.stato === 'disponibile' ? 'bg-teal-100 text-teal-800' :
+                        unit.stato === 'prestato' ? 'bg-teal-100 text-teal-800' :
                         unit.stato === 'riservato' ? 'bg-yellow-100 text-yellow-800' :
                         unit.stato === 'in_riparazione' ? 'bg-orange-100 text-orange-800' : // Stato backend: in_riparazione = in segnalazione
                         'bg-gray-100 text-gray-800'
@@ -641,7 +641,7 @@ const handleCancelRepair = async (repairId) => {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="text-green-600 hover:text-green-800 text-sm"
+                  className="text-teal-600 hover:text-teal-800 text-sm"
                 >
                   ← Cambia ID
                 </button>
@@ -728,7 +728,7 @@ const handleCancelRepair = async (repairId) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
                 >
                   {editingRepair ? 'Aggiorna' : 'Crea Segnalazione'}
                 </button>
@@ -770,7 +770,7 @@ const handleCancelRepair = async (repairId) => {
              <label className="block text-sm font-medium text-gray-700">Stato</label>
              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                selectedRepair.stato === 'in_corso' ? 'bg-yellow-100 text-yellow-800' :
-               selectedRepair.stato === 'completata' ? 'bg-green-100 text-green-800' :
+               selectedRepair.stato === 'completata' ? 'bg-teal-100 text-teal-800' :
                'bg-gray-100 text-gray-800'
              }`}>
                {selectedRepair.stato === 'in_corso' ? 'In Corso' :
@@ -799,7 +799,7 @@ const handleCancelRepair = async (repairId) => {
                selectedRepair.priorita === 'critica' ? 'bg-red-100 text-red-800' :
                selectedRepair.priorita === 'alta' ? 'bg-orange-100 text-orange-800' :
                selectedRepair.priorita === 'media' ? 'bg-yellow-100 text-yellow-800' :
-               'bg-green-100 text-green-800'
+               'bg-teal-100 text-teal-800'
              }`}>
                {selectedRepair.priorita === 'critica' ? 'Critica' :
                 selectedRepair.priorita === 'alta' ? 'Alta' :

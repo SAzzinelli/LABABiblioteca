@@ -260,7 +260,7 @@ body: JSON.stringify({
  <React.Fragment key={s}>
  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
  s <= step 
- ? 'bg-blue-600 text-white' 
+ ? 'bg-teal-600 text-white' 
  : 'bg-gray-200 text-gray-600 '
  }`}>
  {s}
@@ -268,7 +268,7 @@ body: JSON.stringify({
  {s < 5 && (
  <div className={`flex-1 h-1 mx-2 ${
  s < step 
- ? 'bg-blue-600' 
+ ? 'bg-teal-600' 
  : 'bg-gray-200 '
  }`} />
  )}
@@ -290,7 +290,7 @@ body: JSON.stringify({
  <div
  key={item.id}
  onClick={() => handleItemSelect(item)}
- className="p-4 border border-gray-300 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
+ className="p-4 border border-gray-300 rounded-lg hover:bg-teal-50 cursor-pointer transition-colors"
  >
                 <h4 className="font-semibold text-gray-900 ">{item.nome}</h4>
                 <p className="text-sm text-gray-600 ">
@@ -305,7 +305,7 @@ body: JSON.stringify({
                       e.stopPropagation();
                       window.open(item.immagine_url, '_blank');
                     }}
-                    className="mt-2 inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full hover:bg-blue-200 transition-colors"
+                    className="mt-2 inline-flex items-center px-2 py-1 bg-teal-100 text-teal-800 text-xs font-medium rounded-full hover:bg-teal-200 transition-colors"
                     title="Visualizza immagine"
                   >
                     <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -324,7 +324,7 @@ body: JSON.stringify({
  {step === 2 && (
  <div className="space-y-4">
  <h3 className="text-lg font-semibold text-gray-800 ">
- Seleziona l'utente per: <span className="text-blue-600">{selectedItem?.nome}</span>
+ Seleziona l'utente per: <span className="text-teal-600">{selectedItem?.nome}</span>
  </h3>
  
  <div className="flex space-x-4 mb-6">
@@ -332,7 +332,7 @@ body: JSON.stringify({
  onClick={() => setIsManualUser(false)}
  className={`px-4 py-2 rounded-lg ${
  !isManualUser 
- ? 'bg-blue-600 text-white' 
+ ? 'bg-teal-600 text-white' 
  : 'bg-gray-200 text-gray-700 '
  }`}
  >
@@ -342,7 +342,7 @@ body: JSON.stringify({
  onClick={() => setIsManualUser(true)}
  className={`px-4 py-2 rounded-lg ${
  isManualUser 
- ? 'bg-blue-600 text-white' 
+ ? 'bg-teal-600 text-white' 
  : 'bg-gray-200 text-gray-700 '
  }`}
  >
@@ -356,7 +356,7 @@ body: JSON.stringify({
  <div
  key={user.id}
  onClick={() => handleUserSelect(user)}
- className="p-4 border border-gray-300 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors"
+ className="p-4 border border-gray-300 rounded-lg hover:bg-teal-50 cursor-pointer transition-colors"
  >
  <h4 className="font-semibold text-gray-900 ">
  {user.name} {user.surname}
@@ -429,7 +429,7 @@ body: JSON.stringify({
  {step === 3 && (
  <div className="space-y-4">
  <h3 className="text-lg font-semibold text-gray-800 ">
- Seleziona le unità di: <span className="text-blue-600">{selectedItem?.nome}</span>
+ Seleziona le unità di: <span className="text-teal-600">{selectedItem?.nome}</span>
  </h3>
  <p className="text-sm text-gray-600 ">
  Utente: <span className="font-medium">
@@ -444,7 +444,7 @@ body: JSON.stringify({
  onClick={() => handleUnitToggle(unit)}
  className={`p-4 border rounded-lg cursor-pointer transition-colors ${
  selectedUnits.find(u => u.id === unit.id)
- ? 'border-blue-500 bg-blue-50 '
+ ? 'border-teal-500 bg-teal-50 '
  : 'border-gray-300 hover:bg-gray-50 '
  }`}
  >
@@ -453,7 +453,7 @@ body: JSON.stringify({
  {unit.codice_univoco}
  </span>
  {selectedUnits.find(u => u.id === unit.id) && (
- <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+ <svg className="w-5 h-5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
  </svg>
  )}
@@ -486,7 +486,7 @@ body: JSON.stringify({
        <button
          type="button"
          onClick={() => setStep(3)}
-         className="text-blue-600 hover:text-blue-800 text-sm"
+         className="text-teal-600 hover:text-teal-800 text-sm"
        >
          ← Cambia Unità
        </button>
@@ -727,7 +727,7 @@ body: JSON.stringify({
             (step === 3 && selectedUnits.length === 0) ||
             (step === 4 && selectedItem?.tipo_prestito === 'entrambi' && !tipoUtilizzo)
           }
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Avanti
         </button>
@@ -735,7 +735,7 @@ body: JSON.stringify({
  <button
  onClick={handleCreateLoan}
  disabled={loading || !dateRange.dal || (!dateRange.al && !(selectedItem?.tipo_prestito === 'solo_interno' || (selectedItem?.tipo_prestito === 'entrambi' && tipoUtilizzo === 'interno')))}
- className="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {loading ? 'Creazione...' : 'Crea Prestito'}
  </button>

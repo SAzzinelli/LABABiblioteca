@@ -96,8 +96,8 @@ const BasicStats = () => {
 
  const getColorClasses = (color) => {
  const colors = {
- blue: 'bg-blue-50 text-blue-600 border-blue-200',
- green: 'bg-green-50 text-green-600 border-green-200',
+ blue: 'bg-teal-50 text-teal-600 border-teal-200',
+ green: 'bg-teal-50 text-teal-600 border-teal-200',
  yellow: 'bg-yellow-50 text-yellow-600 border-yellow-200',
  purple: 'bg-purple-50 text-purple-600 border-purple-200'
  };
@@ -110,7 +110,7 @@ const BasicStats = () => {
  <h2 className="text-xl font-semibold text-gray-900">Statistiche Base</h2>
  <button
  onClick={fetchBasicStats}
- className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+ className="text-sm text-teal-600 hover:text-teal-800 transition-colors"
  >
  Aggiorna
  </button>

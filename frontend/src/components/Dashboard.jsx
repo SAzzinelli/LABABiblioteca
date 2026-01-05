@@ -326,8 +326,8 @@ return (
           <p className="text-3xl font-bold text-gray-900">{stats.inventory}</p>
           <p className="text-sm text-gray-500">Elementi totali</p>
         </div>
-        <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-          <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
+          <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
         </div>
@@ -429,14 +429,14 @@ return (
  item.stato_scorte === 'esaurito' ? 'border-red-500' :
  item.stato_scorte === 'attenzione' ? 'border-orange-500' :
  item.stato_scorte === 'scarseggia' ? 'border-yellow-500' :
- 'border-green-500'
+ 'border-teal-500'
  }`}>
  <div className="font-semibold text-gray-900 text-sm">{item.nome}</div>
  <div className={`font-medium text-xs mt-1 ${
  item.stato_scorte === 'esaurito' ? 'text-red-600' :
  item.stato_scorte === 'attenzione' ? 'text-orange-600' :
  item.stato_scorte === 'scarseggia' ? 'text-yellow-600' :
- 'text-blue-600'
+ 'text-teal-600'
  }`}>
  {item.motivo}
  </div>
@@ -580,10 +580,10 @@ return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div 
           onClick={() => setShowAddModal(true)}
-          className="group bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+          className="group bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl p-6 border border-teal-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
         >
           <div className="flex items-center mb-4">
-            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+            <div className="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
@@ -712,7 +712,7 @@ return (
  >
  <div className={`w-3 h-3 rounded-full mr-4 ${
  request.stato === 'in_attesa' ? 'bg-amber-500' : 
- request.stato === 'approvata' ? 'bg-green-500' : 'bg-red-500'
+        request.stato === 'approvata' ? 'bg-teal-500' : 'bg-red-500'
  }`}></div>
  <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900 truncate">
@@ -725,7 +725,7 @@ return (
  <div className="flex-shrink-0">
  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
  request.stato === 'in_attesa' ? 'bg-yellow-100 text-yellow-800' :
- request.stato === 'approvata' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        request.stato === 'approvata' ? 'bg-teal-100 text-teal-800' : 'bg-red-100 text-red-800'
  }`}>
  {request.stato === 'in_attesa' ? 'In Attesa' : 
  request.stato === 'approvata' ? 'Approvata' : 'Rifiutata'}
@@ -767,7 +767,7 @@ return (
  </div>
  <div className="flex-shrink-0">
  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
- report.stato === 'aperta' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+        report.stato === 'aperta' ? 'bg-yellow-100 text-yellow-800' : 'bg-teal-100 text-teal-800'
  }`}>
  {report.stato === 'aperta' ? 'Aperta' : 'Chiusa'}
  </span>
@@ -1006,7 +1006,7 @@ const colorMap = {
  <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 transition-transform p-6">
  <div className="flex items-center">
  <div className={`w-12 h-12 ${colorMap[title]} rounded-lg flex items-center justify-center ${
- title === 'Inventario' ? 'text-green-600' :
+        title === 'Inventario' ? 'text-teal-600' :
  title === 'Richieste' ? 'text-amber-600' :
  title === 'Segnalazioni' ? 'text-orange-600' :
  'text-gray-600'

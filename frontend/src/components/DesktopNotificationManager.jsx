@@ -70,7 +70,7 @@ const DesktopNotificationManager = ({ children }) => {
  <div className="bg-white rounded-lg shadow-lg border p-4">
  <div className="flex items-start">
  <div className="flex-shrink-0">
- <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+ <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4 19h6v-6H4v6zM4 5h6V1H4v4zM15 1v6h6V1h-6z" />
  </svg>
  </div>
@@ -84,7 +84,7 @@ const DesktopNotificationManager = ({ children }) => {
  <div className="mt-3 flex space-x-2">
  <button
  onClick={handleEnableNotifications}
- className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+ className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
  >
  Abilita
  </button>
