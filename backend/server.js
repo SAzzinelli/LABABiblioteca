@@ -207,12 +207,20 @@ if (frontendExists) {
   console.warn('⚠️ Solo API disponibile. Esegui "npm run build" nella cartella frontend.');
 }
 
+// Health check endpoint - Railway lo usa per verificare che il servizio sia attivo
 app.get("/health", (_, res) => {
+  res.status(200).type("text").send("ok");
+});
+
+// Health check JSON endpoint per debug
+app.get("/api/health", (_, res) => {
   res.json({ 
     ok: true, 
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    frontend: frontendExists
+    frontend: frontendExists,
+    port: PORT,
+    host: HOST
   });
 });
 
@@ -248,6 +256,17 @@ const server = app.listen(PORT, HOST, () => {
   console.log(`🔌 Porta utilizzata: ${PORT} (da ${process.env.PORT ? 'variabile PORT' : 'default 3001'})`);
 });
 
+// Gestione errori non gestiti
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+  // Non uscire immediatamente, lascia che Railway gestisca il restart
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  // Non uscire immediatamente, lascia che Railway gestisca il restart
+});
+
 // Gestione errori del server
 server.on('error', (error) => {
   console.error('❌ Errore server:', error);
@@ -259,6 +278,14 @@ server.on('error', (error) => {
 // Gestione chiusura graceful
 process.on('SIGTERM', () => {
   console.log('🛑 SIGTERM ricevuto, chiudo il server...');
+  server.close(() => {
+    console.log('✅ Server chiuso correttamente');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.log('🛑 SIGINT ricevuto, chiudo il server...');
   server.close(() => {
     console.log('✅ Server chiuso correttamente');
     process.exit(0);

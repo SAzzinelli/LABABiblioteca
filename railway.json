@@ -8,6 +8,8 @@
     "startCommand": "cd backend && node server.js",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 1,
-    "restartPolicyDelay": 900000
+    "restartPolicyDelay": 900000,
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 100
   }
 }
