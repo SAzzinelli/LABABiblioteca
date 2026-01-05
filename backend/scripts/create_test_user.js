@@ -6,10 +6,11 @@ async function createTestUser() {
   console.log('👤 Creazione utente di test...');
   
   try {
-    // ATTENZIONE: Questo script crea un utente di test con password hardcoded
+    // ATTENZIONE: Questo script crea un utente di test
     // SOLO PER AMBIENTE DI SVILUPPO/TEST - NON USARE IN PRODUZIONE
-    // Crea utente di test
-    const hashedPassword = await bcrypt.hash('***REMOVED***', 10);
+    // La password deve essere fornita tramite variabile d'ambiente TEST_USER_PASSWORD
+    const testPassword = process.env.TEST_USER_PASSWORD || 'changeme123';
+    const hashedPassword = await bcrypt.hash(testPassword, 10);
     
     await query(`
       INSERT INTO users (email, password_hash, name, surname, phone, matricola, ruolo, corso_accademico)
@@ -28,8 +29,12 @@ async function createTestUser() {
     
     console.log('✅ Utente di test creato con successo!');
     console.log('📧 Email: test@laba.it');
-    console.log('🔑 Password: ***REMOVED***');
-    console.log('⚠️  ATTENZIONE: Password hardcoded - SOLO PER TEST');
+    if (process.env.TEST_USER_PASSWORD) {
+      console.log('🔑 Password: [da variabile d\'ambiente TEST_USER_PASSWORD]');
+    } else {
+      console.log('⚠️  Password di default usata - configura TEST_USER_PASSWORD per sicurezza');
+    }
+    console.log('⚠️  ATTENZIONE: SOLO PER TEST - NON USARE IN PRODUZIONE');
     
   } catch (error) {
     console.error('❌ Errore creazione utente:', error);

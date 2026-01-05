@@ -55,7 +55,7 @@ Il browser ha in cache:
 
 Dopo aver pulito la cache:
 1. Apri `https://biblioteca.laba.biz` in una finestra privata
-2. Fai login con `admin / ***REMOVED***`
+2. Fai login con `admin / laba2025`
 3. L'inventario dovrebbe essere vuoto (database nuovo)
 
 Se vedi ancora dati vecchi, il problema è nella configurazione Railway.

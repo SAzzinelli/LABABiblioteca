@@ -157,7 +157,7 @@ cd frontend && npm run dev
 ### 6. Accesso
 - **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:3001
-- **Admin**: admin@labafirenze.com / ***REMOVED***
+- **Admin**: admin@labafirenze.com / laba2025
 
 ## 🔧 Configurazione
 
