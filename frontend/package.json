@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite --port 3000",
-    "build": "./node_modules/.bin/vite build",
+    "build": "node node_modules/vite/bin/vite.js build",
     "dev": "vite --port 3000"
   },
   "dependencies": {
