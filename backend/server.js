@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import { existsSync } from 'fs';
 import inventarioRouter from "./routes/inventario.js";
 import prestitiRouter from "./routes/prestiti.js";
 import categorieRouter from "./routes/categorie.js";
@@ -150,7 +151,6 @@ const __dirname = path.dirname(__filename);
 const staticDir = path.join(__dirname, "..", "frontend", "dist");
 
 // Check if frontend dist exists
-import { existsSync } from 'fs';
 const frontendExists = existsSync(staticDir);
 if (frontendExists) {
   console.log('✅ Frontend build trovato, servendo file statici da:', staticDir);
