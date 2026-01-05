@@ -124,7 +124,7 @@ const Dashboard = ({ onNavigate }) => {
 
  if (!inventoryRes.ok) throw new Error('Errore nel caricamento inventario');
  if (!requestsRes.ok) throw new Error('Errore nel caricamento richieste');
- if (!repairsRes.ok) throw new Error('Errore nel caricamento riparazioni');
+ if (!repairsRes.ok) throw new Error('Errore nel caricamento segnalazioni');
  if (!reportsRes.ok) throw new Error('Errore nel caricamento segnalazioni');
  if (!prestitiRes.ok) throw new Error('Errore nel caricamento prestiti');
  if (!alertsRes.ok) throw new Error('Errore nel caricamento avvisi');
@@ -352,9 +352,9 @@ return (
     <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600 mb-1">Riparazioni</p>
+          <p className="text-sm font-medium text-gray-600 mb-1">Segnalazioni</p>
           <p className="text-3xl font-bold text-gray-900">{stats.repairs}</p>
-          <p className="text-sm text-gray-500">In riparazione</p>
+          <p className="text-sm text-gray-500">In segnalazione</p>
         </div>
         <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
           <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -619,9 +619,9 @@ return (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-bold text-gray-900">Gestisci Riparazioni</h3>
+            <h3 className="text-lg font-bold text-gray-900">Gestisci Segnalazioni</h3>
           </div>
-          <p className="text-gray-600">Visualizza e gestisci le riparazioni</p>
+          <p className="text-gray-600">Visualizza e gestisci le segnalazioni</p>
         </div>
       </div>
     </div>
@@ -989,7 +989,7 @@ function StatCard({ title, value, description }) {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
  </svg>
  ),
- 'Riparazioni': (
+ 'Segnalazioni': (
  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1005,7 +1005,7 @@ function StatCard({ title, value, description }) {
  const colorMap = {
  'Inventario': 'bg-gradient-to-br from-blue-100 to-blue-200 ',
  'Richieste': 'bg-gradient-to-br from-purple-100 to-purple-200 ', 
- 'Riparazioni': 'bg-gradient-to-br from-orange-100 to-orange-200 ',
+ 'Segnalazioni': 'bg-gradient-to-br from-orange-100 to-orange-200 ',
  'Segnalazioni': 'bg-gradient-to-br from-red-100 to-red-200 '
  };
 
@@ -1015,7 +1015,7 @@ function StatCard({ title, value, description }) {
  <div className={`w-12 h-12 ${colorMap[title]} rounded-lg flex items-center justify-center ${
  title === 'Inventario' ? 'text-blue-600' :
  title === 'Richieste' ? 'text-purple-600' :
- title === 'Riparazioni' ? 'text-orange-600' :
+ title === 'Segnalazioni' ? 'text-orange-600' :
  'text-red-600'
  } shadow-lg`}>
  {iconMap[title]}

@@ -43,7 +43,7 @@ export function listRip() {
     JOIN inventario i ON i.id = r.inventario_id
     ORDER BY r.created_at DESC
   `).all()
-  return rows.map((r) => ({ ...r, unit_ids: parseUnits(r.unit_ids_json), tipo: r.tipo || 'RIPARAZIONE' }))
+  return rows.map((r) => ({ ...r, unit_ids: parseUnits(r.unit_ids_json), tipo: r.tipo || 'SEGNALAZIONE' }))
 }
 
 export function getRip(id) {
@@ -54,7 +54,7 @@ export function getRip(id) {
     WHERE r.id = ?
   `).get(id)
   if (!r) return null
-  return { ...r, unit_ids: parseUnits(r.unit_ids_json), tipo: r.tipo || 'RIPARAZIONE' }
+  return { ...r, unit_ids: parseUnits(r.unit_ids_json), tipo: r.tipo || 'SEGNALAZIONE' }
 }
 
 export function addRip(body) {

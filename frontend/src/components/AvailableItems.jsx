@@ -81,7 +81,7 @@ const AvailableItems = () => {
     switch (status) {
       case 'disponibile': return 'Disponibile';
       case 'in_prestito': return 'In Prestito';
-      case 'in_riparazione': return 'In Riparazione';
+      case 'in_riparazione': return 'In Segnalazione';
       case 'non_disponibile': return 'Non Disponibile';
       default: return status;
     }

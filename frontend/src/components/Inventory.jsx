@@ -295,7 +295,7 @@ const Inventory = () => {
       case 'in_prestito':
         return 'In Prestito';
       case 'in_riparazione':
-        return 'In Riparazione';
+        return 'In Segnalazione';
       case 'perso':
         return 'Perso';
       default:
@@ -564,7 +564,7 @@ const Inventory = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">In Riparazione</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">In Segnalazione</p>
                 <p className="text-3xl font-bold text-gray-900">
                   {inventory.filter(item => item.stato_effettivo === 'in_riparazione').length}
                 </p>
@@ -999,7 +999,7 @@ const Inventory = () => {
                           case 'riservato':
                             return 'Riservato';
                           case 'in_riparazione':
-                            return 'In Riparazione';
+                            return 'In Segnalazione';
                           case 'perso':
                             return 'Perso';
                           default:

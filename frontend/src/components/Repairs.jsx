@@ -43,8 +43,8 @@ const Repairs = () => {
    switch (step) {
      case 1: return 'Seleziona Materiale';
      case 2: return 'Seleziona ID Specifico';
-     case 3: return 'Dettagli Riparazione';
-     default: return 'Nuova Riparazione';
+    case 3: return 'Dettagli Segnalazione';
+    default: return 'Nuova Segnalazione';
    }
  };
 
@@ -90,7 +90,7 @@ const handleCompleteRepair = async (repairId) => {
     // Get current repair data
     const repair = repairs.find(r => r.id === repairId);
     if (!repair) {
-      throw new Error('Riparazione non trovata');
+      throw new Error('Segnalazione non trovata');
     }
 
     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/riparazioni/${repairId}`, {
@@ -105,7 +105,7 @@ const handleCompleteRepair = async (repairId) => {
     });
 
     if (!response.ok) {
-      throw new Error('Errore nel completamento riparazione');
+      throw new Error('Errore nel completamento segnalazione');
     }
 
     await fetchData(); // Refresh the list
@@ -127,7 +127,7 @@ const handleCancelRepair = async (repairId) => {
       body: JSON.stringify({ stato: 'annullata' })
     });
 
-    if (!response.ok) throw new Error('Errore nell\'annullamento riparazione');
+    if (!response.ok) throw new Error('Errore nell\'annullamento segnalazione');
 
     await fetchData();
     setShowDetailsModal(false);
@@ -141,7 +141,7 @@ const handleCancelRepair = async (repairId) => {
  e.preventDefault();
  
  if (!selectedObject || !selectedUnit) {
-   setError('Seleziona materiale e ID specifico');
+   setError('Seleziona materiale e ID specifico da segnalare');
    return;
  }
  
@@ -192,7 +192,7 @@ const handleCancelRepair = async (repairId) => {
       })
  ]);
 
- if (!repairsRes.ok) throw new Error('Errore nel caricamento riparazioni');
+ if (!repairsRes.ok) throw new Error('Errore nel caricamento segnalazioni');
  if (!inventoryRes.ok) throw new Error('Errore nel caricamento inventario');
 
  const [repairsData, inventoryData] = await Promise.all([
@@ -297,8 +297,8 @@ const handleCancelRepair = async (repairId) => {
  <div className="card">
  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
  <div>
- <h1 className="text-2xl font-bold text-primary">Gestione Riparazioni</h1>
- <p className="text-secondary mt-1">Gestisci le riparazioni dei materiali</p>
+ <h1 className="text-2xl font-bold text-primary">Gestione Segnalazioni</h1>
+ <p className="text-secondary mt-1">Gestisci le segnalazioni sui materiali</p>
  </div>
  <div className="flex items-center">
         <button
@@ -311,7 +311,7 @@ const handleCancelRepair = async (repairId) => {
           <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          <span>Nuova Riparazione</span>
+          <span>Nuova Segnalazione</span>
         </button>
  </div>
  </div>
@@ -381,7 +381,7 @@ const handleCancelRepair = async (repairId) => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Cerca riparazioni..."
+              placeholder="Cerca segnalazioni..."
               className="w-64 px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <svg className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -396,7 +396,7 @@ const handleCancelRepair = async (repairId) => {
     <div className="lg:hidden">
       <div className="card">
         <div className="form-group">
-          <label className="form-label">Cerca riparazioni</label>
+          <label className="form-label">Cerca segnalazioni</label>
           <div className="relative">
             <input
               type="text"
@@ -424,8 +424,8 @@ const handleCancelRepair = async (repairId) => {
  </svg>
  <p className="text-secondary">
  {searchTerm 
- ? 'Nessuna riparazione trovata con i filtri selezionati' 
- : `Nessuna riparazione ${
+? 'Nessuna segnalazione trovata con i filtri selezionati' 
+: `Nessuna segnalazione ${
  activeTab === 'in_corso' ? 'in corso' :
  activeTab === 'completate' ? 'completata' :
  activeTab === 'annullate' ? 'annullata' : ''
@@ -544,7 +544,7 @@ const handleCancelRepair = async (repairId) => {
           {/* Step 1: Seleziona Materiale */}
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Seleziona il materiale da riparare</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Seleziona il materiale da segnalare</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
                 {inventory.map((item) => (
                   <div
@@ -603,13 +603,13 @@ const handleCancelRepair = async (repairId) => {
                         unit.stato === 'disponibile' ? 'bg-green-100 text-green-800' :
                         unit.stato === 'prestato' ? 'bg-blue-100 text-blue-800' :
                         unit.stato === 'riservato' ? 'bg-yellow-100 text-yellow-800' :
-                        unit.stato === 'in_riparazione' ? 'bg-orange-100 text-orange-800' :
+                        unit.stato === 'in_riparazione' ? 'bg-orange-100 text-orange-800' : // Stato backend: in_riparazione = in segnalazione
                         'bg-gray-100 text-gray-800'
                       }`}>
                         {unit.stato === 'disponibile' ? 'Disponibile' :
                          unit.stato === 'prestato' ? 'In Prestito' :
                          unit.stato === 'riservato' ? 'Riservato' :
-                         unit.stato === 'in_riparazione' ? 'In Riparazione' :
+                         unit.stato === 'in_riparazione' ? 'In Segnalazione' :
                          unit.stato}
                       </span>
                       {unit.note && (
@@ -628,12 +628,12 @@ const handleCancelRepair = async (repairId) => {
             </div>
           )}
 
-          {/* Step 3: Dettagli Riparazione */}
+          {/* Step 3: Dettagli Segnalazione */}
           {step === 3 && selectedObject && selectedUnit && (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900">Dettagli Riparazione</h3>
+                  <h3 className="text-lg font-medium text-gray-900">Dettagli Segnalazione</h3>
                   <p className="text-sm text-gray-600">
                     Oggetto: <strong>{selectedObject.nome}</strong> - ID: <strong>{selectedUnit.codice_univoco}</strong>
                   </p>
@@ -662,10 +662,10 @@ const handleCancelRepair = async (repairId) => {
                 />
               </div>
 
-              {/* Note Tecniche */}
+              {/* Dettagli Problema */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Note Tecniche
+                  Dettagli Problema
                 </label>
                 <textarea
                   value={formData.note_tecniche}
@@ -730,7 +730,7 @@ const handleCancelRepair = async (repairId) => {
                   type="submit"
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  {editingRepair ? 'Aggiorna' : 'Crea Riparazione'}
+                  {editingRepair ? 'Aggiorna' : 'Crea Segnalazione'}
                 </button>
               </div>
             </form>
@@ -745,7 +745,7 @@ const handleCancelRepair = async (repairId) => {
    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4">
      <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-         <h2 className="text-xl font-semibold text-gray-900">Dettagli Riparazione</h2>
+         <h2 className="text-xl font-semibold text-gray-900">Dettagli Segnalazione</h2>
          <button
            onClick={() => {
              setShowDetailsModal(false);

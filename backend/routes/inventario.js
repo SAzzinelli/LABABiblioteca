@@ -432,7 +432,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
           ).join(', ');
           
           return res.status(400).json({ 
-            error: `⚠️ Avviso: Stai modificando questo parametro con riparazioni in corso. Non puoi farlo, lo potrai fare quando rientreranno tutti. Riparazioni in corso: ${repairInfo}${repairDetails.length === 3 ? '...' : ''}` 
+            error: `⚠️ Avviso: Stai modificando questo parametro con segnalazioni in corso. Non puoi farlo, lo potrai fare quando saranno tutte risolte. Segnalazioni in corso: ${repairInfo}${repairDetails.length === 3 ? '...' : ''}` 
           });
         }
         
@@ -575,7 +575,7 @@ r.delete('/:id', requireAuth, requireRole('admin'), async (req, res) => {
       });
     }
     
-    // Controlla se ci sono riparazioni in corso per questo oggetto
+    // Controlla se ci sono segnalazioni in corso per questo materiale
     const ongoingRepairs = await query(`
       SELECT COUNT(*) as count 
       FROM riparazioni r 
@@ -584,7 +584,7 @@ r.delete('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     
     if (ongoingRepairs[0]?.count > 0) {
       return res.status(400).json({ 
-        error: 'Impossibile eliminare: oggetto ha riparazioni in corso. Completa prima le riparazioni.' 
+        error: 'Impossibile eliminare: materiale ha segnalazioni in corso. Risolvi prima le segnalazioni.' 
       });
     }
     

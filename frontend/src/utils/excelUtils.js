@@ -68,11 +68,11 @@ export const exportRequestsToExcel = (requests, filename = 'richieste_laba.xlsx'
   XLSX.writeFile(wb, filename);
 };
 
-// Export riparazioni to Excel
-export const exportRepairsToExcel = (repairs, filename = 'riparazioni_laba.xlsx') => {
+// Export segnalazioni to Excel
+export const exportRepairsToExcel = (repairs, filename = 'segnalazioni_laba.xlsx') => {
   const data = repairs.map(repair => ({
     'ID': repair.id,
-    'Elemento': repair.oggetto_nome || 'N/A',
+    'Materiale': repair.oggetto_nome || 'N/A',
     'Descrizione': repair.descrizione,
     'Stato': repair.stato === 'in_corso' ? 'In Corso' :
              repair.stato === 'completata' ? 'Completata' : 'Annullata',
@@ -99,7 +99,7 @@ export const exportRepairsToExcel = (repairs, filename = 'riparazioni_laba.xlsx'
   ];
   ws['!cols'] = colWidths;
 
-  XLSX.utils.book_append_sheet(wb, ws, 'Riparazioni');
+  XLSX.utils.book_append_sheet(wb, ws, 'Segnalazioni');
   XLSX.writeFile(wb, filename);
 };
 

@@ -1,4 +1,6 @@
 // backend/routes/riparazioni.js - PostgreSQL Version
+// NOTA: Il nome del file e della tabella rimangono "riparazioni" per compatibilità,
+// ma l'interfaccia utente mostra "Segnalazioni" per il contesto biblioteca
 import { Router } from 'express';
 import { query } from '../utils/postgres.js';
 import { requireAuth, requireRole } from '../middleware/auth.js';
@@ -17,7 +19,7 @@ r.get('/', requireAuth, async (req, res) => {
     
     res.json(result || []);
   } catch (error) {
-    console.error('Errore GET riparazioni:', error);
+    console.error('Errore GET segnalazioni:', error);
     res.status(500).json({ error: 'Errore interno del server' });
   }
 });
@@ -44,7 +46,7 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
     
     if (unitCheck[0].stato === 'in_riparazione') {
       return res.status(400).json({ 
-        error: `Unità ${unitCheck[0].codice_univoco} è già in riparazione` 
+        error: `Unità ${unitCheck[0].codice_univoco} è già in segnalazione` 
       });
     }
     
@@ -57,9 +59,9 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
         INSERT INTO riparazioni (inventario_id, quantita, stato, note, unit_ids_json, tipo, priorita)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *
-      `, [inventario_id, 1, stato || 'in_corso', `${descrizione}\n\nNote tecniche: ${note_tecniche || 'N/A'}`, JSON.stringify([unit_id]), 'riparazione', priorita || 'media']);
+      `, [inventario_id, 1, stato || 'in_corso', `${descrizione}\n\nDettagli problema: ${note_tecniche || 'N/A'}`, JSON.stringify([unit_id]), 'segnalazione', priorita || 'media']);
       
-      // Mark unit as in repair
+      // Mark unit as in segnalazione
       const updateResult = await query(`
         UPDATE inventario_unita 
         SET stato = 'in_riparazione'
@@ -73,17 +75,17 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       // Commit transaction
       await query('COMMIT');
       
-      console.log(`✅ Riparazione creata per unità ${unitCheck[0].codice_univoco} (ID: ${unit_id})`);
+      console.log(`✅ Segnalazione creata per unità ${unitCheck[0].codice_univoco} (ID: ${unit_id})`);
       
       res.status(201).json(result[0]);
     } catch (transactionError) {
       // Rollback on any error
       await query('ROLLBACK');
-      console.error('❌ Errore durante creazione riparazione:', transactionError.message);
+      console.error('❌ Errore durante creazione segnalazione:', transactionError.message);
       throw transactionError;
     }
   } catch (error) {
-    console.error('Errore POST riparazione:', error);
+    console.error('Errore POST segnalazione:', error);
     res.status(500).json({ error: 'Errore interno del server' });
   }
 });
@@ -102,7 +104,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     const currentRepair = await query('SELECT unit_ids_json, stato as current_stato FROM riparazioni WHERE id = $1', [id]);
     
     if (currentRepair.length === 0) {
-      return res.status(404).json({ error: 'Riparazione non trovata' });
+      return res.status(404).json({ error: 'Segnalazione non trovata' });
     }
     
     // Start transaction for atomic operations
@@ -149,7 +151,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
           `, [id]);
           
           unitIds = fallbackUnits.map(u => u.id);
-          console.log(`🔄 Fallback: trovate ${unitIds.length} unità da riparazione ${id}`);
+          console.log(`🔄 Fallback: trovate ${unitIds.length} unità da segnalazione ${id}`);
         }
         
         // Update units status if we have valid IDs
@@ -161,7 +163,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
           `, [unitIds]);
           
           const action = stato === 'completata' ? 'completamento' : 'annullamento';
-          console.log(`✅ ${updateResult.rowCount} unità rimesse disponibili dopo ${action} riparazione ${id}`);
+          console.log(`✅ ${updateResult.rowCount} unità rimesse disponibili dopo ${action} segnalazione ${id}`);
           
           // Verify the update worked
           const verifyResult = await query(`
@@ -171,10 +173,10 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
           `, [unitIds]);
           
           if (verifyResult[0].still_in_repair > 0) {
-            throw new Error(`${verifyResult[0].still_in_repair} unità ancora in riparazione dopo aggiornamento`);
+            throw new Error(`${verifyResult[0].still_in_repair} unità ancora in segnalazione dopo aggiornamento`);
           }
         } else {
-          console.warn(`⚠️ Nessuna unità valida trovata per riparazione ${id}, unit_ids:`, unitIds);
+          console.warn(`⚠️ Nessuna unità valida trovata per segnalazione ${id}, unit_ids:`, unitIds);
         }
       }
       
@@ -185,11 +187,11 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     } catch (transactionError) {
       // Rollback on any error
       await query('ROLLBACK');
-      console.error('❌ Errore durante transazione riparazione:', transactionError.message);
+      console.error('❌ Errore durante transazione segnalazione:', transactionError.message);
       throw transactionError;
     }
   } catch (error) {
-    console.error('Errore PUT riparazione:', error);
+    console.error('Errore PUT segnalazione:', error);
     res.status(500).json({ error: 'Errore interno del server' });
   }
 });
@@ -201,20 +203,20 @@ r.delete('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     const result = await query('DELETE FROM riparazioni WHERE id = $1', [id]);
     
     if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'Riparazione non trovata' });
+      return res.status(404).json({ error: 'Segnalazione non trovata' });
     }
     
-    res.json({ message: 'Riparazione eliminata' });
+    res.json({ message: 'Segnalazione eliminata' });
   } catch (error) {
-    console.error('Errore DELETE riparazione:', error);
+    console.error('Errore DELETE segnalazione:', error);
     res.status(500).json({ error: 'Errore interno del server' });
   }
 });
 
-// GET /api/riparazioni/fix-orphaned-units - Fix units stuck in repair status
+// GET /api/riparazioni/fix-orphaned-units - Fix units stuck in segnalazione status
 r.get('/fix-orphaned-units', requireAuth, requireRole('admin'), async (req, res) => {
   try {
-    // Find units marked as 'in_riparazione' but with no active repair
+    // Find units marked as 'in_riparazione' but with no active segnalazione
     const orphanedUnits = await query(`
       SELECT iu.id, iu.codice_univoco, iu.inventario_id, i.nome as articolo_nome
       FROM inventario_unita iu
@@ -248,7 +250,7 @@ r.get('/fix-orphaned-units', requireAuth, requireRole('admin'), async (req, res)
     console.log(`🔧 Corrette ${orphanedUnits.length} unità orfane:`, orphanedUnits.map(u => u.codice_univoco));
     
     res.json({
-      message: `Corrette ${orphanedUnits.length} unità rimaste bloccate in riparazione`,
+      message: `Corrette ${orphanedUnits.length} unità rimaste bloccate in segnalazione`,
       fixed: orphanedUnits.length,
       units: orphanedUnits.map(u => ({
         id: u.id,

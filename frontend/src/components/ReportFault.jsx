@@ -87,7 +87,7 @@ const ReportFault = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Segnala Guasto</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Segnala Problema</h1>
           <p className="text-gray-600">Segnala problemi con gli articoli e gestisci le tue segnalazioni</p>
         </div>
         <button

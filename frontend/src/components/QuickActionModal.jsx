@@ -80,7 +80,7 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
  <h2 className="text-xl font-bold text-primary">
  {action === 'add-inventory' && 'Aggiungi Elemento Rapido'}
  {action === 'manage-requests' && 'Gestisci Richieste'}
- {action === 'manage-repairs' && 'Gestisci Riparazioni'}
+ {action === 'manage-repairs' && 'Gestisci Segnalazioni'}
  {!['add-inventory', 'manage-requests', 'manage-repairs'].includes(action) && 'Azione Rapida'}
  </h2>
  <button
@@ -345,8 +345,8 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
  </svg>
  </div>
- <h3 className="text-lg font-semibold text-primary mb-2">Gestione Riparazioni</h3>
- <p className="text-secondary mb-4">Visualizza e gestisci tutte le riparazioni in corso e completate.</p>
+        <h3 className="text-lg font-semibold text-primary mb-2">Gestione Segnalazioni</h3>
+        <p className="text-secondary mb-4">Visualizza e gestisci tutte le segnalazioni in corso e completate.</p>
  
  {/* Lista riparazioni */}
  <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -355,8 +355,8 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
  </svg>
- <p>Nessuna riparazione in corso</p>
- <p className="text-sm text-muted">Le riparazioni appariranno qui quando saranno create</p>
+            <p>Nessuna segnalazione in corso</p>
+            <p className="text-sm text-muted">Le segnalazioni appariranno qui quando saranno create</p>
  </div>
  </div>
  
@@ -367,7 +367,7 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
  }}
  className="btn-primary w-full"
  >
- Vai a Riparazioni Complete
+            Vai a Segnalazioni Complete
  </button>
  </div>
  )}

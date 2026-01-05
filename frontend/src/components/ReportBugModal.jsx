@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
 const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
-  const [step, setStep] = useState(1); // 1: Prestito, 2: ID Specifico, 3: Dettagli Guasto
+  const [step, setStep] = useState(1); // 1: Prestito, 2: ID Specifico, 3: Dettagli Segnalazione
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [myLoans, setMyLoans] = useState([]);
@@ -10,7 +10,7 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
   const [availableUnits, setAvailableUnits] = useState([]);
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [formData, setFormData] = useState({
-    tipo: 'guasto',
+    tipo: 'danneggiamento',
     urgenza: 'media',
     messaggio: ''
   });
@@ -25,7 +25,7 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
       setSelectedUnit(null);
       setAvailableUnits([]);
       setFormData({
-        tipo: 'guasto',
+        tipo: 'danneggiamento',
         urgenza: 'media',
         messaggio: prefillData.messaggio || ''
       });
@@ -143,7 +143,7 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
       case 1: return 'Seleziona Prestito';
       case 2: return 'Seleziona ID Specifico';
       case 3: return 'Dettagli Segnalazione';
-      default: return 'Segnala Guasto';
+      default: return 'Segnala Problema';
     }
   };
 
@@ -314,10 +314,13 @@ const ReportBugModal = ({ isOpen, onClose, onSuccess, prefillData = {} }) => {
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
                 >
-                  <option value="guasto">Guasto</option>
                   <option value="danneggiamento">Danneggiamento</option>
-                  <option value="malfunzionamento">Malfunzionamento</option>
+                  <option value="pagine_mancanti">Pagine Mancanti</option>
+                  <option value="rilegatura_rotta">Rilegatura Rotta</option>
+                  <option value="copertina_danneggiata">Copertina Danneggiata</option>
+                  <option value="macchie_segni">Macchie/Segni</option>
                   <option value="perdita">Perdita/Furto</option>
+                  <option value="materiale_obsoleto">Materiale Obsoleto/Da Aggiornare</option>
                 </select>
               </div>
 

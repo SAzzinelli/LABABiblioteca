@@ -154,7 +154,7 @@ const AdvancedFilters = ({
  <option value="all">Tutti gli stati</option>
  <option value="disponibile">Disponibile</option>
  <option value="in_prestito">In prestito</option>
- <option value="in_riparazione">In riparazione</option>
+                <option value="in_riparazione">In segnalazione</option>
  <option value="non_disponibile">Non disponibile</option>
  </select>
  </div>

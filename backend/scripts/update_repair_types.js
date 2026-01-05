@@ -3,17 +3,17 @@ import { query } from '../utils/postgres.js';
 
 async function updateRepairTypes() {
   try {
-    console.log('🔄 Aggiornamento tipi riparazioni...');
+    console.log('🔄 Aggiornamento tipi segnalazioni...');
     
     // Aggiorna tutte le riparazioni che non hanno tipo
     const result = await query(`
       UPDATE riparazioni 
-      SET tipo = 'riparazione', priorita = 'media'
+      SET tipo = 'segnalazione', priorita = 'media'
       WHERE tipo IS NULL OR tipo = ''
       RETURNING id, tipo, priorita
     `);
     
-    console.log(`✅ Aggiornate ${result.length} riparazioni`);
+    console.log(`✅ Aggiornate ${result.length} segnalazioni`);
     result.forEach(repair => {
       console.log(`  ID ${repair.id}: tipo="${repair.tipo}", priorità="${repair.priorita}"`);
     });
@@ -25,7 +25,7 @@ async function updateRepairTypes() {
       ORDER BY id
     `);
     
-    console.log('\n📊 Riparazioni aggiornate:');
+    console.log('\n📊 Segnalazioni aggiornate:');
     allRepairs.forEach(repair => {
       console.log(`ID ${repair.id}: tipo="${repair.tipo}", priorità="${repair.priorita}", stato="${repair.stato}"`);
     });
