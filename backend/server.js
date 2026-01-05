@@ -148,16 +148,30 @@ app.use("/api/excel", excelRouter);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const staticDir = path.join(__dirname, "..", "frontend", "dist");
-app.use(express.static(staticDir, { maxAge: "1h", index: false }));
+
+// Check if frontend dist exists
+import { existsSync } from 'fs';
+const frontendExists = existsSync(staticDir);
+if (frontendExists) {
+  console.log('✅ Frontend build trovato, servendo file statici da:', staticDir);
+  app.use(express.static(staticDir, { maxAge: "1h", index: false }));
+} else {
+  console.warn('⚠️ Frontend build non trovato in:', staticDir);
+  console.warn('⚠️ Solo API disponibile. Esegui "npm run build" nella cartella frontend.');
+}
 
 app.get("/health", (_, res) => res.type("text").send("ok"));
 
 app.get("*", (req, res) => {
   if (req.path.startsWith("/api/"))
     return res.status(404).json({ error: "Not found" });
+  if (!frontendExists) {
+    return res.status(503).send("Frontend non disponibile. Build in corso o mancante.");
+  }
   try {
     res.sendFile(path.join(staticDir, "index.html"));
-  } catch {
+  } catch (error) {
+    console.error('Errore servendo index.html:', error);
     res.status(404).send("API running. Build frontend to serve UI.");
   }
 });
