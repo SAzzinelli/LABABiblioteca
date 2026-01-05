@@ -9,10 +9,19 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL non configurata');
 }
 
+// Configurazione pool con retry e limiti per evitare circuit breaker
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
+  },
+  max: 5, // Limita il numero massimo di client nel pool
+  idleTimeoutMillis: 30000, // Chiudi client inattivi dopo 30 secondi
+  connectionTimeoutMillis: 10000, // Timeout connessione 10 secondi
+  // Retry configuration
+  retry: {
+    max: 3,
+    delay: 1000
   }
 });
 
@@ -25,13 +34,28 @@ pool.on('error', (err) => {
   console.error('❌ Errore connessione PostgreSQL:', err);
 });
 
+// Funzione per inizializzare il database con retry logic
+async function connectWithRetry(maxRetries = 5, delay = 2000) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const client = await pool.connect();
+      return client;
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+      console.log(`⚠️ Tentativo connessione ${i + 1}/${maxRetries} fallito, riprovo tra ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      delay *= 1.5; // Backoff esponenziale
+    }
+  }
+}
+
 // Funzione per inizializzare il database
 export async function initDatabase() {
   console.log('🔄 Inizializzazione database PostgreSQL...');
   
   try {
-    // Test connessione
-    const client = await pool.connect();
+    // Test connessione con retry
+    const client = await connectWithRetry();
     console.log('✅ Connessione PostgreSQL verificata');
     
     // Crea schema unificato completo
