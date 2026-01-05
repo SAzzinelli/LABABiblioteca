@@ -144,7 +144,12 @@ app.get("/api/keepalive", async (_, res) => {
           };
           console.log('✅ Chiamata REST Supabase riuscita, count:', result.count);
         }
-      } catch (supabaseError) {
+    } catch (supabaseError) {
+      // Se Supabase non è configurato o c'è un errore, continua senza fallire
+      if (supabaseError.message.includes('devono essere configurate')) {
+        console.warn('⚠️ Client Supabase non configurato (variabili d\'ambiente mancanti)');
+        restActivity = { error: 'Client Supabase non configurato', rest_request: false };
+      } else {
         console.error('❌ Eccezione chiamata REST Supabase:', {
           message: supabaseError.message,
           stack: supabaseError.stack
@@ -154,9 +159,6 @@ app.get("/api/keepalive", async (_, res) => {
           rest_request: false 
         };
       }
-    } else {
-      console.warn('⚠️ Client Supabase non disponibile');
-      restActivity = { error: 'Client Supabase non configurato', rest_request: false };
     }
     
     res.json({ 
