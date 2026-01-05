@@ -293,7 +293,8 @@ function AppInner() {
  currentTab={tab} 
  onClick={handleTabChange} 
  />
- <NavButton icon="📈" label="Statistiche" tab="statistiche" currentTab={tab} onClick={handleTabChange} />
+        {/* Statistiche nascoste - non richieste per biblioteca */}
+        {/* <NavButton icon="📈" label="Statistiche" tab="statistiche" currentTab={tab} onClick={handleTabChange} /> */}
  <NavButton 
    icon={
      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -474,7 +475,8 @@ function AppInner() {
          {tab === 'prestiti' && <Loans selectedRequestFromNotification={selectedRequestFromNotification} onRequestHandled={() => setSelectedRequestFromNotification(null)} />}
          {tab === 'riparazioni' && <Repairs />}
          {tab === 'utenti' && <UserManagement />}
-         {tab === 'statistiche' && <Statistics />}
+         {/* Statistiche nascoste - non richieste per biblioteca */}
+        {/* {tab === 'statistiche' && <Statistics />} */}
          {tab === 'sistema' && <SystemStatus />}
        </div>
      </main>

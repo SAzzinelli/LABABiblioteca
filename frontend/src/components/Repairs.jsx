@@ -306,7 +306,7 @@ const handleCancelRepair = async (repairId) => {
             setShowAddModal(true);
             resetModal();
           }}
-          className="group bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
+          className="group bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-medium hover:from-green-600 hover:to-green-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
         >
           <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -325,7 +325,7 @@ const handleCancelRepair = async (repairId) => {
           onClick={() => setActiveTab('in_corso')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'in_corso'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-green-500 text-green-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -343,7 +343,7 @@ const handleCancelRepair = async (repairId) => {
           onClick={() => setActiveTab('completate')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'completate'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-green-500 text-green-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -360,7 +360,7 @@ const handleCancelRepair = async (repairId) => {
           onClick={() => setActiveTab('annullate')}
           className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
             activeTab === 'annullate'
-              ? 'border-blue-500 text-blue-600'
+              ? 'border-green-500 text-green-600'
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
           }`}
         >
@@ -382,7 +382,7 @@ const handleCancelRepair = async (repairId) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cerca segnalazioni..."
-              className="w-64 px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-64 px-3 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
             />
             <svg className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -550,7 +550,7 @@ const handleCancelRepair = async (repairId) => {
                   <div
                     key={item.id}
                     onClick={() => handleObjectSelect(item)}
-                    className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md cursor-pointer transition-all"
+                    className="p-4 border border-gray-200 rounded-lg hover:border-green-500 hover:shadow-md cursor-pointer transition-all"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-medium text-gray-900">{item.nome}</h4>
@@ -584,7 +584,7 @@ const handleCancelRepair = async (repairId) => {
                 </div>
                 <button
                   onClick={() => setStep(1)}
-                  className="text-blue-600 hover:text-blue-800 text-sm"
+                  className="text-green-600 hover:text-green-800 text-sm"
                 >
                   ← Cambia oggetto
                 </button>
@@ -595,13 +595,13 @@ const handleCancelRepair = async (repairId) => {
                   <div
                     key={unit.id}
                     onClick={() => handleUnitSelect(unit)}
-                    className="p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow-md cursor-pointer transition-all"
+                    className="p-3 border border-gray-200 rounded-lg hover:border-green-500 hover:shadow-md cursor-pointer transition-all"
                   >
                     <div className="text-center">
                       <div className="font-medium text-gray-900 mb-1">{unit.codice_univoco}</div>
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                         unit.stato === 'disponibile' ? 'bg-green-100 text-green-800' :
-                        unit.stato === 'prestato' ? 'bg-blue-100 text-blue-800' :
+                        unit.stato === 'prestato' ? 'bg-green-100 text-green-800' :
                         unit.stato === 'riservato' ? 'bg-yellow-100 text-yellow-800' :
                         unit.stato === 'in_riparazione' ? 'bg-orange-100 text-orange-800' : // Stato backend: in_riparazione = in segnalazione
                         'bg-gray-100 text-gray-800'
@@ -641,7 +641,7 @@ const handleCancelRepair = async (repairId) => {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="text-blue-600 hover:text-blue-800 text-sm"
+                  className="text-green-600 hover:text-green-800 text-sm"
                 >
                   ← Cambia ID
                 </button>
@@ -728,7 +728,7 @@ const handleCancelRepair = async (repairId) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
                   {editingRepair ? 'Aggiorna' : 'Crea Segnalazione'}
                 </button>

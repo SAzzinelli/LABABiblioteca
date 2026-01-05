@@ -277,7 +277,7 @@ const Inventory = () => {
       case 'disponibile':
         return 'bg-green-100 text-green-800 border-green-200';
       case 'in_prestito':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-green-100 text-green-800 border-green-200';
       case 'in_riparazione':
         return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'perso':
@@ -536,8 +536,8 @@ const Inventory = () => {
                 <p className="text-3xl font-bold text-gray-900">{inventory.length}</p>
                 <p className="text-sm text-gray-500">Elementi in inventario</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
@@ -608,7 +608,7 @@ const Inventory = () => {
             <div className="flex flex-wrap gap-4 items-center">
               <button
                 onClick={() => setShowAddModal(true)}
-                className="group bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-600 hover:to-blue-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
+                className="group bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-medium hover:from-green-600 hover:to-green-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
               >
                 <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -652,7 +652,7 @@ const Inventory = () => {
                   placeholder="Cerca per nome, seriale o note..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                  className="block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200"
                 />
               </div>
             </div>
@@ -664,7 +664,7 @@ const Inventory = () => {
                 <div className="relative">
                   <button
                     onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-left flex items-center justify-between hover:bg-gray-50"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white text-left flex items-center justify-between hover:bg-gray-50"
                   >
                     <span className={selectedCategoryFilter ? 'text-gray-900' : 'text-gray-500'}>
                       {selectedCategoryFilter || 'Tutte le categorie'}
@@ -682,8 +682,8 @@ const Inventory = () => {
                             setSelectedCategoryFilter('');
                             setShowCategoryDropdown(false);
                           }}
-                          className={`w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors duration-200 flex items-center justify-between ${
-                            !selectedCategoryFilter ? 'bg-blue-50 text-blue-700' : 'text-gray-900'
+                          className={`w-full px-4 py-3 text-left hover:bg-green-50 transition-colors duration-200 flex items-center justify-between ${
+                            !selectedCategoryFilter ? 'bg-green-50 text-green-700' : 'text-gray-900'
                           }`}
                         >
                           <span>Tutte le categorie</span>
@@ -700,13 +700,13 @@ const Inventory = () => {
                               setSelectedCategoryFilter(cat.nome);
                               setShowCategoryDropdown(false);
                             }}
-                            className={`w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors duration-200 flex items-center justify-between ${
-                              selectedCategoryFilter === cat.nome ? 'bg-blue-50 text-blue-700' : 'text-gray-900'
+                            className={`w-full px-4 py-3 text-left hover:bg-green-50 transition-colors duration-200 flex items-center justify-between ${
+                              selectedCategoryFilter === cat.nome ? 'bg-green-50 text-green-700' : 'text-gray-900'
                             }`}
                           >
                             <span>{cat.nome}</span>
                             {selectedCategoryFilter === cat.nome && (
-                              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                               </svg>
                             )}
@@ -819,7 +819,7 @@ const Inventory = () => {
  {item.nome}
                         </h3>
  {item.hasMultipleUnits && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
  {item.quantita_totale} unità
  </span>
  )}
@@ -905,7 +905,7 @@ const Inventory = () => {
                       {item.immagine_url ? (
                         <button
                           onClick={() => window.open(item.immagine_url, '_blank')}
-                          className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full hover:bg-blue-200 transition-colors"
+                          className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full hover:bg-green-200 transition-colors"
                           title="Visualizza immagine"
                         >
                           <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -966,7 +966,7 @@ const Inventory = () => {
                   </h4>
                   {!itemUnits[item.id] ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
                       <span className="ml-2 text-gray-600">Caricamento unità...</span>
                     </div>
                   ) : (
@@ -978,7 +978,7 @@ const Inventory = () => {
                           case 'disponibile':
                             return 'bg-green-100 text-green-800 border-green-200';
                           case 'prestato':
-                            return 'bg-blue-100 text-blue-800 border-blue-200';
+                            return 'bg-green-100 text-green-800 border-green-200';
                           case 'riservato':
                             return 'bg-yellow-100 text-yellow-800 border-yellow-200';
                           case 'in_riparazione':
@@ -1011,7 +1011,7 @@ const Inventory = () => {
                         <div 
                           key={unit.id} 
                           className={`bg-white p-3 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow flex-shrink-0 min-w-[120px] ${
-                            unit.stato === 'prestato' ? 'cursor-pointer hover:border-blue-500' : ''
+                            unit.stato === 'prestato' ? 'cursor-pointer hover:border-green-500' : ''
                           }`}
                           onClick={() => handleUnitClick(unit)}
                         >
@@ -1019,7 +1019,7 @@ const Inventory = () => {
                             <div className="text-xs font-medium text-gray-900 mb-2 truncate" title={unit.codice_univoco || unit.id}>
                               {unit.codice_univoco || unit.id}
                               {unit.stato === 'prestato' && (
-                                <svg className="w-3 h-3 inline-block ml-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3 h-3 inline-block ml-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                               )}
@@ -1145,7 +1145,7 @@ const Inventory = () => {
                               <div className="flex items-center space-x-2">
                                 <button
                                   onClick={() => handleEditCategory(cat)}
-                                  className="text-blue-600 hover:text-blue-800 p-1"
+                                  className="text-green-600 hover:text-green-800 p-1"
                                   title="Modifica categoria"
                                 >
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1392,7 +1392,7 @@ const Inventory = () => {
                       setShowDeleteWarningModal(false);
                       setDeleteWarningMessage('');
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                   >
                     Ho Capito
                   </button>

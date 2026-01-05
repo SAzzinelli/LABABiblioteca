@@ -492,55 +492,55 @@ body: JSON.stringify({
        </button>
      </div>
 
-     <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+     <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
        <div className="flex items-center mb-3">
-         <svg className="w-5 h-5 text-purple-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+         <svg className="w-5 h-5 text-amber-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
            <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
          </svg>
          <div>
-           <h4 className="text-sm font-medium text-purple-800">Come intendi utilizzare questo materiale?</h4>
-           <p className="text-xs text-purple-700 mt-1">
+           <h4 className="text-sm font-medium text-amber-800">Come intendi utilizzare questo materiale?</h4>
+           <p className="text-xs text-amber-700 mt-1">
              Questo materiale può essere utilizzato sia internamente che esternamente. Scegli come intendi utilizzarlo.
            </p>
          </div>
        </div>
        
        <div className="space-y-3">
-         <label className="flex items-center space-x-3 p-4 bg-white rounded-lg border border-purple-200 cursor-pointer hover:bg-purple-50 transition-colors">
+         <label className="flex items-center space-x-3 p-4 bg-white rounded-lg border border-amber-200 cursor-pointer hover:bg-amber-50 transition-colors">
            <input
              type="radio"
              name="tipo_utilizzo_admin"
              value="interno"
              checked={tipoUtilizzo === 'interno'}
              onChange={(e) => setTipoUtilizzo(e.target.value)}
-             className="w-5 h-5 text-purple-600 border-purple-300 focus:ring-purple-500"
+             className="w-5 h-5 text-amber-600 border-amber-300 focus:ring-amber-500"
            />
            <div className="flex-1">
              <div className="flex items-center space-x-2">
                <span className="text-lg">🏠</span>
-               <span className="text-sm font-medium text-purple-900">Uso Interno</span>
+               <span className="text-sm font-medium text-amber-900">Uso Interno</span>
              </div>
-             <p className="text-xs text-purple-700 mt-1">
+             <p className="text-xs text-amber-700 mt-1">
                Utilizzo all'interno dell'accademia (stesso giorno di inizio e fine)
              </p>
            </div>
          </label>
          
-         <label className="flex items-center space-x-3 p-4 bg-white rounded-lg border border-purple-200 cursor-pointer hover:bg-purple-50 transition-colors">
+         <label className="flex items-center space-x-3 p-4 bg-white rounded-lg border border-amber-200 cursor-pointer hover:bg-amber-50 transition-colors">
            <input
              type="radio"
              name="tipo_utilizzo_admin"
              value="esterno"
              checked={tipoUtilizzo === 'esterno'}
              onChange={(e) => setTipoUtilizzo(e.target.value)}
-             className="w-5 h-5 text-purple-600 border-purple-300 focus:ring-purple-500"
+             className="w-5 h-5 text-amber-600 border-amber-300 focus:ring-amber-500"
            />
            <div className="flex-1">
              <div className="flex items-center space-x-2">
                <span className="text-lg">📅</span>
-               <span className="text-sm font-medium text-purple-900">Prestito Esterno</span>
+               <span className="text-sm font-medium text-amber-900">Prestito Esterno</span>
              </div>
-             <p className="text-xs text-purple-700 mt-1">
+             <p className="text-xs text-amber-700 mt-1">
                Prestito per più giorni, può essere portato fuori dall'accademia
              </p>
            </div>
@@ -588,16 +588,16 @@ body: JSON.stringify({
 
  {/* Info Tipo Utilizzo per oggetti "entrambi" */}
  {selectedItem?.tipo_prestito === 'entrambi' && tipoUtilizzo && (
-   <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
      <div className="flex items-center">
-       <svg className="w-5 h-5 text-purple-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+       <svg className="w-5 h-5 text-amber-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
        </svg>
        <div>
-         <h4 className="text-sm font-medium text-purple-800">
+         <h4 className="text-sm font-medium text-amber-800">
            Tipo di utilizzo selezionato: {tipoUtilizzo === 'interno' ? '🏠 Uso Interno' : '📅 Prestito Esterno'}
          </h4>
-         <p className="text-xs text-purple-700 mt-1">
+         <p className="text-xs text-amber-700 mt-1">
            {tipoUtilizzo === 'interno' 
              ? 'Utilizzo all\'interno dell\'accademia (stesso giorno di inizio e fine)'
              : 'Prestito per più giorni, può essere portato fuori dall\'accademia'

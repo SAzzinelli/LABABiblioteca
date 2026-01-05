@@ -326,8 +326,8 @@ return (
           <p className="text-3xl font-bold text-gray-900">{stats.inventory}</p>
           <p className="text-sm text-gray-500">Elementi totali</p>
         </div>
-        <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-          <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+          <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
         </div>
@@ -341,8 +341,8 @@ return (
           <p className="text-3xl font-bold text-gray-900">{stats.requests}</p>
           <p className="text-sm text-gray-500">Richieste di prestito</p>
         </div>
-        <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-          <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+          <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </div>
@@ -429,7 +429,7 @@ return (
  item.stato_scorte === 'esaurito' ? 'border-red-500' :
  item.stato_scorte === 'attenzione' ? 'border-orange-500' :
  item.stato_scorte === 'scarseggia' ? 'border-yellow-500' :
- 'border-blue-500'
+ 'border-green-500'
  }`}>
  <div className="font-semibold text-gray-900 text-sm">{item.nome}</div>
  <div className={`font-medium text-xs mt-1 ${
@@ -580,10 +580,10 @@ return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div 
           onClick={() => setShowAddModal(true)}
-          className="group bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+          className="group bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
         >
           <div className="flex items-center mb-4">
-            <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
@@ -595,10 +595,10 @@ return (
         
         <div 
           onClick={() => onNavigate('prestiti')}
-          className="group bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+          className="group bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
         >
           <div className="flex items-center mb-4">
-            <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+            <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
@@ -687,7 +687,7 @@ return (
     <div className="bg-white rounded-2xl shadow-lg p-6">
     <div className="flex items-center justify-between mb-6">
     <h2 className="text-xl font-bold text-gray-900">Richieste Recenti</h2>
-    <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">{recentRequests.length} richieste</span>
+    <span className="bg-amber-100 text-amber-800 text-sm font-medium px-3 py-1 rounded-full">{recentRequests.length} richieste</span>
     </div>
  <div className="space-y-3">
  {recentRequests.length === 0 ? (
@@ -705,13 +705,13 @@ return (
  key={index} 
  className={`flex items-center py-4 px-4 rounded-xl transition-all duration-200 ${
  request.stato === 'in_attesa' 
- ? 'bg-blue-50 border border-blue-200 hover:bg-blue-100 hover:shadow-md cursor-pointer' 
+ ? 'bg-amber-50 border border-amber-200 hover:bg-amber-100 hover:shadow-md cursor-pointer' 
  : 'bg-gray-50 border border-gray-200 hover:bg-gray-100'
  }`}
  onClick={() => request.stato === 'in_attesa' && setSelectedRequest(request)}
  >
  <div className={`w-3 h-3 rounded-full mr-4 ${
- request.stato === 'in_attesa' ? 'bg-blue-500' : 
+ request.stato === 'in_attesa' ? 'bg-amber-500' : 
  request.stato === 'approvata' ? 'bg-green-500' : 'bg-red-500'
  }`}></div>
  <div className="flex-1 min-w-0">
@@ -1002,21 +1002,20 @@ function StatCard({ title, value, description }) {
  )
  };
 
- const colorMap = {
- 'Inventario': 'bg-gradient-to-br from-blue-100 to-blue-200 ',
- 'Richieste': 'bg-gradient-to-br from-purple-100 to-purple-200 ', 
- 'Segnalazioni': 'bg-gradient-to-br from-orange-100 to-orange-200 ',
- 'Segnalazioni': 'bg-gradient-to-br from-red-100 to-red-200 '
- };
+const colorMap = {
+  'Inventario': 'bg-gradient-to-br from-green-100 to-green-200 ',
+  'Richieste': 'bg-gradient-to-br from-amber-100 to-amber-200 ', 
+  'Segnalazioni': 'bg-gradient-to-br from-orange-100 to-orange-200 '
+};
 
  return (
  <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 transition-transform p-6">
  <div className="flex items-center">
  <div className={`w-12 h-12 ${colorMap[title]} rounded-lg flex items-center justify-center ${
- title === 'Inventario' ? 'text-blue-600' :
- title === 'Richieste' ? 'text-purple-600' :
+ title === 'Inventario' ? 'text-green-600' :
+ title === 'Richieste' ? 'text-amber-600' :
  title === 'Segnalazioni' ? 'text-orange-600' :
- 'text-red-600'
+ 'text-gray-600'
  } shadow-lg`}>
  {iconMap[title]}
  </div>
@@ -1034,7 +1033,7 @@ function StatCard({ title, value, description }) {
 // Quick Action Button Component 
 function QuickActionButton({ title, description, icon, onClick, color = 'blue' }) {
  const colorClasses = {
- blue: 'bg-gradient-to-br from-blue-500 to-blue-600',
+ blue: 'bg-gradient-to-br from-green-500 to-green-600',
  green: 'bg-gradient-to-br from-green-500 to-green-600', 
  orange: 'bg-gradient-to-br from-orange-500 to-orange-600',
  purple: 'bg-gradient-to-br from-purple-500 to-purple-600'

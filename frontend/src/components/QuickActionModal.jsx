@@ -201,7 +201,7 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
          value="solo_esterno"
          checked={formData.tipo_prestito === 'solo_esterno'}
          onChange={(e) => setFormData({...formData, tipo_prestito: e.target.value})}
-         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+         className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
        />
        <div>
          <span className="text-sm font-medium text-gray-900">📅 Uso Esterno</span>
@@ -216,7 +216,7 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
          value="solo_interno"
          checked={formData.tipo_prestito === 'solo_interno'}
          onChange={(e) => setFormData({...formData, tipo_prestito: e.target.value})}
-         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+         className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
        />
        <div>
          <span className="text-sm font-medium text-gray-900">🏠 Uso Interno</span>
@@ -231,7 +231,7 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
          value="entrambi"
          checked={formData.tipo_prestito === 'entrambi'}
          onChange={(e) => setFormData({...formData, tipo_prestito: e.target.value})}
-         className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+         className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
        />
        <div>
          <span className="text-sm font-medium text-gray-900">🔄 Entrambi</span>
@@ -239,8 +239,8 @@ const QuickActionModal = ({ isOpen, onClose, action, onSuccess }) => {
        </div>
      </label>
    </div>
-   <div className="mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
-     <p className="text-xs text-blue-700">
+   <div className="mt-2 p-3 bg-green-50 rounded-lg border border-green-200">
+     <p className="text-xs text-green-700">
        {formData.tipo_prestito === 'solo_esterno' && (
          <>📅 <strong>Solo Prestito Esterno:</strong> Gli studenti possono richiedere prestiti per più giorni e portare l'oggetto fuori dall'accademia</>
        )}
