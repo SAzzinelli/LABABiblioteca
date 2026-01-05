@@ -51,11 +51,26 @@ try {
     console.error('💡 Verifica anche che la password nel DATABASE_URL sia corretta');
     console.error('═══════════════════════════════════════════════════════════');
     console.error('');
-    console.error('🛑 Servizio in pausa per evitare ulteriori tentativi...');
-    console.error('   Disabilita temporaneamente il restart automatico su Railway');
-    console.error('   oppure attendi 10 minuti prima di riprovare.');
+    console.error('');
+    console.error('🛑 ⚠️  AZIONE RICHIESTA: DISABILITA IL SERVIZIO SU RAILWAY ⚠️');
+    console.error('');
+    console.error('   Il circuit breaker è attivo e il servizio continuerà a riavviarsi');
+    console.error('   finché non lo disabiliti manualmente.');
+    console.error('');
+    console.error('   📋 ISTRUZIONI:');
+    console.error('   1. Vai su Railway Dashboard');
+    console.error('   2. Seleziona il servizio "LABABiblioteca"');
+    console.error('   3. Vai su Settings');
+    console.error('   4. Clicca "Disable Service" o "Pause Deployments"');
+    console.error('   5. Attendi 15 minuti');
+    console.error('   6. Riabilita il servizio');
+    console.error('   7. Fai un nuovo deploy');
+    console.error('');
+    console.error('   ⏳ Il circuit breaker si resetta automaticamente dopo 10-15 minuti');
+    console.error('   senza tentativi di connessione.');
+    console.error('');
     // Exit con codice 0 per evitare restart automatico immediato
-    // Railway riproverà comunque dopo il delay configurato, ma almeno non subito
+    // Ma Railway continuerà a riavviarlo finché non lo disabiliti manualmente
     process.exit(0);
   } else {
     console.error('Verifica la configurazione DATABASE_URL e la connessione a Supabase');
