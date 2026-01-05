@@ -171,16 +171,23 @@ export async function initDatabase() {
   `);
 
   // Inserisci admin user se non esiste
-  const adminExists = db.prepare('SELECT id FROM users WHERE email = ?').get('admin');
-  if (!adminExists) {
-    const hashedPassword = bcrypt.hashSync('***REMOVED***', 10);
-    
-    db.prepare(`
-      INSERT INTO users (email, password_hash, name, surname, ruolo, corso_accademico)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `).run('admin', hashedPassword, 'Admin', 'Sistema', 'admin', 'Tutti');
-    
-    console.log('Admin user creato: admin / ***REMOVED***');
+  // IMPORTANTE: La password admin deve essere configurata come variabile d'ambiente
+  // NOTA: Questo file è per SQLite (non più usato in produzione), mantenuto per compatibilità
+  const adminPassword = process.env.SPECIAL_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    console.warn('⚠️  ADMIN_PASSWORD o SPECIAL_ADMIN_PASSWORD non configurata. Admin user non creato.');
+  } else {
+    const adminExists = db.prepare('SELECT id FROM users WHERE email = ?').get('admin');
+    if (!adminExists) {
+      const hashedPassword = bcrypt.hashSync(adminPassword, 10);
+      
+      db.prepare(`
+        INSERT INTO users (email, password_hash, name, surname, ruolo, corso_accademico)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).run('admin', hashedPassword, 'Admin', 'Sistema', 'admin', 'Tutti');
+      
+      console.log('Admin user creato: admin / [password da SPECIAL_ADMIN_PASSWORD]');
+    }
   }
 
   // Inserisci corsi accademici LABA
@@ -224,7 +231,7 @@ export async function initDatabase() {
 
   console.log('Database inizializzato con successo!');
   console.log('Schema unificato creato con tutte le tabelle');
-  console.log('Admin user: admin / ***REMOVED***');
+  console.log('Admin user: admin / [password da SPECIAL_ADMIN_PASSWORD]');
   console.log('Corsi inseriti:', corsiLABA.length);
   console.log('Categorie inserite:', categorie.length);
 }

@@ -74,14 +74,21 @@ r.post('/setup-categories', async (req, res) => {
     console.log('✅ Migrate categorie esistenti');
     
     // 8. Crea utente admin se non esiste
-    const adminExists = await query('SELECT id FROM users WHERE email = $1', ['admin@laba.biz']);
-    if (adminExists.length === 0) {
-      const bcrypt = await import('bcryptjs');
-      const hashedPassword = await bcrypt.hash('***REMOVED***', 10);
-      await query(`
-        INSERT INTO users (email, password, name, surname, ruolo, corso_accademico)
-        VALUES ($1, $2, $3, $4, $5, $6)
-      `, ['admin@laba.biz', hashedPassword, 'Admin', 'Sistema', 'admin', 'Fotografia']);
+    // IMPORTANTE: La password admin deve essere configurata come variabile d'ambiente
+    const adminPassword = process.env.SPECIAL_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
+      console.warn('⚠️  ADMIN_PASSWORD o SPECIAL_ADMIN_PASSWORD non configurata. Admin user non creato.');
+    } else {
+      const adminExists = await query('SELECT id FROM users WHERE email = $1', ['admin@laba.biz']);
+      if (adminExists.length === 0) {
+        const bcrypt = await import('bcryptjs');
+        const hashedPassword = await bcrypt.hash(adminPassword, 10);
+        await query(`
+          INSERT INTO users (email, password, name, surname, ruolo, corso_accademico)
+          VALUES ($1, $2, $3, $4, $5, $6)
+        `, ['admin@laba.biz', hashedPassword, 'Admin', 'Sistema', 'admin', 'Fotografia']);
+      }
+    }
       console.log('✅ Creato utente admin');
     } else {
       console.log('✅ Utente admin già esistente');

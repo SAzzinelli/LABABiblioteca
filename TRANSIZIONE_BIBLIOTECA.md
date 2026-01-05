@@ -63,8 +63,8 @@ Le modifiche effettuate **NON toccano il database**. Solo le credenziali di conn
 ```env
 # Supabase
 SUPABASE_URL=https://blqoxovrrldfedgzwufa.supabase.co
-SUPABASE_ANON_KEY=***REMOVED***Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc2MjY4MjAsImV4cCI6MjA4MzIwMjgyMH0.Z7NT3zZSvlr5Oo-ZgVBFrSQSGakHBC0SYw7zazogJIA
-SUPABASE_SERVICE_ROLE_KEY=***REMOVED***Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NzYyNjgyMCwiZXhwIjoyMDgzMjAyODIwfQ.bChHq9iV-sFFWALokAmfB4bnp-fFnu7FX-Ot7F2rweo
+SUPABASE_ANON_KEY=***REMOVED***
+SUPABASE_SERVICE_ROLE_KEY=***REMOVED***
 
 # Database (Pooler Supabase)
 DATABASE_URL=postgresql://postgres.blqoxovrrldfedgzwufa:[YOUR-PASSWORD]@aws-1-eu-central-1.pooler.supabase.com:6543/postgres

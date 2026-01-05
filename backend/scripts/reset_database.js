@@ -75,7 +75,7 @@ async function resetDatabase() {
     // Crea un utente di test
     await query(`
       INSERT INTO users (email, password_hash, name, surname, phone, matricola, ruolo, corso_accademico)
-      VALUES ('test@laba.it', '***REMOVED***', 'Mario', 'Rossi', '1234567890', 'MAT001', 'user', 'Fotografia')
+      VALUES ('test@laba.it', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Mario', 'Rossi', '1234567890', 'MAT001', 'user', 'Fotografia') -- password: ***REMOVED*** - SOLO PER TEST
       ON CONFLICT (email) DO NOTHING;
     `);
     

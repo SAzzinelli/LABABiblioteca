@@ -14,7 +14,7 @@ async function createUserDirect() {
       RETURNING id, email, name, surname
     `, [
       'test@laba.it',
-      '***REMOVED***', // password: ***REMOVED*** - SOLO PER TEST
+      '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password: ***REMOVED*** - SOLO PER TEST
       'Mario',
       'Rossi',
       '1234567890',

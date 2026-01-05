@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { query } from '../utils/postgres.js';
 import { normalizeUser, normalizeRole } from '../utils/roles.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || '***REMOVED***';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
 
 export async function requireAuth(req, res, next) {
   try {

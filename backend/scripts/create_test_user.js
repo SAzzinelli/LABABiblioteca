@@ -6,6 +6,8 @@ async function createTestUser() {
   console.log('👤 Creazione utente di test...');
   
   try {
+    // ATTENZIONE: Questo script crea un utente di test con password hardcoded
+    // SOLO PER AMBIENTE DI SVILUPPO/TEST - NON USARE IN PRODUZIONE
     // Crea utente di test
     const hashedPassword = await bcrypt.hash('***REMOVED***', 10);
     
@@ -27,6 +29,7 @@ async function createTestUser() {
     console.log('✅ Utente di test creato con successo!');
     console.log('📧 Email: test@laba.it');
     console.log('🔑 Password: ***REMOVED***');
+    console.log('⚠️  ATTENZIONE: Password hardcoded - SOLO PER TEST');
     
   } catch (error) {
     console.error('❌ Errore creazione utente:', error);

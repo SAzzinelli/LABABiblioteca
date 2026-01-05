@@ -306,16 +306,23 @@ export async function initDatabase() {
     }
 
     // Inserisci admin user se non esiste
-    const adminExists = await client.query('SELECT id FROM users WHERE email = $1', ['admin']);
-    if (adminExists.rows.length === 0) {
-      const hashedPassword = bcrypt.hashSync('***REMOVED***', 10);
-      
-      await client.query(`
-        INSERT INTO users (email, password_hash, name, surname, ruolo, corso_accademico)
-        VALUES ($1, $2, $3, $4, $5, $6)
-      `, ['admin', hashedPassword, 'Admin', 'Sistema', 'admin', 'Tutti']);
-      
-      console.log('✅ Admin user creato: admin / ***REMOVED***');
+    // IMPORTANTE: La password admin deve essere configurata come variabile d'ambiente
+    const adminPassword = process.env.SPECIAL_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
+      console.warn('⚠️  ADMIN_PASSWORD o SPECIAL_ADMIN_PASSWORD non configurata. Admin user non creato.');
+      console.warn('⚠️  Configura SPECIAL_ADMIN_PASSWORD come variabile d\'ambiente per creare l\'utente admin.');
+    } else {
+      const adminExists = await client.query('SELECT id FROM users WHERE email = $1', ['admin']);
+      if (adminExists.rows.length === 0) {
+        const hashedPassword = bcrypt.hashSync(adminPassword, 10);
+        
+        await client.query(`
+          INSERT INTO users (email, password_hash, name, surname, ruolo, corso_accademico)
+          VALUES ($1, $2, $3, $4, $5, $6)
+        `, ['admin', hashedPassword, 'Admin', 'Sistema', 'admin', 'Tutti']);
+        
+        console.log('✅ Admin user creato: admin / [password da SPECIAL_ADMIN_PASSWORD]');
+      }
     }
 
     // Inserisci corsi accademici LABA solo se la tabella è vuota
@@ -377,7 +384,7 @@ export async function initDatabase() {
     
     console.log('✅ Database PostgreSQL inizializzato con successo!');
     console.log('✅ Schema unificato creato con tutte le tabelle');
-    console.log('✅ Admin user: admin / ***REMOVED***');
+      console.log('✅ Admin user: admin / [password da SPECIAL_ADMIN_PASSWORD]');
     
   } catch (error) {
     console.error('❌ Errore durante l\'inizializzazione del database:', error);
