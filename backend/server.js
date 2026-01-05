@@ -50,10 +50,17 @@ try {
     console.error('');
     console.error('💡 Verifica anche che la password nel DATABASE_URL sia corretta');
     console.error('═══════════════════════════════════════════════════════════');
+    console.error('');
+    console.error('🛑 Servizio in pausa per evitare ulteriori tentativi...');
+    console.error('   Disabilita temporaneamente il restart automatico su Railway');
+    console.error('   oppure attendi 10 minuti prima di riprovare.');
+    // Exit con codice 0 per evitare restart automatico immediato
+    // Railway riproverà comunque dopo il delay configurato, ma almeno non subito
+    process.exit(0);
   } else {
     console.error('Verifica la configurazione DATABASE_URL e la connessione a Supabase');
+    process.exit(1);
   }
-  process.exit(1);
 }
 
 // CORS configuration
