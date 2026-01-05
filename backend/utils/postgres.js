@@ -435,4 +435,9 @@ export async function transaction(callback) {
   }
 }
 
-export default pool;
+// Export getter per compatibilità (lazy initialization)
+export default {
+  get pool() {
+    return getPool();
+  }
+};
