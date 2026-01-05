@@ -15,14 +15,11 @@ const pool = new Pool({
   ssl: {
     rejectUnauthorized: false
   },
-  max: 5, // Limita il numero massimo di client nel pool
+  max: 2, // Ridotto per evitare troppe connessioni simultanee
   idleTimeoutMillis: 30000, // Chiudi client inattivi dopo 30 secondi
-  connectionTimeoutMillis: 10000, // Timeout connessione 10 secondi
-  // Retry configuration
-  retry: {
-    max: 3,
-    delay: 1000
-  }
+  connectionTimeoutMillis: 20000, // Timeout connessione aumentato a 20 secondi
+  statement_timeout: 30000, // Timeout per le query
+  query_timeout: 30000
 });
 
 // Test connessione
@@ -35,14 +32,18 @@ pool.on('error', (err) => {
 });
 
 // Funzione per inizializzare il database con retry logic
-async function connectWithRetry(maxRetries = 5, delay = 2000) {
+async function connectWithRetry(maxRetries = 3, delay = 5000) {
   for (let i = 0; i < maxRetries; i++) {
     try {
       const client = await pool.connect();
       return client;
     } catch (error) {
+      if (error.message.includes('Circuit breaker')) {
+        console.error('❌ Circuit breaker attivo su Supabase. Attendi 5-10 minuti prima di riprovare.');
+        console.error('💡 Suggerimento: Usa la connection string diretta invece del pooler');
+      }
       if (i === maxRetries - 1) throw error;
-      console.log(`⚠️ Tentativo connessione ${i + 1}/${maxRetries} fallito, riprovo tra ${delay}ms...`);
+      console.log(`⚠️ Tentativo connessione ${i + 1}/${maxRetries} fallito, riprovo tra ${delay/1000}s...`);
       await new Promise(resolve => setTimeout(resolve, delay));
       delay *= 1.5; // Backoff esponenziale
     }
