@@ -708,10 +708,10 @@ body {
 }
 
 .nav-button.active {
-  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-  color: #1e40af;
-  border: 1px solid #93c5fd;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  background: linear-gradient(135deg, #ccfbf1, #99f6e4);
+  color: #0d9488;
+  border: 1px solid #5eead4;
+  box-shadow: 0 2px 8px rgba(20, 184, 166, 0.15);
 }
 
 /* Dark mode styles removed */
@@ -1112,9 +1112,9 @@ footer {
 .tab-button.active {
   color: white;
   border-bottom-color: transparent;
-  background: linear-gradient(135deg, var(--brand-primary), rgba(59, 130, 246, 0.9));
+  background: linear-gradient(135deg, var(--brand-primary), rgba(20, 184, 166, 0.9));
   border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 2px 4px rgba(13, 148, 136, 0.2);
 }
 
 /* Main content */
