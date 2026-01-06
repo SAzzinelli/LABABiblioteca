@@ -477,7 +477,7 @@ body {
 .input-field:focus {
     outline: none;
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
 }
 
 .input-field::placeholder {
@@ -504,7 +504,7 @@ body {
 .select-field:focus {
   outline: none;
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
 }
 
 /* Dark mode styles removed */
@@ -636,8 +636,8 @@ body {
 
 .alert-info {
   border-left-color: var(--info);
-  background: linear-gradient(135deg, #eff6ff, #dbeafe);
-  border: 1px solid #dbeafe;
+  background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+  border: 1px solid #ccfbf1;
 }
 
 /* Dark mode styles removed */
