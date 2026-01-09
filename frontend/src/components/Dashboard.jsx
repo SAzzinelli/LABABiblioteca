@@ -27,7 +27,7 @@ const Dashboard = ({ onNavigate }) => {
   const [selectedAlert, setSelectedAlert] = useState(null);
   const [showPasswordResetModal, setShowPasswordResetModal] = useState(false);
   const [selectedPasswordRequest, setSelectedPasswordRequest] = useState(null);
-  const { token, isAdmin, roleLabel } = useAuth();
+  const { token, isAdmin, isSupervisor, roleLabel } = useAuth();
 
   // Helper function to calculate time ago
   const getTimeAgo = (dateString) => {
@@ -101,8 +101,8 @@ const Dashboard = ({ onNavigate }) => {
         }),
       ];
 
-      // Requests (admin only)
-      if (isAdmin) {
+      // Requests (admin only, NOT supervisor)
+      if (isAdmin && !isSupervisor) {
         promises.push(
           fetch(`${import.meta.env.VITE_API_BASE_URL}/api/richieste?all=1`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -127,8 +127,8 @@ const Dashboard = ({ onNavigate }) => {
         );
       }
 
-      // Password reset requests (admin only)
-      if (isAdmin) {
+      // Password reset requests (admin only, NOT supervisor)
+      if (isAdmin && !isSupervisor) {
         promises.push(
           fetch(
             `${import.meta.env.VITE_API_BASE_URL}/api/auth/password-reset-requests`,
@@ -316,8 +316,8 @@ const Dashboard = ({ onNavigate }) => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      <div className="flex flex-col md:flex-row gap-6 mb-8">
+        <div className="flex-1 bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 mb-1">
@@ -375,7 +375,7 @@ const Dashboard = ({ onNavigate }) => {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+        <div className="flex-1 bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 mb-1">
