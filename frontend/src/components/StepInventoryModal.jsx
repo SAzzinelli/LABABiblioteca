@@ -263,10 +263,10 @@ const canProceed = () => {
 
  if (!isOpen) return null;
 
- return (
- <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && handleClose()}>
- <div className="modal-content h-[90vh] flex flex-col" style={{ maxWidth: '56rem', width: '95vw' }} onClick={(e) => e.stopPropagation()}>
- <div className="modal-header">
+return (
+  <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && handleClose()}>
+    <div className="modal-content h-[90vh] flex flex-col" style={{ maxWidth: '56rem', width: '95vw' }} onClick={(e) => e.stopPropagation()}>
+      <div className="modal-header">
  <div>
  <h2 className="text-lg font-semibold text-primary">
  {editingItem ? 'Modifica Elemento' : 'Nuovo Elemento'}
@@ -283,10 +283,10 @@ const canProceed = () => {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
  </svg>
  </button>
- </div>
+      </div>
  
- {/* Progress Bar */}
- <div className="px-6 py-4 border-b border-gray-200">
+      {/* Progress Bar */}
+      <div className="px-6 py-4 border-b border-gray-200">
  <div className="flex items-center justify-center">
  <div className="flex items-center space-x-4">
  {[
@@ -320,11 +320,11 @@ const canProceed = () => {
  )}
  </React.Fragment>
  ))}
- </div>
- </div>
- </div>
+      </div>
+      </div>
+      </div>
 
- <div className="modal-body flex-1 overflow-y-auto">
+      <div className="modal-body flex-1 overflow-y-auto">
  {/* Step 1: Basic Info */}
  {step === 1 && (
  <div className="space-y-4">
@@ -339,14 +339,14 @@ const canProceed = () => {
  type="text"
  required
  value={formData.nome}
-onChange={(e) => {
-const newName = e.target.value;
-setFormData(prev => ({ ...prev, nome: newName }));
-if (newName && formData.quantita_totale && formData.quantita_totale > 0) {
-const units = generateUnitCodes(formData.quantita_totale);
-setFormData(prev => ({ ...prev, unita: units }));
-}
-}}
+ onChange={(e) => {
+   const newName = e.target.value;
+   setFormData(prev => ({ ...prev, nome: newName }));
+   if (newName && formData.quantita_totale && formData.quantita_totale > 0) {
+     const units = generateUnitCodes(formData.quantita_totale);
+     setFormData(prev => ({ ...prev, unita: units }));
+   }
+ }}
  className="input-field"
  placeholder="Titolo del libro"
  />
@@ -632,24 +632,24 @@ Tipo di Utilizzo
  </div>
  </div>
  ))}
- </div>
- </div>
- </div>
- )}
+</div>
+</div>
+</div>
+)}
 
- {error && (
- <div className="alert-card alert-danger mt-4">
- <div className="flex items-center">
- <svg className="icon text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
- <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
- </svg>
- <p className="text-red-800 ">{error}</p>
- </div>
- </div>
- )}
- </div>
+      {error && (
+        <div className="alert-card alert-danger mt-4">
+          <div className="flex items-center">
+            <svg className="icon text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-red-800 ">{error}</p>
+          </div>
+        </div>
+      )}
+      </div>
 
- <div className="modal-footer flex-shrink-0 border-t border-gray-200 bg-white">
+      <div className="modal-footer flex-shrink-0 border-t border-gray-200 bg-white px-6 py-4">
  <button
  onClick={() => step > 1 ? setStep(step - 1) : handleClose()}
  className="btn-secondary"
@@ -660,15 +660,15 @@ Tipo di Utilizzo
  <div className="flex space-x-3">
  {step < 5 ? (
  <button
-onClick={() => {
-if (canProceed()) {
-if (step === 1 && formData.nome && formData.quantita_totale && formData.quantita_totale > 0) {
-const units = generateUnitCodes(formData.quantita_totale);
-setFormData(prev => ({ ...prev, unita: units }));
-}
-setStep(step + 1);
-}
-}}
+ onClick={() => {
+   if (canProceed()) {
+     if (step === 1 && formData.nome && formData.quantita_totale && formData.quantita_totale > 0) {
+       const units = generateUnitCodes(formData.quantita_totale);
+       setFormData(prev => ({ ...prev, unita: units }));
+     }
+     setStep(step + 1);
+   }
+ }}
  disabled={!canProceed()}
  className="btn-primary"
  >
@@ -683,11 +683,11 @@ setStep(step + 1);
  {loading ? 'Creazione...' : (editingItem ? 'Aggiorna Elemento' : 'Crea Elemento')}
  </button>
  )}
- </div>
- </div>
- </div>
- </div>
- );
+      </div>
+      </div>
+    </div>
+  </div>
+);
 };
 
 export default StepInventoryModal;
