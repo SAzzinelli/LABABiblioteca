@@ -158,8 +158,8 @@ const NotificationManager = () => {
  },
  {
  type: 'warning',
- title: 'Scorte Basse',
- body: 'Alcuni elementi in inventario hanno scorte basse',
+        title: 'Scorte Basse',
+        body: 'Alcuni elementi nel catalogo hanno scorte basse',
  requireInteraction: false
  },
  {

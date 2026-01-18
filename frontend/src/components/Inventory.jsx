@@ -245,22 +245,7 @@ const Inventory = () => {
     return sortOrder === 'asc' ? idA - idB : idB - idA;
   });
 
-  // Calculate low stock items - Allineato con la dashboard
-  const calculateLowStockItems = () => {
-    return inventory.filter(item => {
-      const totalQuantity = item.quantita_totale || 0;
-      const availableQuantity = item.unita_disponibili || 0;
-      
-      // Usa la stessa logica della dashboard
-      return (
-        availableQuantity === 0 || // ESAURITO
-        (availableQuantity === 1 && totalQuantity > 2) || // ATTENZIONE
-        (availableQuantity <= (totalQuantity * 0.3) && totalQuantity >= 4 && availableQuantity > 0) // SCARSEGGIA
-      );
-    });
-  };
-  
-  const lowStockItems = calculateLowStockItems();
+  // Scorte basse rimosse - i libri sono sempre massimo 1 o 2 articoli
 
   // Toggle expanded state for items with multiple units
   const toggleExpanded = async (itemId) => {

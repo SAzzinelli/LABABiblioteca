@@ -13,7 +13,6 @@ const Dashboard = ({ onNavigate }) => {
   const [recentRequests, setRecentRequests] = useState([]);
   const [recentReports, setRecentReports] = useState([]);
   const [alerts, setAlerts] = useState({
-    scorte_basse: [],
     prestiti_scaduti: [],
     scadenze_oggi: [],
     scadenze_domani: [],
@@ -175,99 +174,14 @@ const Dashboard = ({ onNavigate }) => {
         return total + unita;
       }, 0);
 
-      // Calcola scorte basse basate sui PRESTITI ATTIVI e sulla SCARSITÀ
-      const calculateLowStockItems = () => {
-        const lowStockItems = [];
-
-        inventoryData.forEach((item) => {
-          const totalQuantity = item.quantita_totale || 0;
-          const availableQuantity = item.unita_disponibili || 0;
-          const loanedQuantity = totalQuantity - availableQuantity;
-
-          // REGOLA SPECIALE: Se c'è solo 1 oggetto e è disponibile, NON è scarsità
-          if (totalQuantity === 1 && availableQuantity === 1) {
-            return; // Salta questo oggetto - oggetti singoli disponibili NON sono scarsità
-          }
-
-          // Solo se c'è almeno 1 oggetto in inventario e non è il caso speciale 1/1
-          if (totalQuantity > 0) {
-            // Calcola la percentuale di oggetti in prestito
-            const loanedPercentage = (loanedQuantity / totalQuantity) * 100;
-
-            // Trova la prima data di ritorno per questo oggetto
-            const itemLoans = prestitiData.filter(
-              (p) =>
-                p.inventario_id === item.id &&
-                p.stato === "attivo" &&
-                p.data_fine,
-            );
-
-            let firstReturnDate = null;
-            if (itemLoans.length > 0) {
-              const returnDates = itemLoans
-                .map((p) => new Date(p.data_fine))
-                .filter((date) => !isNaN(date.getTime()))
-                .sort((a, b) => a - b);
-
-              firstReturnDate = returnDates.length > 0 ? returnDates[0] : null;
-            }
-
-            // Se disponibili = 0, significa che TUTTI sono in prestito (ESAURITO)
-            if (availableQuantity === 0) {
-              lowStockItems.push({
-                ...item,
-                firstReturnDate: firstReturnDate,
-                reason: "ESAURITO - Tutti gli oggetti sono in prestito",
-                status: "esaurito",
-                loanedPercentage: 100,
-              });
-            }
-            // Se disponibili = 1 e totali > 1, significa che solo 1 rimane (ATTENZIONE)
-            else if (availableQuantity === 1 && totalQuantity > 1) {
-              lowStockItems.push({
-                ...item,
-                firstReturnDate: firstReturnDate,
-                reason: "ATTENZIONE - Solo 1 oggetto disponibile",
-                status: "attenzione",
-                loanedPercentage: loanedPercentage,
-              });
-            }
-            // Se la percentuale di prestiti è >= 80%, significa che scarseggia
-            else if (loanedPercentage >= 80 && totalQuantity > 1) {
-              lowStockItems.push({
-                ...item,
-                firstReturnDate: firstReturnDate,
-                reason: `SCARSEGGIA - ${Math.round(loanedPercentage)}% in prestito`,
-                status: "scarseggia",
-                loanedPercentage: loanedPercentage,
-              });
-            }
-            // Se la percentuale di prestiti è >= 60%, significa che si sta esaurendo
-            else if (loanedPercentage >= 60 && totalQuantity > 1) {
-              lowStockItems.push({
-                ...item,
-                firstReturnDate: firstReturnDate,
-                reason: `SI STA ESAURENDO - ${Math.round(loanedPercentage)}% in prestito`,
-                status: "si_sta_esaurendo",
-                loanedPercentage: loanedPercentage,
-              });
-            }
-          }
-        });
-
-        return lowStockItems;
-      };
-
-      const lowStockWithDates = calculateLowStockItems();
-
       setStats({
         inventory: inventoryData.length,
         requests: requestsData.length,
         reports: reportsData.length,
         activeLoans: activeLoans,
         availableItems: availableItems,
-        lowStockItems: lowStockWithDates.length,
-        lowStockWithDates: lowStockWithDates,
+        lowStockItems: 0,
+        lowStockWithDates: [],
       });
 
       setAlerts(alertsData);
@@ -321,7 +235,7 @@ const Dashboard = ({ onNavigate }) => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 mb-1">
-                Inventario
+                Catalogo
               </p>
               <p className="text-3xl font-bold text-gray-900">
                 {stats.inventory}
@@ -446,81 +360,6 @@ const Dashboard = ({ onNavigate }) => {
 
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Scorte Basse */}
-              {alerts.scorte_basse.length > 0 && (
-                <div
-                  className="bg-red-50 border border-red-200 rounded-lg p-4 cursor-pointer hover:bg-red-100 transition-colors"
-                  onClick={() =>
-                    setSelectedAlert({
-                      type: "scorte",
-                      data: alerts.scorte_basse,
-                    })
-                  }
-                >
-                  <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mr-3">
-                      <svg
-                        className="w-4 h-4 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-lg font-bold text-red-800">
-                      Scorte Basse ({alerts.scorte_basse.length})
-                    </h3>
-                  </div>
-                  <div className="space-y-2">
-                    {alerts.scorte_basse.slice(0, 3).map((item) => (
-                      <div
-                        key={item.id}
-                        className={`bg-white rounded-lg p-3 border ${item.stato_scorte === "esaurito"
-                          ? "border-red-500"
-                          : item.stato_scorte === "attenzione"
-                            ? "border-orange-500"
-                            : item.stato_scorte === "scarseggia"
-                              ? "border-yellow-500"
-                              : "border-teal-500"
-                          }`}
-                      >
-                        <div className="font-semibold text-gray-900 text-sm">
-                          {item.nome}
-                        </div>
-                        <div
-                          className={`font-medium text-xs mt-1 ${item.stato_scorte === "esaurito"
-                            ? "text-red-600"
-                            : item.stato_scorte === "attenzione"
-                              ? "text-orange-600"
-                              : item.stato_scorte === "scarseggia"
-                                ? "text-yellow-600"
-                                : "text-teal-600"
-                            }`}
-                        >
-                          {item.motivo}
-                        </div>
-                        <div className="text-gray-500 text-xs mt-1">
-                          Disponibili: {item.unita_disponibili || 0}/
-                          {item.quantita_totale}
-                          {item.percentuale_disponibile !== null &&
-                            ` (${item.percentuale_disponibile}% disponibili)`}
-                        </div>
-                      </div>
-                    ))}
-                    {alerts.scorte_basse.length > 3 && (
-                      <div className="text-center text-red-600 text-sm font-medium">
-                        +{alerts.scorte_basse.length - 3} altri elementi...
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
 
               {/* Prestiti Scaduti */}
               {alerts.prestiti_scaduti.length > 0 && (
@@ -1096,7 +935,7 @@ const Dashboard = ({ onNavigate }) => {
           >
             <div className="modal-header">
               <h2 className="text-xl font-bold text-primary">
-                {selectedAlert.type === "scorte"
+                {false && selectedAlert.type === "scorte"
                   ? "Scorte Basse"
                   : selectedAlert.type === "ritardi"
                     ? "Prestiti in Ritardo"
@@ -1131,20 +970,20 @@ const Dashboard = ({ onNavigate }) => {
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-medium text-primary">
-                          {selectedAlert.type === "scorte"
+                          {false && selectedAlert.type === "scorte"
                             ? item.nome
                             : item.utente_nome_reale && item.utente_cognome
                               ? `${item.utente_nome_reale} ${item.utente_cognome}`
                               : item.utente_nome}
                         </h3>
                         <p className="text-sm text-secondary">
-                          {selectedAlert.type === "scorte"
+                          {false && selectedAlert.type === "scorte"
                             ? `${item.reason} - Disponibili: ${item.unita_disponibili || 0}/${item.quantita_totale}${item.loanedPercentage ? ` (${Math.round(item.loanedPercentage)}% in prestito)` : ""}`
                             : selectedAlert.type === "ritardi"
                               ? `${item.oggetto_nome} - ${Math.floor(item.giorni_ritardo)} giorni di ritardo`
                               : item.oggetto_nome}
                         </p>
-                        {selectedAlert.type === "scorte" &&
+                        {false && selectedAlert.type === "scorte" &&
                           item.firstReturnDate && (
                             <p className="text-xs text-muted mt-1">
                               Primo ritorno:{" "}
@@ -1152,11 +991,11 @@ const Dashboard = ({ onNavigate }) => {
                             </p>
                           )}
                       </div>
-                      {selectedAlert.type === "scorte" && (
+                      {false && selectedAlert.type === "scorte" && (
                         <button
                           onClick={() => {
                             setSelectedAlert(null);
-                            onNavigate && onNavigate("inventario");
+                            onNavigate && onNavigate("catalogo");
                           }}
                           className="btn-primary btn-small"
                         >
@@ -1311,7 +1150,7 @@ const Dashboard = ({ onNavigate }) => {
 // Stat Card Component
 function StatCard({ title, value, description }) {
   const iconMap = {
-    Inventario: (
+    Catalogo: (
       <svg
         className="w-6 h-6"
         fill="none"
@@ -1359,7 +1198,7 @@ function StatCard({ title, value, description }) {
   };
 
   const colorMap = {
-    Inventario: "bg-gradient-to-br from-teal-100 to-teal-200 ",
+    Catalogo: "bg-gradient-to-br from-teal-100 to-teal-200 ",
     Richieste: "bg-gradient-to-br from-amber-100 to-amber-200 ",
     Segnalazioni: "bg-gradient-to-br from-orange-100 to-orange-200 ",
   };
@@ -1368,7 +1207,7 @@ function StatCard({ title, value, description }) {
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:scale-105 transition-transform p-6">
       <div className="flex items-center">
         <div
-          className={`w-12 h-12 ${colorMap[title]} rounded-lg flex items-center justify-center ${title === "Inventario"
+          className={`w-12 h-12 ${colorMap[title]} rounded-lg flex items-center justify-center ${title === "Catalogo"
             ? "text-teal-600"
             : title === "Richieste"
               ? "text-amber-600"

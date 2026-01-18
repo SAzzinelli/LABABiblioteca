@@ -110,20 +110,7 @@ function AppInner() {
           });
         }
 
-        // Low stock alerts
-        if (alertsData.scorte_basse) {
-          alertsData.scorte_basse.forEach(item => {
-            realNotifications.push({
-              id: notificationId++,
-              title: 'Scorte Basse',
-              message: `${item.nome}: solo ${item.unita_disponibili} disponibili`,
-              time: 'Ora',
-              isRead: false,
-              type: 'warning',
-              data: { type: 'inventory', id: item.id, itemData: item }
-            });
-          });
-        }
+        // Scorte basse rimosse - i libri sono sempre massimo 1 o 2 articoli
 
         setNotifications(realNotifications);
       }
