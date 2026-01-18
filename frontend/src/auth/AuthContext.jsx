@@ -10,6 +10,7 @@ export default function AuthProvider({ children }) {
  // Load persisted token once
  const [token, setToken] = useState(() => localStorage.getItem(KEY));
  const [user, setUser] = useState(null);
+ const [authLoading, setAuthLoading] = useState(!!localStorage.getItem(KEY)); // Loading se c'è un token da verificare
 
  const isAuthenticated = !!token;
  const role = (user?.ruolo || user?.role || '').toLowerCase();
@@ -37,19 +38,25 @@ export default function AuthProvider({ children }) {
  async function loadMe() {
  if (!token) { 
  setUser(null); 
+ setAuthLoading(false);
  return; 
  }
+ setAuthLoading(true);
  try {
  const { data } = await api.get(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`);
  const u = data?.user || data || null; // tolerate both formats
- if (!cancelled) setUser(u);
+ if (!cancelled) {
+ setUser(u);
+ setAuthLoading(false);
+ }
  } catch (e) {
  // Token invalid/expired → clear session
  console.warn("/api/auth/me failed", e?.response?.status, e?.message);
  localStorage.removeItem(KEY);
  if (!cancelled) { 
  setToken(null); 
- setUser(null); 
+ setUser(null);
+ setAuthLoading(false);
  }
  }
  }
@@ -104,7 +111,7 @@ export default function AuthProvider({ children }) {
 
  // Expose helpers
  return (
- <AuthContext.Provider value={{ token, user, isAuthenticated, isAdmin, isSupervisor, role, roleLabel, api, login, register, logout }}>
+ <AuthContext.Provider value={{ token, user, isAuthenticated, isAdmin, isSupervisor, role, roleLabel, api, login, register, logout, authLoading }}>
  {children}
  </AuthContext.Provider>
  );
