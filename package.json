@@ -1,0 +1,11 @@
+{
+  "name": "laba-biblioteca",
+  "version": "1.0.1-alpha",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "build": "cd backend && npm install && cd ../frontend && npm install && npm run build"
+  }
+}
