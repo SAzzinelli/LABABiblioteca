@@ -635,7 +635,9 @@ Tipo di Utilizzo
 </div>
 </div>
 </div>
+</div>
 )}
+      </div>
 
       {error && (
         <div className="alert-card alert-danger mt-4">
@@ -647,7 +649,6 @@ Tipo di Utilizzo
           </div>
         </div>
       )}
-      </div>
 
       <div className="modal-footer flex-shrink-0 border-t border-gray-200 bg-white px-6 py-4">
  <button
