@@ -24,7 +24,7 @@
         { "step": "install-frontend" }
       ],
       "commands": [
-        "cd /app/frontend && npx vite build"
+        "cd /app/frontend && npm run build"
       ]
     }
   },
