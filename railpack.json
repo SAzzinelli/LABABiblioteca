@@ -25,8 +25,7 @@
         { "local": true, "include": ["frontend"] }
       ],
       "commands": [
-        "cd /app/frontend && npm install",
-        "cd /app/frontend && npm run build"
+        "cd /app/frontend && npm install && npm run build"
       ]
     }
   },
