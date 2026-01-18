@@ -21,13 +21,11 @@
     },
     "build-frontend": {
       "inputs": [
-        { "image": "node:20" },
-        { "local": true, "include": ["frontend"] }
+        { "step": "install-frontend" },
+        { "local": true }
       ],
       "commands": [
-        "cd /app/frontend && npm install",
-        {"path": "/app/frontend/node_modules/.bin"},
-        "cd /app/frontend && npm run build"
+        "cd /app/frontend && npx vite build"
       ]
     }
   },
