@@ -624,7 +624,6 @@ Tipo di Utilizzo
  </div>
  )}
  </div>
- </div>
 
  <div className="modal-footer flex-shrink-0 border-t border-gray-200 bg-white">
  <button
