@@ -17,7 +17,7 @@ r.get('/', requireAuth, requireRole('admin'), async (req, res) => {
     let queryText = `
       SELECT
         i.id, i.nome, i.quantita_totale, i.categoria_madre, i.categoria_id,
-        i.posizione, i.note, i.immagine_url, i.in_manutenzione, i.tipo_prestito, i.created_at, i.updated_at,
+        i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.in_manutenzione, i.tipo_prestito, i.created_at, i.updated_at,
         CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome,
         COALESCE(json_agg(DISTINCT ic.corso) FILTER (WHERE ic.corso IS NOT NULL), '[]') AS corsi_assegnati,
         (SELECT COUNT(*) FROM inventario_unita iu WHERE iu.inventario_id = i.id AND iu.stato = 'disponibile') AS unita_disponibili,
@@ -38,7 +38,7 @@ r.get('/', requireAuth, requireRole('admin'), async (req, res) => {
       queryParams.push(corso);
     }
     if (search) {
-      conditions.push(`(i.nome ILIKE $${queryParams.length + 1} OR i.note ILIKE $${queryParams.length + 2} OR i.posizione ILIKE $${queryParams.length + 3})`);
+      conditions.push(`(i.nome ILIKE $${queryParams.length + 1} OR i.autore ILIKE $${queryParams.length + 2} OR i.posizione ILIKE $${queryParams.length + 3})`);
       queryParams.push(`%${search}%`, `%${search}%`, `%${search}%`);
     }
 
@@ -46,7 +46,7 @@ r.get('/', requireAuth, requireRole('admin'), async (req, res) => {
       queryText += ` WHERE ${conditions.join(' AND ')}`;
     }
 
-    queryText += ` GROUP BY i.id, cs.nome ORDER BY i.nome`;
+    queryText += ` GROUP BY i.id, cs.nome ORDER BY COALESCE((SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id AND stato = 'disponibile'), (SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id), i.nome)`;
 
     const rows = await query(queryText, queryParams);
     res.json(rows);
@@ -69,7 +69,7 @@ r.get('/disponibili', requireAuth, async (req, res) => {
       // Admin vede tutti gli oggetti
       result = await query(`
         SELECT
-          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.note, i.immagine_url, i.tipo_prestito,
+          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.tipo_prestito,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome,
           CAST((SELECT COUNT(*) FROM inventario_unita iu WHERE iu.inventario_id = i.id AND iu.stato = 'disponibile' AND iu.prestito_corrente_id IS NULL AND iu.richiesta_riservata_id IS NULL) AS INTEGER) AS unita_disponibili,
           CASE
@@ -79,17 +79,13 @@ r.get('/disponibili', requireAuth, async (req, res) => {
           END AS stato_effettivo
         FROM inventario i
         LEFT JOIN categorie_semplici cs ON cs.id = i.categoria_id
-        ORDER BY i.nome
+        ORDER BY COALESCE((SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id AND stato = 'disponibile'), (SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id), i.nome)
       `);
   } else {
-      // Utenti vedono solo oggetti del loro corso
-      if (!userCourse) {
-        return res.status(403).json({ error: 'Corso accademico non assegnato' });
-      }
-
+      // Utenti vedono tutti i libri (ogni libro è assegnato a tutti i corsi)
       result = await query(`
         SELECT
-          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.note, i.immagine_url, i.tipo_prestito,
+          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.tipo_prestito,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome,
           CAST((SELECT COUNT(*) FROM inventario_unita iu WHERE iu.inventario_id = i.id AND iu.stato = 'disponibile' AND iu.prestito_corrente_id IS NULL AND iu.richiesta_riservata_id IS NULL) AS INTEGER) AS unita_disponibili,
           CASE
@@ -99,9 +95,8 @@ r.get('/disponibili', requireAuth, async (req, res) => {
           END AS stato_effettivo
         FROM inventario i
         LEFT JOIN categorie_semplici cs ON cs.id = i.categoria_id
-        WHERE EXISTS (SELECT 1 FROM inventario_corsi WHERE inventario_id = i.id AND corso = $1)
-        ORDER BY i.nome
-      `, [userCourse]);
+        ORDER BY COALESCE((SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id AND stato = 'disponibile'), (SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id), i.nome)
+      `);
     }
 
     res.json(result);
@@ -129,7 +124,7 @@ r.get('/unita-disponibili', requireAuth, async (req, res) => {
       result = await query(`
         SELECT
           iu.id, iu.codice_univoco, iu.stato,
-          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.note, i.immagine_url,
+          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome
         FROM inventario_unita iu
         JOIN inventario i ON i.id = iu.inventario_id
@@ -138,18 +133,14 @@ r.get('/unita-disponibili', requireAuth, async (req, res) => {
           AND iu.prestito_corrente_id IS NULL 
           AND iu.richiesta_riservata_id IS NULL
           AND i.in_manutenzione = FALSE
-        ORDER BY i.nome, iu.codice_univoco
+        ORDER BY COALESCE((SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id AND stato = 'disponibile'), (SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id), i.nome), iu.codice_univoco
       `);
     } else {
-      // Utenti vedono solo unità del loro corso
-      if (!userCourse) {
-        return res.status(403).json({ error: 'Corso accademico non assegnato' });
-      }
-
+      // Utenti vedono tutte le unità disponibili (ogni libro è assegnato a tutti i corsi)
       result = await query(`
         SELECT
           iu.id, iu.codice_univoco, iu.stato,
-          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.note, i.immagine_url,
+          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome
         FROM inventario_unita iu
         JOIN inventario i ON i.id = iu.inventario_id
@@ -158,9 +149,8 @@ r.get('/unita-disponibili', requireAuth, async (req, res) => {
           AND iu.prestito_corrente_id IS NULL 
           AND iu.richiesta_riservata_id IS NULL
           AND i.in_manutenzione = FALSE
-          AND EXISTS (SELECT 1 FROM inventario_corsi WHERE inventario_id = i.id AND corso = $1)
-        ORDER BY i.nome, iu.codice_univoco
-      `, [userCourse]);
+        ORDER BY COALESCE((SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id AND stato = 'disponibile'), (SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id), i.nome), iu.codice_univoco
+      `);
     }
 
     console.log(`📦 Found ${result.length} available units for user`);
@@ -213,9 +203,12 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       categoria_madre,
       categoria_id,
       posizione = null, 
-      fornitore = null,
-      note = null, 
-      immagine_url = null,
+      autore = null,
+      luogo_pubblicazione = null,
+      data_pubblicazione = null,
+      casa_editrice = null,
+      fondo = null,
+      settore = null,
       quantita_totale = 1, 
       tipo_prestito = 'solo_esterno',
       corsi_assegnati = [], 
@@ -254,10 +247,10 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
     
     // Create inventory item
     const result = await query(`
-      INSERT INTO inventario (nome, categoria_madre, categoria_id, posizione, fornitore, note, immagine_url, quantita_totale, quantita, in_manutenzione, tipo_prestito)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      INSERT INTO inventario (nome, categoria_madre, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita, in_manutenzione, tipo_prestito)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING *
-    `, [nome, categoria_madre, categoria_id, posizione, fornitore, note, immagine_url, quantita_totale, quantita_totale, false, tipo_prestito]);
+    `, [nome, categoria_madre || '', categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, false, tipo_prestito]);
     
     const newItem = result[0];
     
@@ -281,15 +274,14 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       }
     }
     
-    // Assign to courses if specified
-    if (corsi_assegnati && corsi_assegnati.length > 0) {
-      for (const corso of corsi_assegnati) {
-        await query(`
-          INSERT INTO inventario_corsi (inventario_id, corso)
-          VALUES ($1, $2)
-          ON CONFLICT (inventario_id, corso) DO NOTHING
-        `, [newItem.id, corso]);
-      }
+    // Assign to ALL courses automatically
+    const allCourses = await query('SELECT corso FROM corsi');
+    for (const courseRow of allCourses) {
+      await query(`
+        INSERT INTO inventario_corsi (inventario_id, corso)
+        VALUES ($1, $2)
+        ON CONFLICT (inventario_id, corso) DO NOTHING
+      `, [newItem.id, courseRow.corso]);
     }
     
     res.status(201).json(newItem);
@@ -308,9 +300,12 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
       categoria_madre,
       categoria_id,
       posizione = null, 
-      fornitore = null,
-      note = null, 
-      immagine_url = null,
+      autore = null,
+      luogo_pubblicazione = null,
+      data_pubblicazione = null,
+      casa_editrice = null,
+      fondo = null,
+      settore = null,
       quantita_totale, 
       in_manutenzione,
       tipo_prestito = 'solo_esterno',
@@ -334,11 +329,12 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     // Update inventory item
     const result = await query(`
       UPDATE inventario 
-      SET nome = $1, categoria_madre = $2, categoria_id = $3, posizione = $4, fornitore = $5, note = $6, 
-          immagine_url = $7, quantita_totale = $8, quantita = $9, in_manutenzione = $10, tipo_prestito = $11, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $12
+      SET nome = $1, categoria_madre = $2, categoria_id = $3, posizione = $4, autore = $5, 
+          luogo_pubblicazione = $6, data_pubblicazione = $7, casa_editrice = $8, fondo = $9, settore = $10,
+          quantita_totale = $11, quantita = $12, in_manutenzione = $13, tipo_prestito = $14, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $15
       RETURNING *
-    `, [nome, categoria_madre, categoria_id, posizione, fornitore, note, immagine_url, quantita_totale, quantita_totale, in_manutenzione || false, tipo_prestito, id]);
+    `, [nome, categoria_madre || '', categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, in_manutenzione || false, tipo_prestito, id]);
 
     if (result.length === 0) {
       return res.status(404).json({ error: 'Elemento inventario non trovato' });

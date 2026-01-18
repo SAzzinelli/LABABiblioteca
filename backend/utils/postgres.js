@@ -107,9 +107,12 @@ export async function initDatabase() {
         categoria_madre VARCHAR(255) NOT NULL,
         categoria_id INTEGER REFERENCES categorie_semplici(id),
         posizione VARCHAR(255),
-        fornitore VARCHAR(255),
-        note TEXT,
-        immagine_url TEXT,
+        autore VARCHAR(255),
+        luogo_pubblicazione VARCHAR(255),
+        data_pubblicazione INTEGER,
+        casa_editrice VARCHAR(255),
+        fondo VARCHAR(255),
+        settore VARCHAR(255),
         in_manutenzione BOOLEAN NOT NULL DEFAULT FALSE,
         unita JSONB DEFAULT '[]',
         quantita INTEGER DEFAULT 0,
@@ -213,7 +216,19 @@ export async function initDatabase() {
       ALTER TABLE riparazioni ADD COLUMN IF NOT EXISTS tipo VARCHAR(100) DEFAULT 'segnalazione';
       ALTER TABLE riparazioni ADD COLUMN IF NOT EXISTS priorita VARCHAR(50) DEFAULT 'media';
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS tipo_prestito VARCHAR(20) DEFAULT 'solo_esterno';
-      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS fornitore VARCHAR(255);
+      -- Migrazione campi inventario: fornitore -> autore, aggiungi nuovi campi pubblicazione
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS autore VARCHAR(255);
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS luogo_pubblicazione VARCHAR(255);
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS data_pubblicazione INTEGER;
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS casa_editrice VARCHAR(255);
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS fondo VARCHAR(255);
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS settore VARCHAR(255);
+      -- Migra dati esistenti: fornitore -> autore (se fornitore esiste e autore no)
+      UPDATE inventario SET autore = fornitore WHERE fornitore IS NOT NULL AND autore IS NULL;
+      -- Rimuovi colonne obsolete (commentato per sicurezza, decommentare dopo migrazione)
+      -- ALTER TABLE inventario DROP COLUMN IF EXISTS fornitore;
+      -- ALTER TABLE inventario DROP COLUMN IF EXISTS note;
+      -- ALTER TABLE inventario DROP COLUMN IF EXISTS immagine_url;
       ALTER TABLE richieste ADD COLUMN IF NOT EXISTS tipo_utilizzo VARCHAR(20) DEFAULT NULL;
       
       -- Sistema di penalità per ritardi

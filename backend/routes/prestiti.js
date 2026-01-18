@@ -21,7 +21,8 @@ r.get('/', requireAuth, async (req, res) => {
     if (wantAll) {
       if (!isAdminUser(req.user)) return res.status(403).json({ error: 'Solo admin o supervisori' });
       result = await query(`
-        SELECT p.*, i.nome AS articolo_nome, i.note AS articolo_descrizione,
+        SELECT p.*, i.nome AS articolo_nome, i.autore AS articolo_autore, i.casa_editrice AS articolo_casa_editrice,
+               COALESCE(r.utente_id, u.id) AS utente_id,
                u.name AS utente_nome, u.surname AS utente_cognome, u.email AS utente_email,
                u.penalty_strikes, u.is_blocked, u.blocked_reason,
                r.dal, r.al, r.note AS richiesta_note
@@ -33,7 +34,7 @@ r.get('/', requireAuth, async (req, res) => {
       `);
     } else {
       result = await query(`
-        SELECT p.*, i.nome AS articolo_nome, i.note AS articolo_descrizione,
+        SELECT p.*, i.nome AS articolo_nome, i.autore AS articolo_autore, i.casa_editrice AS articolo_casa_editrice,
                i.categoria_madre, cs.nome as categoria_figlia
         FROM prestiti p
         LEFT JOIN inventario i ON i.id = p.inventario_id
@@ -78,7 +79,7 @@ r.get('/mie', requireAuth, async (req, res) => {
     });
     
     const result = await query(`
-      SELECT p.*, i.nome AS articolo_nome, i.note AS articolo_descrizione,
+      SELECT p.*, i.nome AS articolo_nome, i.autore AS articolo_autore, i.casa_editrice AS articolo_casa_editrice,
              i.categoria_madre, cs.nome as categoria_figlia,
              p.data_uscita AS data_inizio, p.data_rientro AS data_fine
       FROM prestiti p

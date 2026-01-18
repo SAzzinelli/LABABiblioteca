@@ -58,7 +58,10 @@ const AvailableItems = () => {
   // Filter items
   const filteredItems = items.filter(item => {
     const matchesSearch = item.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.note?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (item.autore && item.autore.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (item.casa_editrice && item.casa_editrice.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (item.fondo && item.fondo.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (item.settore && item.settore.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          item.posizione?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesCategory = !selectedCategory || 
@@ -215,8 +218,25 @@ const AvailableItems = () => {
                   )}
                 </div>
 
-                {item.note && (
-                  <p className="text-sm text-gray-600 mb-6">{item.note}</p>
+                {/* Dati pubblicazione */}
+                {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore) && (
+                  <div className="mb-6 space-y-1">
+                    {item.luogo_pubblicazione && (
+                      <p className="text-sm text-gray-600"><span className="font-medium">Luogo:</span> {item.luogo_pubblicazione}</p>
+                    )}
+                    {item.data_pubblicazione && (
+                      <p className="text-sm text-gray-600"><span className="font-medium">Anno:</span> {item.data_pubblicazione}</p>
+                    )}
+                    {item.casa_editrice && (
+                      <p className="text-sm text-gray-600"><span className="font-medium">Casa Editrice:</span> {item.casa_editrice}</p>
+                    )}
+                    {item.fondo && (
+                      <p className="text-sm text-gray-600"><span className="font-medium">Fondo:</span> {item.fondo}</p>
+                    )}
+                    {item.settore && (
+                      <p className="text-sm text-gray-600"><span className="font-medium">Settore:</span> {item.settore}</p>
+                    )}
+                  </div>
                 )}
 
                 <div className="flex justify-center">

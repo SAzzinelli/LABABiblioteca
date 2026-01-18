@@ -230,12 +230,18 @@ function AppInner() {
   };
 
   const [tab, setTab] = useState(getCurrentTab());
+  const [loansInitialTab, setLoansInitialTab] = useState(null);
 
   // Funzione per cambiare tab e aggiornare URL
-  const handleTabChange = (newTab) => {
+  const handleTabChange = (newTab, options = {}) => {
     setTab(newTab);
     const path = newTab === 'dashboard' ? '/' : `/${newTab}`;
     window.history.pushState({}, '', path);
+    
+    // Se ci sono opzioni per il tab prestiti, salva il tab iniziale
+    if (newTab === 'prestiti' && options.initialTab) {
+      setLoansInitialTab(options.initialTab);
+    }
   };
 
   // Chiudi sidebar su resize
@@ -479,7 +485,12 @@ onClick={handleTabChange}
               <div className="max-w-7xl mx-auto">
                 {tab === 'dashboard' && <Dashboard onNavigate={handleTabChange} />}
                 {tab === 'inventario' && <Inventory />}
-                {tab === 'prestiti' && <Loans selectedRequestFromNotification={selectedRequestFromNotification} onRequestHandled={() => setSelectedRequestFromNotification(null)} />}
+                {tab === 'prestiti' && <Loans 
+                  selectedRequestFromNotification={selectedRequestFromNotification} 
+                  onRequestHandled={() => setSelectedRequestFromNotification(null)}
+                  initialTab={loansInitialTab}
+                  onTabSet={() => setLoansInitialTab(null)}
+                />}
                 {tab === 'riparazioni' && <Repairs />}
                 {tab === 'utenti' && <UserManagement />}
                 {/* Statistiche nascoste - non richieste per biblioteca */}

@@ -3,39 +3,39 @@ import { useAuth } from '../auth/AuthContext';
 import AdvancedLoanModal from './AdvancedLoanModal';
 import { TableSkeleton } from './SkeletonLoader';
 
-const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
+const Loans = ({ selectedRequestFromNotification, onRequestHandled, initialTab, onTabSet }) => {
   const [requests, setRequests] = useState([]);
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showLoanModal, setShowLoanModal] = useState(false);
   const [selectedLoan, setSelectedLoan] = useState(null);
-  const [activeTab, setActiveTab] = useState('active');
+  const [activeTab, setActiveTab] = useState(initialTab || 'active');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectRequestId, setRejectRequestId] = useState(null);
   const [rejectReason, setRejectReason] = useState('');
-  const { token, isAdmin, isSupervisor } = useAuth();
+  const [approvingRequestId, setApprovingRequestId] = useState(null);
+  const { token } = useAuth();
 
   const fetchData = async () => {
     try {
       setLoading(true);
       const [requestsRes, loansRes] = await Promise.all([
-        (isAdmin && !isSupervisor)
-          ? fetch(`${import.meta.env.VITE_API_BASE_URL}/api/richieste?all=1`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          })
-          : Promise.resolve(null),
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/api/richieste?all=1`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
         fetch(`${import.meta.env.VITE_API_BASE_URL}/api/prestiti?all=1`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
 
-      if (requestsRes && !requestsRes.ok) throw new Error('Errore nel caricamento richieste');
+      if (!requestsRes.ok) throw new Error('Errore nel caricamento richieste');
       if (!loansRes.ok) throw new Error('Errore nel caricamento prestiti');
 
       const [requestsData, loansData] = await Promise.all([
-        requestsRes ? requestsRes.json() : [],
+        requestsRes.json(),
         loansRes.json()
       ]);
 
@@ -72,8 +72,23 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
     }
   }, [selectedRequestFromNotification, requests, onRequestHandled]);
 
+  // Gestisce il tab iniziale quando si naviga dalla dashboard
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+      // Notifica che il tab è stato impostato
+      if (onTabSet) {
+        onTabSet();
+      }
+    }
+  }, [initialTab, onTabSet]);
+
   const handleApprove = async (requestId) => {
     try {
+      // Disabilita il bottone durante l'approvazione per evitare doppi click
+      setApprovingRequestId(requestId);
+      setError(null);
+
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/prestiti/${requestId}/approva`, {
         method: 'PUT',
         headers: {
@@ -91,6 +106,7 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
         } else {
           throw new Error(responseData.error || 'Errore nell\'approvazione');
         }
+        setApprovingRequestId(null);
         return;
       }
 
@@ -104,6 +120,15 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
         }
       }
 
+      // Chiudi il modale se è aperto per questa richiesta
+      if (showLoanModal && selectedLoan && selectedLoan.id === requestId) {
+        setShowLoanModal(false);
+        setSelectedLoan(null);
+      }
+
+      // Rimuovi immediatamente la richiesta dalla lista "pending" per feedback visivo immediato
+      setRequests(prevRequests => prevRequests.filter(req => req.id !== requestId));
+
       // Send approval notification to user
       window.dispatchEvent(new CustomEvent('showNotification', {
         detail: {
@@ -116,9 +141,29 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
         }
       }));
 
-      await fetchData();
+      // Ricarica i dati per avere lo stato aggiornato completo (incluso il nuovo prestito)
+      const [updatedRequestsData, updatedLoansData] = await Promise.all([
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/api/richieste?all=1`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }).then(res => res.json()),
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/api/prestiti?all=1`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }).then(res => res.json())
+      ]);
+
+      setRequests(updatedRequestsData);
+      setLoans(updatedLoansData);
+
+      // Se siamo nel tab "pending" e non ci sono più richieste, passa al tab "active" per mostrare il nuovo prestito
+      const remainingPending = updatedRequestsData.filter(r => r.stato === 'in_attesa');
+      if (activeTab === 'pending' && remainingPending.length === 0) {
+        setActiveTab('active');
+      }
+
+      setApprovingRequestId(null);
     } catch (err) {
       setError(err.message);
+      setApprovingRequestId(null);
     }
   };
 
@@ -191,6 +236,66 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
     }
   };
 
+  // Get unique users from current data
+  const getUniqueUsers = () => {
+    let allData = [];
+    
+    switch (activeTab) {
+      case 'pending':
+        allData = requests.filter(r => r.stato === 'in_attesa');
+        break;
+      case 'processed':
+        allData = loans.filter(l => l.stato === 'restituito');
+        break;
+      case 'active':
+        allData = loans.filter(l => l.stato === 'attivo');
+        break;
+      default:
+        allData = [];
+    }
+
+    // Apply search filter first
+    if (searchTerm) {
+      allData = allData.filter(item => {
+        const unitaStr = Array.isArray(item.unita) ? item.unita.join(' ') : (item.unita || '');
+        const searchLower = searchTerm.toLowerCase();
+        const fullName = `${item.utente_nome || ''} ${item.utente_cognome || ''}`.trim().toLowerCase();
+        const chiField = (item.chi || '').toLowerCase();
+        
+        return (item.articolo_nome || item.oggetto_nome || '').toLowerCase().includes(searchLower) ||
+               unitaStr.toLowerCase().includes(searchLower) ||
+               (item.utente_nome || '').toLowerCase().includes(searchLower) ||
+               (item.utente_cognome || '').toLowerCase().includes(searchLower) ||
+               fullName.includes(searchLower) ||
+               chiField.includes(searchLower) ||
+               (item.utente_email || '').toLowerCase().includes(searchLower) ||
+               (item.note || '').toLowerCase().includes(searchLower);
+      });
+    }
+
+    // Extract unique users
+    const userMap = new Map();
+    allData.forEach(item => {
+      // Try different possible user ID fields
+      const userId = item.utente_id || item.user_id;
+      const userName = `${item.utente_nome || ''} ${item.utente_cognome || ''}`.trim() || item.utente_email || item.chi || 'Utente sconosciuto';
+      const userEmail = item.utente_email || '';
+      
+      // Use user ID if available, otherwise use email as unique identifier
+      const uniqueKey = userId ? userId.toString() : (userEmail || userName);
+      
+      if (uniqueKey && !userMap.has(uniqueKey)) {
+        userMap.set(uniqueKey, {
+          id: userId || uniqueKey, // Use ID if available, otherwise use the unique key
+          name: userName,
+          email: userEmail
+        });
+      }
+    });
+
+    return Array.from(userMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+  };
+
   // Filter data based on active tab
   const getFilteredData = () => {
     let data = [];
@@ -209,22 +314,81 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
         data = [];
     }
 
+    // Apply user filter
+    if (selectedUserId) {
+      data = data.filter(item => {
+        const userId = item.utente_id || item.user_id;
+        const userEmail = item.utente_email || '';
+        const userName = `${item.utente_nome || ''} ${item.utente_cognome || ''}`.trim();
+        
+        // Match by ID if available, otherwise by email or name
+        if (userId) {
+          return userId.toString() === selectedUserId.toString();
+        } else {
+          return userEmail === selectedUserId || userName === selectedUserId;
+        }
+      });
+    }
+
     // Apply search filter
     if (searchTerm) {
       data = data.filter(item => {
         const unitaStr = Array.isArray(item.unita) ? item.unita.join(' ') : (item.unita || '');
-        return (item.articolo_nome || item.oggetto_nome || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-          unitaStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (item.utente_nome || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (item.utente_cognome || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (item.utente_email || '').toLowerCase().includes(searchTerm.toLowerCase());
+        const searchLower = searchTerm.toLowerCase();
+        
+        // Cerca nel nome completo (nome + cognome insieme)
+        const fullName = `${item.utente_nome || ''} ${item.utente_cognome || ''}`.trim().toLowerCase();
+        const chiField = (item.chi || '').toLowerCase();
+        
+        return (item.articolo_nome || item.oggetto_nome || '').toLowerCase().includes(searchLower) ||
+               unitaStr.toLowerCase().includes(searchLower) ||
+               (item.utente_nome || '').toLowerCase().includes(searchLower) ||
+               (item.utente_cognome || '').toLowerCase().includes(searchLower) ||
+               fullName.includes(searchLower) ||
+               chiField.includes(searchLower) ||
+               (item.utente_email || '').toLowerCase().includes(searchLower) ||
+               (item.note || '').toLowerCase().includes(searchLower);
       });
     }
 
     return data;
   };
 
+  // Group data by user when user filter is active
+  const getGroupedData = () => {
+    const data = getFilteredData();
+    
+    if (!selectedUserId) {
+      return null; // No grouping needed
+    }
+
+    // Group by user (should be single user when filter is active, but we group anyway)
+    const grouped = {};
+    data.forEach(item => {
+      const userId = item.utente_id || item.user_id;
+      const userEmail = item.utente_email || '';
+      const userName = `${item.utente_nome || ''} ${item.utente_cognome || ''}`.trim();
+      const userKey = userId?.toString() || userEmail || userName || 'unknown';
+      
+      if (!grouped[userKey]) {
+        grouped[userKey] = {
+          user: {
+            id: userId || userKey,
+            name: userName || userEmail || 'Utente sconosciuto',
+            email: userEmail || ''
+          },
+          items: []
+        };
+      }
+      grouped[userKey].items.push(item);
+    });
+
+    return Object.values(grouped);
+  };
+
   const filteredData = getFilteredData();
+  const groupedData = getGroupedData();
+  const uniqueUsers = getUniqueUsers();
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Non specificata';
@@ -373,7 +537,10 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
           <nav className="flex space-x-8">
             <button
-              onClick={() => setActiveTab('active')}
+              onClick={() => {
+                setActiveTab('active');
+                setSelectedUserId(''); // Reset user filter when changing tab
+              }}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'active'
                 ? 'border-teal-500 text-teal-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -389,7 +556,10 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
             </button>
 
             <button
-              onClick={() => setActiveTab('pending')}
+              onClick={() => {
+                setActiveTab('pending');
+                setSelectedUserId(''); // Reset user filter when changing tab
+              }}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'pending'
                 ? 'border-teal-500 text-teal-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -405,7 +575,10 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
             </button>
 
             <button
-              onClick={() => setActiveTab('processed')}
+              onClick={() => {
+                setActiveTab('processed');
+                setSelectedUserId(''); // Reset user filter when changing tab
+              }}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'processed'
                 ? 'border-teal-500 text-teal-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -421,8 +594,28 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
             </button>
           </nav>
 
-          {/* Search - Desktop only */}
-          <div className="hidden lg:block mt-4 lg:mt-0">
+          {/* Search and User Filter - Desktop only */}
+          <div className="hidden lg:flex items-center gap-3 mt-4 lg:mt-0">
+            {/* User Filter */}
+            <div className="relative">
+              <select
+                value={selectedUserId}
+                onChange={(e) => setSelectedUserId(e.target.value)}
+                className="px-3 py-2 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white text-sm appearance-none cursor-pointer min-w-[200px]"
+              >
+                <option value="">Tutti gli utenti</option>
+                {uniqueUsers.map(user => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
+              <svg className="absolute right-2 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+            
+            {/* Search */}
             <div className="relative">
               <input
                 type="text"
@@ -439,9 +632,24 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
         </div>
       </div>
 
-      {/* Search - Mobile only */}
+      {/* Search and User Filter - Mobile only */}
       <div className="lg:hidden">
         <div className="card">
+          <div className="form-group">
+            <label className="form-label">Filtra per utente</label>
+            <select
+              value={selectedUserId}
+              onChange={(e) => setSelectedUserId(e.target.value)}
+              className="input-field"
+            >
+              <option value="">Tutti gli utenti</option>
+              {uniqueUsers.map(user => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="form-group">
             <label className="form-label">Cerca prestiti</label>
             <div className="relative">
@@ -460,9 +668,144 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
         </div>
       </div>
 
+      {/* Grouped View Header */}
+      {groupedData && groupedData.length > 0 && (
+        <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-teal-900">
+                Prestiti raggruppati per utente
+              </h3>
+              <p className="text-sm text-teal-700 mt-1">
+                Visualizzazione raggruppata per {groupedData.length} {groupedData.length === 1 ? 'utente' : 'utenti'}
+              </p>
+            </div>
+            <button
+              onClick={() => setSelectedUserId('')}
+              className="bg-teal-100 text-teal-800 px-3 py-1 rounded-md text-sm font-medium hover:bg-teal-200 transition-colors"
+            >
+              Rimuovi filtro utente
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Desktop Grid View */}
       <div className="hidden lg:block space-y-4">
-        {filteredData.length === 0 ? (
+        {groupedData && groupedData.length > 0 ? (
+          // Grouped view
+          groupedData.map(group => (
+            <div key={group.user.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              {/* User Header */}
+              <div className="bg-teal-50 border-b border-teal-200 p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-3">
+                      {group.user.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">{group.user.name}</h3>
+                      {group.user.email && (
+                        <p className="text-sm text-gray-600">{group.user.email}</p>
+                      )}
+                    </div>
+                  </div>
+                  <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">
+                    {group.items.length} {group.items.length === 1 ? 'prestito' : 'prestiti'}
+                  </span>
+                </div>
+              </div>
+              
+              {/* User's Loans */}
+              <div className="divide-y divide-gray-200">
+                {group.items.map(item => (
+                  <div key={item.id} className="p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-gray-900">
+                          {item.articolo_nome || item.oggetto_nome}
+                          {item.unita && item.unita.length > 0 && (
+                            <span className="text-gray-500 text-sm ml-2">- {Array.isArray(item.unita) ? item.unita.join(', ') : item.unita}</span>
+                          )}
+                        </h4>
+                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                          <span>Dal: {formatDate(item.dal || item.data_uscita)}</span>
+                          <span>Al: {formatDate(item.al || item.data_rientro)}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {getStatusBadge(item.stato)}
+                        {(activeTab === 'pending' || (activeTab === 'active' && item.stato === 'attivo')) && (
+                          <div className="flex items-center gap-2">
+                            {activeTab === 'pending' && (
+                              <>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleApprove(item.id);
+                                  }}
+                                  disabled={approvingRequestId === item.id || approvingRequestId !== null}
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {approvingRequestId === item.id ? (
+                                    <>
+                                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+                                      Approvazione...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                      Approva
+                                    </>
+                                  )}
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    openRejectModal(item.id);
+                                  }}
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors"
+                                >
+                                  <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                  Rifiuta
+                                </button>
+                              </>
+                            )}
+                            {activeTab === 'active' && item.stato === 'attivo' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (canTerminateLoan(item)) {
+                                    handleReturn(item.id);
+                                  }
+                                }}
+                                disabled={!canTerminateLoan(item)}
+                                className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md transition-colors ${canTerminateLoan(item)
+                                  ? 'text-white bg-teal-600 hover:bg-teal-700'
+                                  : 'text-gray-400 bg-gray-200 cursor-not-allowed'
+                                  }`}
+                                title={getTerminateButtonTooltip(item)}
+                              >
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                                </svg>
+                                Termina prestito
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        ) : filteredData.length === 0 ? (
           <div>
             <div className="card text-center py-12">
               <div className="text-muted text-lg mb-2">
@@ -589,12 +932,22 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
                               e.stopPropagation();
                               handleApprove(item.id);
                             }}
-                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 transition-colors"
+                            disabled={approvingRequestId === item.id || approvingRequestId !== null}
+                            className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                            Approva
+                            {approvingRequestId === item.id ? (
+                              <>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+                                Approvazione...
+                              </>
+                            ) : (
+                              <>
+                                <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                Approva
+                              </>
+                            )}
                           </button>
                           <button
                             onClick={(e) => {
@@ -657,7 +1010,106 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
 
       {/* Mobile Card View */}
       <div className="lg:hidden space-y-4">
-        {filteredData.length === 0 ? (
+        {groupedData && groupedData.length > 0 ? (
+          // Grouped view mobile
+          groupedData.map(group => (
+            <div key={group.user.id} className="card">
+              {/* User Header */}
+              <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center text-white font-semibold text-lg mr-3">
+                      {group.user.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">{group.user.name}</h3>
+                      {group.user.email && (
+                        <p className="text-sm text-gray-600">{group.user.email}</p>
+                      )}
+                    </div>
+                  </div>
+                  <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">
+                    {group.items.length} {group.items.length === 1 ? 'prestito' : 'prestiti'}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setSelectedUserId('')}
+                  className="mt-3 w-full bg-teal-100 text-teal-800 px-3 py-1 rounded-md text-sm font-medium hover:bg-teal-200 transition-colors"
+                >
+                  Rimuovi filtro utente
+                </button>
+              </div>
+              
+              {/* User's Loans */}
+              <div className="space-y-3">
+                {group.items.map(item => (
+                  <div key={item.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <h4 className="font-medium text-gray-900 mb-2">
+                      {item.articolo_nome || item.oggetto_nome}
+                      {item.unita && item.unita.length > 0 && (
+                        <span className="text-gray-500 text-sm ml-2">- {Array.isArray(item.unita) ? item.unita.join(', ') : item.unita}</span>
+                      )}
+                    </h4>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="text-sm text-gray-600">
+                        <div>Dal: {formatDate(item.dal || item.data_uscita)}</div>
+                        <div>Al: {formatDate(item.al || item.data_rientro)}</div>
+                      </div>
+                      {getStatusBadge(item.stato)}
+                    </div>
+                    {(activeTab === 'pending' || (activeTab === 'active' && item.stato === 'attivo')) && (
+                      <div className="flex flex-col gap-2">
+                        {activeTab === 'pending' && (
+                          <>
+                            <button
+                              onClick={() => handleApprove(item.id)}
+                              disabled={approvingRequestId === item.id || approvingRequestId !== null}
+                              className="w-full btn-success text-center py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {approvingRequestId === item.id ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white inline-block mr-2"></div>
+                                  Approvazione...
+                                </>
+                              ) : (
+                                <>
+                                  <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                  Approva Richiesta
+                                </>
+                              )}
+                            </button>
+                            <button
+                              onClick={() => openRejectModal(item.id)}
+                              className="w-full bg-red-500 hover:bg-red-600 text-white rounded-lg py-2 transition-colors duration-200"
+                            >
+                              <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                              Rifiuta Richiesta
+                            </button>
+                          </>
+                        )}
+                        {activeTab === 'active' && item.stato === 'attivo' && (
+                          <button
+                            onClick={() => handleReturn(item.id)}
+                            className="w-full btn-success text-center py-2"
+                          >
+                            <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                            </svg>
+                            Termina Prestito
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        ) : filteredData.length === 0 ? (
           <div className="card text-center py-12">
             <div className="text-muted text-lg mb-2">
               <svg className="icon-lg mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -739,12 +1191,22 @@ const Loans = ({ selectedRequestFromNotification, onRequestHandled }) => {
                   <>
                     <button
                       onClick={() => handleApprove(item.id)}
-                      className="w-full btn-success text-center py-2"
+                      disabled={approvingRequestId === item.id || approvingRequestId !== null}
+                      className="w-full btn-success text-center py-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Approva Richiesta
+                      {approvingRequestId === item.id ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white inline-block mr-2"></div>
+                          Approvazione...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Approva Richiesta
+                        </>
+                      )}
                     </button>
                     <button
                       onClick={() => openRejectModal(item.id)}

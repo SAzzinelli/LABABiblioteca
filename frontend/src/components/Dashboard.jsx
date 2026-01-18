@@ -732,7 +732,14 @@ const Dashboard = ({ onNavigate }) => {
             </div>
 
             <div
-              onClick={() => onNavigate("prestiti")}
+              onClick={() => {
+                const pendingCount = recentRequests.filter(r => r.stato === 'in_attesa').length;
+                if (pendingCount > 0 && onNavigate) {
+                  onNavigate("prestiti", { initialTab: 'pending' });
+                } else if (onNavigate) {
+                  onNavigate("prestiti");
+                }
+              }}
               className="group bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 border border-amber-200 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
             >
               <div className="flex items-center mb-4">
@@ -862,6 +869,47 @@ const Dashboard = ({ onNavigate }) => {
                 </button>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Pending Requests Alert */}
+      {recentRequests.filter(r => r.stato === 'in_attesa').length > 0 && (
+        <div 
+          className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 cursor-pointer hover:bg-yellow-100 transition-colors mb-6"
+          onClick={() => {
+            if (onNavigate) {
+              onNavigate('prestiti', { initialTab: 'pending' });
+            }
+          }}
+        >
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-yellow-800">
+                {recentRequests.filter(r => r.stato === 'in_attesa').length} {recentRequests.filter(r => r.stato === 'in_attesa').length === 1 ? 'richiesta in attesa' : 'richieste in attesa'} di approvazione
+              </h3>
+              <p className="text-sm text-yellow-700 mt-1">
+                Ci sono prestiti che necessitano della tua attenzione per essere approvati o rifiutati.
+              </p>
+            </div>
+            <div className="ml-auto">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onNavigate) {
+                    onNavigate('prestiti', { initialTab: 'pending' });
+                  }
+                }}
+                className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors"
+              >
+                Visualizza
+              </button>
+            </div>
           </div>
         </div>
       )}

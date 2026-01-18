@@ -48,7 +48,12 @@ const Inventory = () => {
  const [newItem, setNewItem] = useState({
  nome: '',
  categoria_id: '',
- note: '',
+ autore: '',
+ luogo_pubblicazione: '',
+ data_pubblicazione: null,
+ casa_editrice: '',
+ fondo: '',
+ settore: '',
  quantita_totale: 1,
  scaffale: '',
  unita: []
@@ -193,7 +198,6 @@ const Inventory = () => {
       existingItem.unita.push({
         id: item.id,
         stato: item.stato_effettivo,
-        note: item.note,
         quantita: item.quantita_totale || 1
       });
     } else {
@@ -204,7 +208,6 @@ const Inventory = () => {
         unita: [{
           id: item.id,
           stato: item.stato_effettivo,
-          note: item.note,
           quantita: item.quantita_totale || 1
         }]
       });
@@ -221,7 +224,8 @@ const Inventory = () => {
     // Search term filter
     const matchesSearch = !searchTerm || (
       item.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (item.note && item.note.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.autore && item.autore.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (item.casa_editrice && item.casa_editrice.toLowerCase().includes(searchTerm.toLowerCase())) ||
       item.categoria_nome?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.categoria_madre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.categoria_figlia?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -520,7 +524,7 @@ const Inventory = () => {
       <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8 mx-4 sm:mx-6 lg:mx-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestione Inventario</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Catalogo</h1>
             <p className="text-gray-600 text-lg">Gestisci e monitora tutti i materiali della biblioteca</p>
           </div>
         </div>
@@ -534,7 +538,7 @@ const Inventory = () => {
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Totale Articoli</p>
                 <p className="text-3xl font-bold text-gray-900">{inventory.length}</p>
-                <p className="text-sm text-gray-500">Elementi in inventario</p>
+                <p className="text-sm text-gray-500">Catalogo completo</p>
               </div>
               <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
                 <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -601,7 +605,7 @@ const Inventory = () => {
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Articoli in Inventario</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Catalogo</h2>
               <p className="text-gray-600 text-lg">Gestisci e monitora tutti i materiali della biblioteca</p>
             </div>
             
@@ -649,7 +653,7 @@ const Inventory = () => {
                 </div>
                 <input
                   type="text"
-                  placeholder="Cerca per nome, seriale o note..."
+                  placeholder="Cerca per titolo, autore, casa editrice..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200"
@@ -825,9 +829,26 @@ const Inventory = () => {
  )}
                       </div>
  </div>
- {item.note && (
-                      <p className="text-sm text-gray-600 mt-2 line-clamp-2">{item.note}</p>
- )}
+                  {/* Dati pubblicazione */}
+                  {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore) && (
+                    <div className="mt-2 space-y-1">
+                      {item.luogo_pubblicazione && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Luogo:</span> {item.luogo_pubblicazione}</p>
+                      )}
+                      {item.data_pubblicazione && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Anno:</span> {item.data_pubblicazione}</p>
+                      )}
+                      {item.casa_editrice && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Casa Editrice:</span> {item.casa_editrice}</p>
+                      )}
+                      {item.fondo && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Fondo:</span> {item.fondo}</p>
+                      )}
+                      {item.settore && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Settore:</span> {item.settore}</p>
+                      )}
+                    </div>
+                  )}
  </div>
                   
                   {/* Status Badge */}
@@ -853,7 +874,7 @@ const Inventory = () => {
 
               {/* Card Body */}
               <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
                   {/* Category */}
                   <div>
                     <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Categoria</label>
@@ -864,26 +885,16 @@ const Inventory = () => {
                     </p>
                   </div>
 
-                  {/* Course */}
+                  {/* Fondo */}
                   <div>
-                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Corso Accademico</label>
-                    <div className="mt-1">
-                      {item.corsi_assegnati && item.corsi_assegnati.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {item.corsi_assegnati.map((corso, index) => (
-                            <span 
-                              key={index}
-                              className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200"
-                              title={corso} // Mostra il nome completo al hover
-                            >
-                              {abbreviateCourse(corso)}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-sm text-gray-500 italic">Non assegnato</span>
-                      )}
-                    </div>
+                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Fondo</label>
+                    <p className="text-sm text-gray-900 mt-1">{item.fondo || 'N/A'}</p>
+                  </div>
+
+                  {/* Settore */}
+                  <div>
+                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Settore</label>
+                    <p className="text-sm text-gray-900 mt-1">{item.settore || 'N/A'}</p>
                   </div>
 
                   {/* Quantity */}
@@ -898,26 +909,6 @@ const Inventory = () => {
                     <p className="text-sm text-gray-900 mt-1">{item.posizione || 'N/A'}</p>
                   </div>
 
-                  {/* Image */}
-                  <div>
-                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Immagine</label>
-                    <div className="mt-1">
-                      {item.immagine_url ? (
-                        <button
-                          onClick={() => window.open(item.immagine_url, '_blank')}
-                          className="inline-flex items-center px-3 py-1 bg-teal-100 text-teal-800 text-xs font-medium rounded-full hover:bg-teal-200 transition-colors"
-                          title="Visualizza immagine"
-                        >
-                          <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          Visualizza
-                        </button>
-                      ) : (
-                        <span className="text-sm text-gray-400">Nessuna</span>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
 

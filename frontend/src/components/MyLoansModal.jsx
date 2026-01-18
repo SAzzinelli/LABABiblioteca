@@ -159,9 +159,16 @@ const MyLoansModal = ({ isOpen, onClose }) => {
  </span>
  </div>
  
- {loan.articolo_descrizione && (
- <p className="text-sm text-gray-600 mb-3">{loan.articolo_descrizione}</p>
- )}
+                {(loan.articolo_autore || loan.articolo_casa_editrice) && (
+                  <div className="mb-3 space-y-1">
+                    {loan.articolo_autore && (
+                      <p className="text-sm text-gray-600"><span className="font-medium">Autore:</span> {loan.articolo_autore}</p>
+                    )}
+                    {loan.articolo_casa_editrice && (
+                      <p className="text-sm text-gray-600"><span className="font-medium">Casa Editrice:</span> {loan.articolo_casa_editrice}</p>
+                    )}
+                  </div>
+                )}
  
  <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-3">
  <div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
@@ -16,9 +16,28 @@ const [activeTab, setActiveTab] = useState('users');
 const [showPenaltyModal, setShowPenaltyModal] = useState(false);
 const [selectedUserForPenalty, setSelectedUserForPenalty] = useState(null);
 const [userPenalties, setUserPenalties] = useState([]);
+const [manualPenaltyStrikes, setManualPenaltyStrikes] = useState(1);
+const [manualPenaltyMotivo, setManualPenaltyMotivo] = useState('');
 const { token, user: currentUser } = useAuth();
 
 const normalizeRole = (value) => (value || '').toString().trim().toLowerCase();
+
+// Function to abbreviate course names
+const abbreviateCourse = (courseName) => {
+  if (!courseName) return '-';
+  const courseAbbreviations = {
+    'Cinema e Audiovisivi': 'CIN',
+    'Fotografia': 'FOT', 
+    'Graphic Design & Multimedia': 'GD',
+    'Fashion Design': 'FD',
+    'Pittura': 'PIT',
+    'Interior Design': 'INT',
+    'Design': 'DES',
+    'Regia e Videomaking': 'REG'
+  };
+  
+  return courseAbbreviations[courseName] || courseName;
+};
 
 const mapFetchedUser = (user) => {
   if (!user) return user;
@@ -56,9 +75,9 @@ const getRoleBadge = (role) => {
   return { text: 'Utente', className: 'bg-teal-100 text-teal-800' };
 };
 
-const currentRole = normalizeRole(currentUser?.ruolo);
-const isSystemAdmin = currentUser?.id === -1 || currentRole === 'admin';
-const isCurrentSupervisor = currentRole === 'supervisor';
+const currentRole = useMemo(() => normalizeRole(currentUser?.ruolo), [currentUser]);
+const isSystemAdmin = useMemo(() => currentUser?.id === -1 || currentRole === 'admin', [currentUser, currentRole]);
+const isCurrentSupervisor = useMemo(() => currentRole === 'supervisor', [currentRole]);
 
 const canDeleteUser = useMemo(() => {
   return (targetUser) => {
@@ -110,11 +129,7 @@ const canManagePenalties = useMemo(() => {
  'Regia e Videomaking'
  ];
 
- useEffect(() => {
- fetchUsers();
- }, []);
-
- const fetchUsers = async () => {
+ const fetchUsers = useCallback(async () => {
    try {
      setLoading(true);
      const response = await fetch(`${API_BASE_URL}/api/auth/users`, {
@@ -134,12 +149,16 @@ const canManagePenalties = useMemo(() => {
    } finally {
      setLoading(false);
    }
- };
+ }, [token]);
+
+ useEffect(() => {
+ fetchUsers();
+ }, [fetchUsers]);
 
 const normalizedUsers = useMemo(() => (users || []).map(mapFetchedUser), [users]);
 
 // Filter users based on active tab
-const getFilteredUsers = () => {
+const filteredUsers = useMemo(() => {
   if (activeTab === 'supervisors') {
     return normalizedUsers.filter(user => normalizeRole(user.ruolo) === 'supervisor');
   } else if (activeTab === 'admins') {
@@ -150,11 +169,11 @@ const getFilteredUsers = () => {
       return role !== 'supervisor' && role !== 'admin';
     });
   }
-};
-const filteredUsers = getFilteredUsers();
-const regularUsers = normalizedUsers.filter(user => normalizeRole(user.ruolo) === 'user');
-const supervisorUsers = normalizedUsers.filter(user => normalizeRole(user.ruolo) === 'supervisor');
-const adminUsers = normalizedUsers.filter(user => normalizeRole(user.ruolo) === 'admin');
+}, [normalizedUsers, activeTab]);
+
+const regularUsers = useMemo(() => normalizedUsers.filter(user => normalizeRole(user.ruolo) === 'user'), [normalizedUsers]);
+const supervisorUsers = useMemo(() => normalizedUsers.filter(user => normalizeRole(user.ruolo) === 'supervisor'), [normalizedUsers]);
+const adminUsers = useMemo(() => normalizedUsers.filter(user => normalizeRole(user.ruolo) === 'admin'), [normalizedUsers]);
 
  const handleInputChange = (e) => {
  const { name, value } = e.target;
@@ -322,6 +341,8 @@ setError(err.message);
 const openPenaltyModal = async (user) => {
 setSelectedUserForPenalty(user);
 setShowPenaltyModal(true);
+setManualPenaltyStrikes(1);
+setManualPenaltyMotivo('');
 await fetchUserPenalties(user.id);
 };
 
@@ -358,6 +379,110 @@ throw new Error(errorData.error || 'Errore nello sblocco utente');
 
 await fetchUsers();
 setShowPenaltyModal(false);
+} catch (err) {
+setError(err.message);
+}
+};
+
+const handleAssignManualPenalty = async () => {
+try {
+if (!selectedUserForPenalty) {
+setError('Nessun utente selezionato');
+return;
+}
+
+if (!manualPenaltyStrikes || manualPenaltyStrikes < 1 || manualPenaltyStrikes > 3) {
+setError('Il numero di strike deve essere tra 1 e 3');
+return;
+}
+
+const currentStrikes = selectedUserForPenalty.penalty_strikes || 0;
+const newTotal = currentStrikes + manualPenaltyStrikes;
+
+if (newTotal > 3) {
+const confirm = window.confirm(
+`ATTENZIONE: L'utente ha attualmente ${currentStrikes} strike. Assegnando ${manualPenaltyStrikes} strike, l'utente avrà ${newTotal} strike (supera il limite di 3). Vuoi continuare?`
+);
+if (!confirm) return;
+}
+
+const response = await fetch(`${API_BASE_URL}/api/penalties/assign-manual`, {
+method: 'POST',
+headers: {
+'Authorization': `Bearer ${token}`,
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({
+userId: selectedUserForPenalty.id,
+strikes: manualPenaltyStrikes,
+motivo: manualPenaltyMotivo || undefined
+})
+});
+
+if (!response.ok) {
+const errorData = await response.json();
+throw new Error(errorData.error || errorData.details || 'Errore nell\'assegnazione penalità');
+}
+
+const data = await response.json();
+alert(data.message || 'Penalità assegnata con successo');
+
+// Reset form
+setManualPenaltyStrikes(1);
+setManualPenaltyMotivo('');
+
+// Refresh user data and penalties
+await fetchUsers();
+await fetchUserPenalties(selectedUserForPenalty.id);
+// Aggiorna anche selectedUserForPenalty per riflettere i nuovi strike
+const updatedUser = await fetch(`${API_BASE_URL}/api/auth/users`, {
+headers: { 'Authorization': `Bearer ${token}` }
+}).then(r => r.json()).then(users => users.find(u => u.id === selectedUserForPenalty.id));
+if (updatedUser) {
+setSelectedUserForPenalty(updatedUser);
+}
+} catch (err) {
+setError(err.message);
+}
+};
+
+const handleRemovePenalty = async (penaltyId) => {
+try {
+if (!selectedUserForPenalty) {
+setError('Nessun utente selezionato');
+return;
+}
+
+if (!window.confirm('Sei sicuro di voler rimuovere questa penalità? Gli strike verranno sottratti dal totale dell\'utente.')) {
+return;
+}
+
+const response = await fetch(`${API_BASE_URL}/api/penalties/${penaltyId}`, {
+method: 'DELETE',
+headers: {
+'Authorization': `Bearer ${token}`,
+'Content-Type': 'application/json'
+}
+});
+
+if (!response.ok) {
+const errorData = await response.json();
+throw new Error(errorData.error || errorData.details || 'Errore nella rimozione penalità');
+}
+
+const data = await response.json();
+alert(data.message || 'Penalità rimossa con successo');
+
+// Refresh data
+await fetchUsers();
+await fetchUserPenalties(selectedUserForPenalty.id);
+// Aggiorna anche selectedUserForPenalty
+const updatedUser = await fetch(`${API_BASE_URL}/api/auth/users`, {
+headers: { 'Authorization': `Bearer ${token}` }
+}).then(r => r.json()).then(users => users.find(u => u.id === selectedUserForPenalty.id));
+if (updatedUser) {
+setSelectedUserForPenalty(updatedUser);
+}
 } catch (err) {
 setError(err.message);
 }
@@ -529,8 +654,17 @@ return (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
                   {user.email}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
-                  {user.corso_accademico || '-'}
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {user.corso_accademico ? (
+                    <span 
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200"
+                      title={user.corso_accademico}
+                    >
+                      {abbreviateCourse(user.corso_accademico)}
+                    </span>
+                  ) : (
+                    <span className="text-gray-500">-</span>
+                  )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {normalizeRole(user.ruolo) === 'admin' ? (
@@ -649,9 +783,18 @@ return (
               <span className="text-sm font-medium text-gray-600">Matricola:</span>
               <span className="text-sm text-gray-900">{user.matricola}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-600">Corso:</span>
-              <span className="text-sm text-gray-900">{user.corso_accademico || '-'}</span>
+              {user.corso_accademico ? (
+                <span 
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200"
+                  title={user.corso_accademico}
+                >
+                  {abbreviateCourse(user.corso_accademico)}
+                </span>
+              ) : (
+                <span className="text-sm text-gray-900">-</span>
+              )}
             </div>
             {user.phone && (
               <div className="flex justify-between">
@@ -1217,10 +1360,13 @@ Nessuna Penalità
 {userPenalties.map((penalty) => (
 <div key={penalty.id} className="bg-white border border-gray-200 rounded-lg p-4">
 <div className="flex items-start justify-between mb-2">
-<div>
-<p className="font-medium text-gray-900">{penalty.articolo_nome}</p>
-<p className="text-sm text-gray-600">{penalty.motivo}</p>
+<div className="flex-1">
+<p className="font-medium text-gray-900">
+{penalty.articolo_nome || (penalty.tipo === 'manuale' ? 'Penalità Manuale' : 'Penalità')}
+</p>
+<p className="text-sm text-gray-600">{penalty.motivo || 'Nessun motivo specificato'}</p>
 </div>
+<div className="flex items-center gap-2">
 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
 penalty.strike_assegnati >= 2 ? 'bg-red-100 text-red-800' :
 penalty.strike_assegnati === 1 ? 'bg-orange-100 text-orange-800' :
@@ -1228,9 +1374,21 @@ penalty.strike_assegnati === 1 ? 'bg-orange-100 text-orange-800' :
 }`}>
 {penalty.strike_assegnati} Strike
 </span>
+<button
+onClick={() => handleRemovePenalty(penalty.id)}
+className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
+title="Rimuovi penalità"
+>
+<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+</svg>
+</button>
+</div>
 </div>
 <div className="text-xs text-gray-500 flex items-center justify-between">
-<span>Ritardo: {penalty.giorni_ritardo} giorni</span>
+<span>
+{penalty.tipo === 'manuale' ? 'Penalità Manuale' : `Ritardo: ${penalty.giorni_ritardo} giorni`}
+</span>
 <span>{new Date(penalty.created_at).toLocaleDateString('it-IT')}</span>
 </div>
 {penalty.created_by_name && (
@@ -1243,6 +1401,55 @@ Assegnata da: {penalty.created_by_name} {penalty.created_by_surname}
 </div>
 )}
 </div>
+
+{/* Assign Manual Penalty */}
+{!selectedUserForPenalty.is_blocked && (
+<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+<h4 className="text-md font-semibold text-blue-900 mb-3">Assegna Penalità Manuale</h4>
+<div className="space-y-3">
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">
+Numero di Strike (1-3)
+</label>
+<select
+value={manualPenaltyStrikes}
+onChange={(e) => setManualPenaltyStrikes(parseInt(e.target.value))}
+className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+>
+<option value={1}>1 Strike</option>
+<option value={2}>2 Strike</option>
+<option value={3}>3 Strike</option>
+</select>
+<p className="text-xs text-gray-500 mt-1">
+Strike attuali: {selectedUserForPenalty.penalty_strikes || 0} / 3
+{selectedUserForPenalty.penalty_strikes + manualPenaltyStrikes > 3 && (
+<span className="text-red-600 font-semibold ml-2">
+⚠️ Supererà il limite di 3 strike!
+</span>
+)}
+</p>
+</div>
+<div>
+<label className="block text-sm font-medium text-gray-700 mb-1">
+Motivo (opzionale)
+</label>
+<textarea
+value={manualPenaltyMotivo}
+onChange={(e) => setManualPenaltyMotivo(e.target.value)}
+placeholder="Inserisci il motivo della penalità..."
+rows={3}
+className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+/>
+</div>
+<button
+onClick={handleAssignManualPenalty}
+className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+>
+Assegna Penalità
+</button>
+</div>
+</div>
+)}
 
 {/* Actions */}
 {selectedUserForPenalty.is_blocked && (

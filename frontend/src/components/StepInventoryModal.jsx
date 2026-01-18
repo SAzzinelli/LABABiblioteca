@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
 const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) => {
-  const [step, setStep] = useState(1); // 1: Basic Info, 2: Description & Image, 3: Tipo Utilizzo, 4: Course & Category, 5: Unit Codes
+  const [step, setStep] = useState(1); // 1: Basic Info, 2: Dati pubblicazione, 3: Tipo Utilizzo, 4: Categoria, 5: Codici Univoci
  const [courses, setCourses] = useState([]);
  const [categories, setCategories] = useState([]);
  const [loading, setLoading] = useState(false);
@@ -12,9 +12,12 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
     nome: '',
     quantita_totale: 1,
     scaffale: '',
-    fornitore: '',
-    note: '',
-    immagine_url: '',
+    autore: '',
+    luogo_pubblicazione: '',
+    data_pubblicazione: '',
+    casa_editrice: '',
+    fondo: '',
+    settore: '',
     tipo_prestito: 'solo_esterno',
     corsi_assegnati: [],
     categoria_madre: '',
@@ -35,9 +38,12 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
           nome: editingItem.nome || '',
           quantita_totale: editingItem.quantita_totale || 1,
           scaffale: editingItem.posizione || '',
-          fornitore: editingItem.fornitore || '',
-          note: editingItem.note || '',
-          immagine_url: editingItem.immagine_url || '',
+          autore: editingItem.autore || '',
+          luogo_pubblicazione: editingItem.luogo_pubblicazione || '',
+          data_pubblicazione: editingItem.data_pubblicazione || '',
+          casa_editrice: editingItem.casa_editrice || '',
+          fondo: editingItem.fondo || '',
+          settore: editingItem.settore || '',
           tipo_prestito: editingItem.tipo_prestito || 'solo_esterno',
           corsi_assegnati: editingItem.corsi_assegnati || [],
           categoria_madre: '', // Non serve, viene derivato automaticamente
@@ -52,9 +58,12 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
         nome: '',
         quantita_totale: 1,
         scaffale: '',
-        fornitore: '',
-        note: '',
-        immagine_url: '',
+        autore: '',
+        luogo_pubblicazione: '',
+        data_pubblicazione: '',
+        casa_editrice: '',
+        fondo: '',
+        settore: '',
         tipo_prestito: 'solo_esterno',
         corsi_assegnati: [],
         categoria_madre: '', // Non serve, viene derivato automaticamente
@@ -121,13 +130,12 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
     }
   };
 
- // Generate unit codes automatically
- const generateUnitCodes = (quantity, baseName) => {
+ // Generate unit codes - create empty slots for manual input
+ const generateUnitCodes = (quantity) => {
  const units = [];
  for (let i = 1; i <= quantity; i++) {
- const code = `${baseName.toUpperCase().replace(/\s+/g, '')}_${String(i).padStart(3, '0')}`;
  units.push({
- codice_univoco: code,
+ codice_univoco: '',
  note: ''
  });
  }
@@ -160,7 +168,7 @@ const handleQuantityChange = (quantity) => {
     }));
   } else {
     // Solo per nuovi articoli, genera i codici
-    const units = generateUnitCodes(newQuantity, formData.nome || 'ITEM');
+    const units = generateUnitCodes(newQuantity);
     setFormData(prev => ({
       ...prev,
       quantita_totale: newQuantity,
@@ -194,8 +202,9 @@ const handleSubmit = async () => {
   const submitData = {
     ...formData,
     posizione: formData.scaffale, // Mappa scaffale a posizione per il backend
-    categoria_madre: formData.corsi_assegnati[0] || '', // Usa il primo corso selezionato come categoria_madre
-    categoria_id: formData.categoria_id
+    categoria_madre: '', // Non più necessario, ogni libro è assegnato a tutti i corsi
+    categoria_id: formData.categoria_id,
+    corsi_assegnati: [] // Non più necessario, backend assegna automaticamente tutti i corsi
   };
 
   // Rimuovi i campi che non servono al backend
@@ -233,7 +242,7 @@ const handleSubmit = async () => {
 const getStepTitle = () => {
   switch (step) {
     case 1: return 'Informazioni Base';
-    case 2: return 'Descrizione e Immagine';
+    case 2: return 'Dati pubblicazione';
     case 3: return 'Tipo di Utilizzo';
     case 4: return 'Corso e Categoria';
     case 5: return 'Codici Univoci';
@@ -244,10 +253,10 @@ const getStepTitle = () => {
 const canProceed = () => {
   switch (step) {
     case 1: return formData.nome && formData.quantita_totale && formData.quantita_totale > 0;
-    case 2: return true; // Descrizione e immagine sono opzionali
+    case 2: return true; // Dati pubblicazione opzionali
     case 3: return true; // Tipo di utilizzo sempre selezionabile
-    case 4: return formData.corsi_assegnati.length > 0; // Categoria non obbligatoria
-    case 5: return formData.unita.length > 0;
+    case 4: return true; // Categoria non obbligatoria
+    case 5: return formData.unita.length > 0 && formData.unita.every(u => u.codice_univoco && u.codice_univoco.length <= 6 && /^[A-Za-z0-9]+$/.test(u.codice_univoco));
     default: return false;
   }
 };
@@ -325,7 +334,7 @@ const canProceed = () => {
  
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="form-group">
- <label className="form-label">Nome Elemento *</label>
+ <label className="form-label">Titolo *</label>
  <input
  type="text"
  required
@@ -334,12 +343,12 @@ onChange={(e) => {
 const newName = e.target.value;
 setFormData(prev => ({ ...prev, nome: newName }));
 if (newName && formData.quantita_totale && formData.quantita_totale > 0) {
-const units = generateUnitCodes(formData.quantita_totale, newName);
+const units = generateUnitCodes(formData.quantita_totale);
 setFormData(prev => ({ ...prev, unita: units }));
 }
 }}
  className="input-field"
- placeholder="Nome dell'elemento"
+ placeholder="Titolo del libro"
  />
  </div>
 
@@ -367,13 +376,13 @@ setFormData(prev => ({ ...prev, unita: units }));
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Fornitore</label>
+                  <label className="form-label">Autore</label>
                   <input
                     type="text"
-                    value={formData.fornitore}
-                    onChange={(e) => setFormData(prev => ({ ...prev, fornitore: e.target.value }))}
+                    value={formData.autore}
+                    onChange={(e) => setFormData(prev => ({ ...prev, autore: e.target.value }))}
                     className="input-field"
-                    placeholder="Es. Canon, Nikon, Sony"
+                    placeholder="Nome dell'autore"
                   />
                 </div>
 
@@ -382,37 +391,47 @@ setFormData(prev => ({ ...prev, unita: units }));
  </div>
  )}
 
- {/* Step 2: Description & Image */}
+ {/* Step 2: Dati pubblicazione */}
  {step === 2 && (
  <div className="space-y-4">
  <h3 className="text-lg font-semibold text-primary mb-4">
-   Descrizione e Immagine
+   Dati pubblicazione
  </h3>
  
  <div className="space-y-4">
    <div className="form-group">
-     <label className="form-label">Descrizione</label>
-     <textarea
-       value={formData.note}
-       onChange={(e) => setFormData(prev => ({ ...prev, note: e.target.value }))}
-       rows={3}
+     <label className="form-label">Luogo</label>
+     <input
+       type="text"
+       value={formData.luogo_pubblicazione}
+       onChange={(e) => setFormData(prev => ({ ...prev, luogo_pubblicazione: e.target.value }))}
        className="input-field"
-       placeholder="Descrizione dell'oggetto"
+       placeholder="Es. Milano, Roma, Torino"
      />
    </div>
 
    <div className="form-group">
-     <label className="form-label">Link Immagine</label>
+     <label className="form-label">Data pubblicazione (anno)</label>
      <input
-       type="url"
-       value={formData.immagine_url}
-       onChange={(e) => setFormData(prev => ({ ...prev, immagine_url: e.target.value }))}
+       type="number"
+       min="1000"
+       max="9999"
+       value={formData.data_pubblicazione}
+       onChange={(e) => setFormData(prev => ({ ...prev, data_pubblicazione: e.target.value ? parseInt(e.target.value) : '' }))}
        className="input-field"
-       placeholder="https://drive.google.com/... (link diretto immagine)"
+       placeholder="Es. 2023"
      />
-     <p className="text-xs text-gray-500 mt-1">
-       Inserisci un link diretto a un'immagine (es. Google Drive).
-     </p>
+   </div>
+
+   <div className="form-group">
+     <label className="form-label">Casa Editrice</label>
+     <input
+       type="text"
+       value={formData.casa_editrice}
+       onChange={(e) => setFormData(prev => ({ ...prev, casa_editrice: e.target.value }))}
+       className="input-field"
+       placeholder="Es. Mondadori, Einaudi, Feltrinelli"
+     />
    </div>
 
    {/* Tipo di Utilizzo moved to Step 3 */}
@@ -492,67 +511,18 @@ Tipo di Utilizzo
 </div>
 )}
 
-{/* Step 4: Course & Category */}
+{/* Step 4: Categoria */}
 {step === 4 && (
  <div className="space-y-6">
  <h3 className="text-lg font-semibold text-primary mb-4">
- Assegnazione Corsi e Categoria
+ Categoria
  </h3>
  
- {/* Multiple Course Selection */}
- <div className="form-group">
- <label className="form-label">Corsi Accademici *</label>
- <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3">
- {courses.map(course => (
- <label key={course.id} className="flex items-center space-x-3 p-2 hover:bg-gray-50 cursor-pointer rounded">
- <input
- type="checkbox"
- checked={formData.corsi_assegnati.includes(course.nome)}
- onChange={(e) => {
- if (e.target.checked) {
- setFormData(prev => ({
- ...prev,
- corsi_assegnati: [...prev.corsi_assegnati, course.nome]
- }));
- } else {
- setFormData(prev => ({
- ...prev,
- corsi_assegnati: prev.corsi_assegnati.filter(c => c !== course.nome)
- }));
- }
- }}
- className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-gray-400"
- />
- <span className="text-sm text-gray-700">{course.nome}</span>
- </label>
- ))}
+ <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-4">
+   <p className="text-sm text-teal-800">
+     <strong>Nota:</strong> Ogni libro viene automaticamente assegnato a tutti i corsi accademici.
+   </p>
  </div>
- {formData.corsi_assegnati.length > 0 && (
- <div className="mt-3">
- <p className="text-xs text-gray-500 mb-2">Corsi Selezionati ({formData.corsi_assegnati.length}):</p>
- <div className="flex flex-wrap gap-2">
- {formData.corsi_assegnati.map(courseName => (
- <span key={courseName} className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-teal-100 text-teal-800">
- {courseName}
- <button
- type="button"
- onClick={() => {
- setFormData(prev => ({
- ...prev,
- corsi_assegnati: prev.corsi_assegnati.filter(c => c !== courseName)
- }));
- }}
- className="ml-1 text-teal-600 hover:text-teal-800"
- >
- ×
- </button>
- </span>
- ))}
- </div>
- </div>
- )}
- </div>
-
 
         {/* Categoria */}
         <div className="form-group">
@@ -584,17 +554,21 @@ Tipo di Utilizzo
  <div className="card bg-tertiary mb-4">
  <h4 className="font-medium text-primary mb-2">Riepilogo</h4>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div><strong>Nome:</strong> {formData.nome}</div>
+                  <div><strong>Titolo:</strong> {formData.nome}</div>
                   <div><strong>Quantità:</strong> {formData.quantita_totale}</div>
-                  <div><strong>Corsi:</strong> {formData.corsi_assegnati.join(', ')}</div>
+                  <div><strong>Autore:</strong> {formData.autore || 'Non specificato'}</div>
                   <div><strong>Scaffale:</strong> {formData.scaffale || 'Non specificato'}</div>
-                  <div className="col-span-2"><strong>Immagine:</strong> {formData.immagine_url || 'Nessuna immagine'}</div>
+                  <div><strong>Luogo:</strong> {formData.luogo_pubblicazione || 'Non specificato'}</div>
+                  <div><strong>Anno:</strong> {formData.data_pubblicazione || 'Non specificato'}</div>
+                  <div className="col-span-2"><strong>Casa Editrice:</strong> {formData.casa_editrice || 'Non specificato'}</div>
+                  <div><strong>Fondo:</strong> {formData.fondo || 'Non specificato'}</div>
+                  <div><strong>Settore:</strong> {formData.settore || 'Non specificato'}</div>
                 </div>
  </div>
 
  <div className="form-group">
- <label className="form-label">Codici Univoci ({formData.unita.length})</label>
- <div className="bg-gray-50 rounded-lg p-3 max-h-60 overflow-y-auto border border-gray-200">
+ <label className="form-label">Codice Univoco *</label>
+ <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
  <div className="space-y-2">
  {formData.unita.map((unit, index) => (
  <div key={index} className="flex items-center space-x-2 p-2 bg-white rounded border border-gray-200 hover:border-teal-300 transition-colors">
@@ -605,10 +579,17 @@ Tipo di Utilizzo
  <input
  type="text"
  value={unit.codice_univoco}
- onChange={(e) => handleUnitCodeChange(index, e.target.value)}
- className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
- placeholder={`Codice ${index + 1}`}
+ onChange={(e) => {
+   const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+   handleUnitCodeChange(index, value);
+ }}
+ className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 font-mono"
+ placeholder="Es. AA1234"
+ maxLength={6}
  />
+ {unit.codice_univoco && (unit.codice_univoco.length > 6 || !/^[A-Z0-9]+$/.test(unit.codice_univoco)) && (
+   <p className="text-xs text-red-600 mt-1">Massimo 6 caratteri alfanumerici</p>
+ )}
  </div>
  <div className="flex-shrink-0 flex items-center space-x-2">
  {editingItem && unit.stato && (
@@ -622,12 +603,11 @@ Tipo di Utilizzo
  </span>
  )}
  <span className="text-xs text-gray-500 bg-gray-100 px-1 py-0.5 rounded">
- {unit.codice_univoco.length}
+ {unit.codice_univoco.length}/6
  </span>
  </div>
  </div>
  ))}
- </div>
  </div>
  </div>
  </div>
@@ -659,7 +639,7 @@ Tipo di Utilizzo
 onClick={() => {
 if (canProceed()) {
 if (step === 1 && formData.nome && formData.quantita_totale && formData.quantita_totale > 0) {
-const units = generateUnitCodes(formData.quantita_totale, formData.nome);
+const units = generateUnitCodes(formData.quantita_totale);
 setFormData(prev => ({ ...prev, unita: units }));
 }
 setStep(step + 1);
