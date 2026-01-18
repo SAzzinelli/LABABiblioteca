@@ -21,7 +21,7 @@
     },
     "build-frontend": {
       "inputs": [
-        { "step": "install-frontend", "include": ["frontend"] },
+        { "step": "install-frontend" },
         { "local": true, "include": ["frontend"] }
       ],
       "commands": [
