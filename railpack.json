@@ -22,7 +22,7 @@
     "build-frontend": {
       "inputs": [
         { "image": "node:20" },
-        { "step": "install-frontend" }
+        { "local": true, "include": ["frontend"] }
       ],
       "commands": [
         "cd /app/frontend && npm install",
