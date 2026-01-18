@@ -136,7 +136,7 @@ const AvailableItems = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Filtra per categoria</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Filtra per settore</label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}

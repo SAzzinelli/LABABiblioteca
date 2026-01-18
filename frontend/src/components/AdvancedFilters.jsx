@@ -197,7 +197,7 @@ const AdvancedFilters = ({
  >
  <option value="nome">Nome</option>
  <option value="seriale">Seriale</option>
- <option value="categoria">Categoria</option>
+ <option value="categoria">Settore</option>
  <option value="data_aggiunta">Data aggiunta</option>
  </select>
  </div>

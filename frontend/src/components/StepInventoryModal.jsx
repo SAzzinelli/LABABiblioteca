@@ -17,7 +17,6 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
     data_pubblicazione: '',
     casa_editrice: '',
     fondo: '',
-    settore: '',
     tipo_prestito: 'solo_esterno',
     corsi_assegnati: [],
     categoria_madre: '',
@@ -43,7 +42,6 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
           data_pubblicazione: editingItem.data_pubblicazione || '',
           casa_editrice: editingItem.casa_editrice || '',
           fondo: editingItem.fondo || '',
-          settore: editingItem.settore || '',
           tipo_prestito: editingItem.tipo_prestito || 'solo_esterno',
           corsi_assegnati: editingItem.corsi_assegnati || [],
           categoria_madre: '', // Non serve, viene derivato automaticamente
@@ -511,11 +509,11 @@ Tipo di Utilizzo
 </div>
 )}
 
-{/* Step 4: Fondo, Settore e Categoria */}
+{/* Step 4: Fondo e Settore */}
 {step === 4 && (
  <div className="space-y-6">
  <h3 className="text-lg font-semibold text-primary mb-4">
- Fondo, Settore e Categoria
+ Fondo e Settore
  </h3>
  
  <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-4">
@@ -539,24 +537,12 @@ Tipo di Utilizzo
         {/* Settore */}
         <div className="form-group">
           <label className="form-label">Settore</label>
-          <input
-            type="text"
-            value={formData.settore}
-            onChange={(e) => setFormData(prev => ({ ...prev, settore: e.target.value }))}
-            className="input-field"
-            placeholder="Es. Letteratura, Storia, Arte"
-          />
-        </div>
-
-        {/* Categoria */}
-        <div className="form-group">
-          <label className="form-label">Categoria</label>
           <select
             value={formData.categoria_id}
             onChange={(e) => setFormData(prev => ({ ...prev, categoria_id: e.target.value }))}
             className="select-field"
           >
-            <option value="">Seleziona categoria</option>
+            <option value="">Seleziona settore</option>
             {categories.map(category => (
               <option key={category.id} value={category.id}>
                 {category.nome}
@@ -586,7 +572,7 @@ Tipo di Utilizzo
                   <div><strong>Anno:</strong> {formData.data_pubblicazione || 'Non specificato'}</div>
                   <div className="col-span-2"><strong>Casa Editrice:</strong> {formData.casa_editrice || 'Non specificato'}</div>
                   <div><strong>Fondo:</strong> {formData.fondo || 'Non specificato'}</div>
-                  <div><strong>Settore:</strong> {formData.settore || 'Non specificato'}</div>
+                  <div><strong>Settore:</strong> {categories.find(c => c.id === formData.categoria_id)?.nome || 'Non specificato'}</div>
                 </div>
  </div>
 
