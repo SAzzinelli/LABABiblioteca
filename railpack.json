@@ -21,9 +21,12 @@
     },
     "build-frontend": {
       "inputs": [
-        { "step": "install-frontend" }
+        { "image": "node:20" },
+        { "step": "install-frontend" },
+        { "local": true, "include": ["frontend"] }
       ],
       "commands": [
+        "cd /app/frontend && npm install",
         "cd /app/frontend && npm run build"
       ]
     }
