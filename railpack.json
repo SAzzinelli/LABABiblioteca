@@ -26,6 +26,7 @@
       ],
       "commands": [
         "cd /app/frontend && npm install",
+        "PATH:/app/frontend/node_modules/.bin",
         "cd /app/frontend && npm run build"
       ]
     }
