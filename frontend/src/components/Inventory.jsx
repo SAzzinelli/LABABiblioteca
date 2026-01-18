@@ -572,21 +572,6 @@ const Inventory = () => {
               </div>
             </div>
           </div>
-          
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Scorte Basse</p>
-                <p className="text-3xl font-bold text-gray-900">{lowStockItems.length}</p>
-                <p className="text-sm text-gray-500">Articoli da rifornire</p>
-              </div>
-              <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
