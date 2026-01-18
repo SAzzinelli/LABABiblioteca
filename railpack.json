@@ -21,8 +21,7 @@
     },
     "build-frontend": {
       "inputs": [
-        { "step": "install-frontend" },
-        { "local": true, "include": ["frontend"] }
+        { "step": "install-frontend" }
       ],
       "commands": [
         "cd /app/frontend && npx vite build"
