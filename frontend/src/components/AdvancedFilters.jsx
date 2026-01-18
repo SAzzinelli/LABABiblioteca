@@ -110,7 +110,7 @@ const AdvancedFilters = ({
  {/* Category */}
  <div>
  <label className="block text-sm font-medium text-gray-700 mb-2">
- Categoria
+ Settore
  </label>
  <select
  value={filters.category}

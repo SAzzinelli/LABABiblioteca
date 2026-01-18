@@ -124,7 +124,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
         setCategories(data);
       }
     } catch (err) {
-      console.error('Errore caricamento categorie:', err);
+      console.error('Errore caricamento settori:', err);
     }
   };
 

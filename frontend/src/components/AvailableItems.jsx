@@ -46,7 +46,7 @@ const AvailableItems = () => {
         setCategories(data);
       }
     } catch (err) {
-      console.error('Errore caricamento categorie:', err);
+      console.error('Errore caricamento settori:', err);
     }
   };
 
