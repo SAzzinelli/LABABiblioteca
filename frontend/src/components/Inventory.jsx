@@ -700,22 +700,22 @@ const Inventory = () => {
             )}
 
             {/* Sort Order - Ordina per ID */}
-            <div className="w-full lg:w-auto">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Ordina per ID</label>
-              <div className="relative">
-                <button
-                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white text-left flex items-center justify-between hover:bg-gray-50"
-                  title={sortOrder === 'asc' ? 'Crescente (101, 102, 103...)' : 'Decrescente (103, 102, 101...)'}
-                >
-                  <span className="text-gray-900">
-                    {sortOrder === 'asc' ? 'Crescente (101 → 103)' : 'Decrescente (103 → 101)'}
-                  </span>
-                  <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${sortOrder === 'desc' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-full lg:w-auto flex items-end">
+              <button
+                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white hover:bg-gray-50 flex items-center justify-center"
+                title={sortOrder === 'asc' ? 'Ordina decrescente (103 → 101)' : 'Ordina crescente (101 → 103)'}
+              >
+                {sortOrder === 'asc' ? (
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                   </svg>
-                </button>
-              </div>
+                ) : (
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </button>
             </div>
 
             {/* Clear Filters Button - Only show if filters are active */}
