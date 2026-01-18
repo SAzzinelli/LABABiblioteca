@@ -82,8 +82,8 @@ export const DashboardSkeleton = () => (
     </div>
 
     {/* Stats Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      {[...Array(4)].map((_, i) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      {[...Array(3)].map((_, i) => (
         <StatsCardSkeleton key={i} />
       ))}
     </div>
