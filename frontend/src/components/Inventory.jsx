@@ -35,6 +35,7 @@ const Inventory = () => {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('');
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc' per ordinamento ID
  const [viewMode, setViewMode] = useState('list'); // only list view
  const [showUnitDetailModal, setShowUnitDetailModal] = useState(false);
  const [selectedUnit, setSelectedUnit] = useState(null);
@@ -237,6 +238,11 @@ const Inventory = () => {
     );
 
     return matchesSearch && matchesCategory;
+  }).sort((a, b) => {
+    // Ordina per ID numerico
+    const idA = parseInt(a.id) || 0;
+    const idB = parseInt(b.id) || 0;
+    return sortOrder === 'asc' ? idA - idB : idB - idA;
   });
 
   // Calculate low stock items - Allineato con la dashboard
@@ -722,6 +728,25 @@ const Inventory = () => {
                 </div>
               </div>
             )}
+
+            {/* Sort Order - Ordina per ID */}
+            <div className="w-full lg:w-auto">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Ordina per ID</label>
+              <div className="relative">
+                <button
+                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white text-left flex items-center justify-between hover:bg-gray-50"
+                  title={sortOrder === 'asc' ? 'Crescente (101, 102, 103...)' : 'Decrescente (103, 102, 101...)'}
+                >
+                  <span className="text-gray-900">
+                    {sortOrder === 'asc' ? 'Crescente (101 → 103)' : 'Decrescente (103 → 101)'}
+                  </span>
+                  <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${sortOrder === 'desc' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
 
             {/* Clear Filters Button - Only show if filters are active */}
             {(searchTerm || selectedCategoryFilter) && (
