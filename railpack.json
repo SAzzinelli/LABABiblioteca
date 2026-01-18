@@ -10,22 +10,14 @@
         "cd /app/backend && npm install"
       ]
     },
-    "install-frontend": {
-      "inputs": [
-        { "image": "node:20" },
-        { "local": true, "include": ["."] }
-      ],
-      "commands": [
-        "cd /app/frontend && npm install"
-      ]
-    },
     "build-frontend": {
       "inputs": [
         { "image": "node:20" },
         { "local": true, "include": ["frontend"] }
       ],
       "commands": [
-        "cd /app/frontend && npm install && npm run build"
+        "cd /app/frontend && npm install --include=dev",
+        "cd /app/frontend && ./node_modules/.bin/vite build"
       ]
     }
   },
