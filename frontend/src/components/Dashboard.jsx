@@ -9,6 +9,10 @@ const Dashboard = ({ onNavigate }) => {
     inventory: 0,
     requests: 0,
     reports: 0,
+    activeLoans: 0,
+    availableItems: 0,
+    lowStockItems: 0,
+    lowStockWithDates: [],
   });
   const [recentRequests, setRecentRequests] = useState([]);
   const [recentReports, setRecentReports] = useState([]);
