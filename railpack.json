@@ -25,6 +25,7 @@
         { "local": true }
       ],
       "commands": [
+        "PATH:/app/frontend/node_modules/.bin",
         "cd /app/frontend && npm run build"
       ]
     }
