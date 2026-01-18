@@ -511,11 +511,11 @@ Tipo di Utilizzo
 </div>
 )}
 
-{/* Step 4: Categoria */}
+{/* Step 4: Fondo, Settore e Categoria */}
 {step === 4 && (
  <div className="space-y-6">
  <h3 className="text-lg font-semibold text-primary mb-4">
- Categoria
+ Fondo, Settore e Categoria
  </h3>
  
  <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-4">
@@ -523,6 +523,30 @@ Tipo di Utilizzo
      <strong>Nota:</strong> Ogni libro viene automaticamente assegnato a tutti i corsi accademici.
    </p>
  </div>
+
+        {/* Fondo */}
+        <div className="form-group">
+          <label className="form-label">Fondo</label>
+          <input
+            type="text"
+            value={formData.fondo}
+            onChange={(e) => setFormData(prev => ({ ...prev, fondo: e.target.value }))}
+            className="input-field"
+            placeholder="Es. Fondo Moderno, Fondo Antico"
+          />
+        </div>
+
+        {/* Settore */}
+        <div className="form-group">
+          <label className="form-label">Settore</label>
+          <input
+            type="text"
+            value={formData.settore}
+            onChange={(e) => setFormData(prev => ({ ...prev, settore: e.target.value }))}
+            className="input-field"
+            placeholder="Es. Letteratura, Storia, Arte"
+          />
+        </div>
 
         {/* Categoria */}
         <div className="form-group">
