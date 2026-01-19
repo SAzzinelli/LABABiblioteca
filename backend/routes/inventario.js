@@ -216,7 +216,7 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
     } = req.body || {};
     
     if (!nome) return res.status(400).json({ error: 'nome richiesto' });
-    if (!categoria_madre) return res.status(400).json({ error: 'categoria_madre (corso accademico) richiesta' });
+    // categoria_madre non è più obbligatoria - ogni libro viene assegnato automaticamente a tutti i corsi
     if (!quantita_totale || quantita_totale < 1) return res.status(400).json({ error: 'quantità totale richiesta' });
     if (!['solo_interno', 'solo_esterno', 'entrambi'].includes(tipo_prestito)) {
       return res.status(400).json({ error: 'tipo_prestito deve essere "solo_interno", "solo_esterno" o "entrambi"' });
@@ -245,12 +245,25 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       }
     }
     
+    // Assign to ALL courses automatically - recupera tutti i corsi
+    const allCourses = await query('SELECT corso FROM corsi');
+    
+    // Popola categoria_madre con tutti i corsi se non fornito dal frontend
+    let categoriaMadreValue = categoria_madre || '';
+    if (!categoriaMadreValue && allCourses.length > 0) {
+      const courseNames = allCourses.map(c => c.corso).join(', ');
+      // Se supera 255 caratteri, usa "Tutti i corsi" invece
+      categoriaMadreValue = courseNames.length <= 255 ? courseNames : 'Tutti i corsi';
+    } else if (!categoriaMadreValue) {
+      categoriaMadreValue = 'Tutti i corsi';
+    }
+    
     // Create inventory item
     const result = await query(`
       INSERT INTO inventario (nome, categoria_madre, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita, in_manutenzione, tipo_prestito)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING *
-    `, [nome, categoria_madre || '', categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, false, tipo_prestito]);
+    `, [nome, categoriaMadreValue, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, false, tipo_prestito]);
     
     const newItem = result[0];
     
@@ -274,8 +287,7 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       }
     }
     
-    // Assign to ALL courses automatically
-    const allCourses = await query('SELECT corso FROM corsi');
+    // Assegna tutti i corsi tramite inventario_corsi
     for (const courseRow of allCourses) {
       await query(`
         INSERT INTO inventario_corsi (inventario_id, corso)
@@ -314,7 +326,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     } = req.body || {};
 
     if (!nome) return res.status(400).json({ error: 'nome richiesto' });
-    if (!categoria_madre) return res.status(400).json({ error: 'categoria_madre (corso accademico) richiesta' });
+    // categoria_madre non è più obbligatoria - ogni libro viene assegnato automaticamente a tutti i corsi
     if (!quantita_totale || quantita_totale < 1) return res.status(400).json({ error: 'quantità totale richiesta' });
     if (!['solo_interno', 'solo_esterno', 'entrambi'].includes(tipo_prestito)) {
       return res.status(400).json({ error: 'tipo_prestito deve essere "solo_interno", "solo_esterno" o "entrambi"' });

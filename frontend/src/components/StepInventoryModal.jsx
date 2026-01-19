@@ -196,11 +196,22 @@ const handleSubmit = async () => {
  const method = editingItem ? 'PUT' : 'POST';
  const url = editingItem ? `${import.meta.env.VITE_API_BASE_URL}/api/inventario/${editingItem.id}` : `${import.meta.env.VITE_API_BASE_URL}/api/inventario`;
  
+  // Prepara categoria_madre con tutti i corsi disponibili
+  let categoriaMadreValue = '';
+  if (courses && courses.length > 0) {
+    const courseNames = courses.map(c => c.nome || c.corso || c).join(', ');
+    // Se supera 255 caratteri, usa "Tutti i corsi" invece
+    categoriaMadreValue = courseNames.length <= 255 ? courseNames : 'Tutti i corsi';
+  } else {
+    // Fallback se i corsi non sono ancora caricati
+    categoriaMadreValue = 'Tutti i corsi';
+  }
+
   // Prepara i dati per l'invio
   const submitData = {
     ...formData,
     posizione: formData.scaffale, // Mappa scaffale a posizione per il backend
-    categoria_madre: '', // Non più necessario, ogni libro è assegnato a tutti i corsi
+    categoria_madre: categoriaMadreValue, // Tutti i corsi accademici disponibili
     categoria_id: formData.categoria_id,
     corsi_assegnati: [] // Non più necessario, backend assegna automaticamente tutti i corsi
   };
