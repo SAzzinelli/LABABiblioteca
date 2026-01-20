@@ -210,12 +210,19 @@ const handleSubmit = async () => {
     categoriaMadreValue = 'Tutti i corsi';
   }
 
-  // Prepara i dati per l'invio
+  // Prepara i dati per l'invio - pulisci i valori vuoti
   const submitData = {
     ...formData,
-    posizione: formData.scaffale, // Mappa scaffale a posizione per il backend
+    posizione: formData.scaffale || null, // Mappa scaffale a posizione per il backend
     categoria_madre: categoriaMadreValue, // Tutti i corsi accademici disponibili
-    categoria_id: formData.categoria_id,
+    categoria_id: formData.categoria_id || null,
+    autore: formData.autore || null,
+    luogo_pubblicazione: formData.luogo_pubblicazione || null,
+    data_pubblicazione: formData.data_pubblicazione ? parseInt(formData.data_pubblicazione) : null,
+    casa_editrice: formData.casa_editrice || null,
+    fondo: formData.fondo || null,
+    settore: formData.settore || null,
+    location: formData.location || null,
     corsi_assegnati: [] // Non più necessario, backend assegna automaticamente tutti i corsi
   };
 
