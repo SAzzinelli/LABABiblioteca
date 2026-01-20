@@ -960,12 +960,9 @@ const Inventory = () => {
  </div>
                   {/* Dati pubblicazione */}
                   {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore || item.location) && (
-                    <div className="mt-2 space-y-1">
+                    <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1">
                       {item.location && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Location:</span> {item.location}</p>
-                      )}
-                      {item.luogo_pubblicazione && (
-                        <p className="text-sm text-gray-600"><span className="font-medium">Luogo:</span> {item.luogo_pubblicazione}</p>
                       )}
                       {item.data_pubblicazione && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Anno:</span> {item.data_pubblicazione}</p>
@@ -975,6 +972,9 @@ const Inventory = () => {
                       )}
                       {item.fondo && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Fondo:</span> {item.fondo}</p>
+                      )}
+                      {item.luogo_pubblicazione && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Luogo:</span> {item.luogo_pubblicazione}</p>
                       )}
                       {item.settore && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Settore:</span> {item.settore}</p>
@@ -994,11 +994,11 @@ const Inventory = () => {
              : getStatusColor(item.stato_effettivo)
          }`}>
            {item.tipo_prestito === 'solo_interno' 
-             ? 'Lezione / Interno' 
+             ? 'Solo Interno' 
              : item.tipo_prestito === 'solo_esterno'
-             ? 'Prestito / Esterno'
+             ? 'Solo Esterno'
              : item.tipo_prestito === 'entrambi'
-             ? 'Lezione / Prestito'
+             ? 'Interno ed Esterno'
              : getStatusText(item.stato_effettivo)}
          </span>
                 </div>
