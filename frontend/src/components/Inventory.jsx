@@ -121,7 +121,26 @@ const Inventory = () => {
  loansRes.json()
  ]);
  
- setInventory(inventoryData);
+ // Carica le unità per ogni item dell'inventario
+ const inventoryWithUnits = await Promise.all(
+   inventoryData.map(async (item) => {
+     try {
+       const unitsRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/inventario/${item.id}/units`, {
+         headers: { 'Authorization': `Bearer ${token}` }
+       });
+       if (unitsRes.ok) {
+         const units = await unitsRes.json();
+         return { ...item, unita_codici: units.map(u => u.codice_univoco) };
+       }
+       return { ...item, unita_codici: [] };
+     } catch (err) {
+       console.error(`Errore caricamento unità per item ${item.id}:`, err);
+       return { ...item, unita_codici: [] };
+     }
+   })
+ );
+ 
+ setInventory(inventoryWithUnits);
  setLoans(loansData);
  } catch (err) {
  setError(err.message);
@@ -198,6 +217,10 @@ const Inventory = () => {
     if (existingItem) {
       // Aggiungi la quantità dell'oggetto corrente alla quantità totale
       existingItem.quantita_totale += (item.quantita_totale || 1);
+      // Unisci i codici univoci
+      if (item.unita_codici && item.unita_codici.length > 0) {
+        existingItem.unita_codici = [...(existingItem.unita_codici || []), ...item.unita_codici];
+      }
       existingItem.unita.push({
         id: item.id,
         stato: item.stato_effettivo,
@@ -208,6 +231,7 @@ const Inventory = () => {
  ...item,
         quantita_totale: item.quantita_totale || 1,
         hasMultipleUnits: false,
+        unita_codici: item.unita_codici || [],
         unita: [{
           id: item.id,
           stato: item.stato_effettivo,
@@ -224,7 +248,7 @@ const Inventory = () => {
 
   // Filter inventory based on search term and category
   const filteredInventory = groupedInventory.filter(item => {
-    // Search term filter
+    // Search term filter - cerca anche nei codice_univoco delle unità
     const matchesSearch = !searchTerm || (
       item.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (item.autore && item.autore.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -232,7 +256,10 @@ const Inventory = () => {
       item.categoria_nome?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.categoria_madre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.categoria_figlia?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.id.toString().includes(searchTerm)
+      item.id.toString().includes(searchTerm) ||
+      (item.unita_codici && item.unita_codici.some(codice => 
+        codice && codice.toLowerCase().includes(searchTerm.toLowerCase())
+      ))
     );
 
     // Category filter (only for admin) - usa il nome della categoria semplice
@@ -908,9 +935,21 @@ const Inventory = () => {
                           <h3 className="text-lg font-semibold text-gray-900">
  {item.nome}
                           </h3>
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                            ID: {item.id}
-                          </span>
+                          {item.unita_codici && item.unita_codici.length > 0 ? (
+                            item.unita_codici.length === 1 ? (
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                                ID: {item.unita_codici[0]}
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                                ID: {item.unita_codici.join(', ')}
+                              </span>
+                            )
+                          ) : (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                              ID: {item.id}
+                            </span>
+                          )}
                         </div>
  {item.hasMultipleUnits && (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
