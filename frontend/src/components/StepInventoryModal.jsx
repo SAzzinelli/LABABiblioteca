@@ -558,7 +558,7 @@ Tipo di Utilizzo
             value={formData.fondo}
             onChange={(e) => setFormData(prev => ({ ...prev, fondo: e.target.value }))}
             className="input-field"
-            placeholder="Es. Fondo Moderno, Fondo Antico"
+            placeholder="Ciulli, LABA, ecc"
           />
         </div>
 
