@@ -34,6 +34,8 @@ const Inventory = () => {
   const [editCategoryName, setEditCategoryName] = useState('');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('');
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [selectedLocationFilter, setSelectedLocationFilter] = useState('');
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc' per ordinamento ID
  const [viewMode, setViewMode] = useState('list'); // only list view
@@ -229,7 +231,8 @@ const Inventory = () => {
       (item.casa_editrice && item.casa_editrice.toLowerCase().includes(searchTerm.toLowerCase())) ||
       item.categoria_nome?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.categoria_madre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.categoria_figlia?.toLowerCase().includes(searchTerm.toLowerCase())
+      item.categoria_figlia?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.id.toString().includes(searchTerm)
     );
 
     // Category filter (only for admin) - usa il nome della categoria semplice
@@ -237,7 +240,12 @@ const Inventory = () => {
       selectedCategoryFilter === (item.categoria_figlia || item.categoria_nome?.split(' - ')[1])
     );
 
-    return matchesSearch && matchesCategory;
+    // Location filter
+    const matchesLocation = !selectedLocationFilter || (
+      item.location === selectedLocationFilter
+    );
+
+    return matchesSearch && matchesCategory && matchesLocation;
   }).sort((a, b) => {
     // Ordina per ID numerico
     const idA = parseInt(a.id) || 0;
@@ -523,7 +531,7 @@ const Inventory = () => {
 
       {/* Stats Cards */}
       <div className="px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
@@ -629,7 +637,7 @@ const Inventory = () => {
                 </div>
                 <input
                   type="text"
-                  placeholder="Cerca per titolo, autore, casa editrice..."
+                  placeholder="Cerca per titolo, autore, casa editrice, ID..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="block w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200"
@@ -643,7 +651,10 @@ const Inventory = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Filtra per Categoria</label>
                 <div className="relative">
                   <button
-                    onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                    onClick={() => {
+                      setShowCategoryDropdown(!showCategoryDropdown);
+                      setShowLocationDropdown(false); // Chiudi location dropdown se aperto
+                    }}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white text-left flex items-center justify-between hover:bg-gray-50"
                   >
                     <span className={selectedCategoryFilter ? 'text-gray-900' : 'text-gray-500'}>
@@ -699,6 +710,82 @@ const Inventory = () => {
               </div>
             )}
 
+            {/* Location Filter */}
+            <div className="w-full lg:w-64">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Filtra per Location</label>
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setShowLocationDropdown(!showLocationDropdown);
+                    setShowCategoryDropdown(false); // Chiudi category dropdown se aperto
+                  }}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white text-left flex items-center justify-between hover:bg-gray-50"
+                >
+                  <span className={selectedLocationFilter ? 'text-gray-900' : 'text-gray-500'}>
+                    {selectedLocationFilter || 'Tutte le location'}
+                  </span>
+                  <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${showLocationDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {showLocationDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-auto">
+                    <div className="py-1">
+                      <button
+                        onClick={() => {
+                          setSelectedLocationFilter('');
+                          setShowLocationDropdown(false);
+                        }}
+                        className={`w-full px-4 py-3 text-left hover:bg-teal-50 transition-colors duration-200 flex items-center justify-between ${
+                          !selectedLocationFilter ? 'bg-teal-50 text-teal-700' : 'text-gray-900'
+                        }`}
+                      >
+                        <span>Tutte le location</span>
+                        {!selectedLocationFilter && (
+                          <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedLocationFilter('Piazza di Badia a Ripoli');
+                          setShowLocationDropdown(false);
+                        }}
+                        className={`w-full px-4 py-3 text-left hover:bg-teal-50 transition-colors duration-200 flex items-center justify-between ${
+                          selectedLocationFilter === 'Piazza di Badia a Ripoli' ? 'bg-teal-50 text-teal-700' : 'text-gray-900'
+                        }`}
+                      >
+                        <span>Piazza di Badia a Ripoli</span>
+                        {selectedLocationFilter === 'Piazza di Badia a Ripoli' && (
+                          <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedLocationFilter("Via de' Vecchietti");
+                          setShowLocationDropdown(false);
+                        }}
+                        className={`w-full px-4 py-3 text-left hover:bg-teal-50 transition-colors duration-200 flex items-center justify-between ${
+                          selectedLocationFilter === "Via de' Vecchietti" ? 'bg-teal-50 text-teal-700' : 'text-gray-900'
+                        }`}
+                      >
+                        <span>Via de' Vecchietti</span>
+                        {selectedLocationFilter === "Via de' Vecchietti" && (
+                          <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Sort Order - Ordina per ID */}
             <div className="w-full lg:w-auto flex items-end">
               <button
@@ -719,12 +806,13 @@ const Inventory = () => {
             </div>
 
             {/* Clear Filters Button - Only show if filters are active */}
-            {(searchTerm || selectedCategoryFilter) && (
+            {(searchTerm || selectedCategoryFilter || selectedLocationFilter) && (
               <div className="flex items-end">
                 <button
                   onClick={() => {
                     setSearchTerm('');
                     setSelectedCategoryFilter('');
+                    setSelectedLocationFilter('');
                   }}
                   className="px-4 py-3 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-200 flex items-center gap-2 hover:scale-105"
                   title="Cancella filtri"
@@ -740,7 +828,7 @@ const Inventory = () => {
         </div>
 
         {/* Results Counter */}
-        {(searchTerm || selectedCategoryFilter) && (
+        {(searchTerm || selectedCategoryFilter || selectedLocationFilter) && (
           <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
@@ -750,6 +838,7 @@ const Inventory = () => {
                 <span className="text-teal-800 font-medium">
                   {filteredInventory.length} {filteredInventory.length === 1 ? 'risultato trovato' : 'risultati trovati'}
                   {selectedCategoryFilter && ` nella categoria "${selectedCategoryFilter}"`}
+                  {selectedLocationFilter && ` nella location "${selectedLocationFilter}"`}
                 </span>
               </div>
               {filteredInventory.length === 0 && (
@@ -768,20 +857,21 @@ const Inventory = () => {
               </svg>
               <h3 className="text-lg font-medium text-gray-900 mb-2">Nessun articolo trovato</h3>
               <p className="text-gray-600 mb-4">
-                {searchTerm && selectedCategoryFilter 
-                  ? `Nessun articolo corrisponde alla ricerca "${searchTerm}" nella categoria "${selectedCategoryFilter}"`
+                {searchTerm && (selectedCategoryFilter || selectedLocationFilter)
+                  ? `Nessun articolo corrisponde alla ricerca "${searchTerm}"${selectedCategoryFilter ? ` nella categoria "${selectedCategoryFilter}"` : ''}${selectedLocationFilter ? ` nella location "${selectedLocationFilter}"` : ''}`
                   : searchTerm 
                     ? `Nessun articolo corrisponde alla ricerca "${searchTerm}"`
-                    : selectedCategoryFilter
-                      ? `Nessun articolo nella categoria "${selectedCategoryFilter}"`
+                    : selectedCategoryFilter || selectedLocationFilter
+                      ? `Nessun articolo${selectedCategoryFilter ? ` nella categoria "${selectedCategoryFilter}"` : ''}${selectedLocationFilter ? ` nella location "${selectedLocationFilter}"` : ''}`
                       : "Nessun articolo disponibile"
                 }
               </p>
-              {(searchTerm || selectedCategoryFilter) && (
+              {(searchTerm || selectedCategoryFilter || selectedLocationFilter) && (
                 <button
                   onClick={() => {
                     setSearchTerm('');
                     setSelectedCategoryFilter('');
+                    setSelectedLocationFilter('');
                   }}
                   className="btn-secondary"
                 >
@@ -814,9 +904,14 @@ const Inventory = () => {
  </button>
  )}
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-lg font-semibold text-gray-900">
  {item.nome}
-                        </h3>
+                          </h3>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                            ID: {item.id}
+                          </span>
+                        </div>
  {item.hasMultipleUnits && (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
  {item.quantita_totale} unità
@@ -825,8 +920,11 @@ const Inventory = () => {
                       </div>
  </div>
                   {/* Dati pubblicazione */}
-                  {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore) && (
+                  {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore || item.location) && (
                     <div className="mt-2 space-y-1">
+                      {item.location && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Location:</span> {item.location}</p>
+                      )}
                       {item.luogo_pubblicazione && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Luogo:</span> {item.luogo_pubblicazione}</p>
                       )}

@@ -18,6 +18,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
     casa_editrice: '',
     fondo: '',
     tipo_prestito: 'solo_esterno',
+    location: '',
     corsi_assegnati: [],
     categoria_madre: '',
     categoria_id: '',
@@ -43,6 +44,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
           casa_editrice: editingItem.casa_editrice || '',
           fondo: editingItem.fondo || '',
           tipo_prestito: editingItem.tipo_prestito || 'solo_esterno',
+          location: editingItem.location || '',
           corsi_assegnati: editingItem.corsi_assegnati || [],
           categoria_madre: '', // Non serve, viene derivato automaticamente
           categoria_id: editingItem.categoria_id || '',
@@ -63,6 +65,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
         fondo: '',
         settore: '',
         tipo_prestito: 'solo_esterno',
+        location: '',
         corsi_assegnati: [],
         categoria_madre: '', // Non serve, viene derivato automaticamente
         categoria_id: '',
@@ -516,6 +519,20 @@ Tipo di Utilizzo
       )}
     </p>
   </div>
+</div>
+
+<div className="form-group mt-6">
+  <label className="form-label">Location</label>
+  <select
+    value={formData.location}
+    onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+    className="select-field"
+  >
+    <option value="">Seleziona location</option>
+    <option value="Piazza di Badia a Ripoli">Piazza di Badia a Ripoli</option>
+    <option value="Via de' Vecchietti">Via de' Vecchietti</option>
+  </select>
+  <p className="text-xs text-gray-500 mt-1">Seleziona la sede fisica dove si trova il libro</p>
 </div>
 </div>
 )}

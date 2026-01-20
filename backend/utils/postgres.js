@@ -118,6 +118,7 @@ export async function initDatabase() {
         quantita INTEGER DEFAULT 0,
         soglia_minima INTEGER DEFAULT 1,
         tipo_prestito VARCHAR(20) DEFAULT 'solo_esterno',
+        location VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -216,6 +217,7 @@ export async function initDatabase() {
       ALTER TABLE riparazioni ADD COLUMN IF NOT EXISTS tipo VARCHAR(100) DEFAULT 'segnalazione';
       ALTER TABLE riparazioni ADD COLUMN IF NOT EXISTS priorita VARCHAR(50) DEFAULT 'media';
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS tipo_prestito VARCHAR(20) DEFAULT 'solo_esterno';
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS location VARCHAR(255);
       -- Migrazione campi inventario: fornitore -> autore, aggiungi nuovi campi pubblicazione
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS autore VARCHAR(255);
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS luogo_pubblicazione VARCHAR(255);

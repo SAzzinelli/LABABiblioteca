@@ -17,7 +17,7 @@ r.get('/', requireAuth, requireRole('admin'), async (req, res) => {
     let queryText = `
       SELECT
         i.id, i.nome, i.quantita_totale, i.categoria_madre, i.categoria_id,
-        i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.in_manutenzione, i.tipo_prestito, i.created_at, i.updated_at,
+        i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.in_manutenzione, i.tipo_prestito, i.location, i.created_at, i.updated_at,
         CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome,
         COALESCE(json_agg(DISTINCT ic.corso) FILTER (WHERE ic.corso IS NOT NULL), '[]') AS corsi_assegnati,
         (SELECT COUNT(*) FROM inventario_unita iu WHERE iu.inventario_id = i.id AND iu.stato = 'disponibile') AS unita_disponibili,
@@ -69,7 +69,7 @@ r.get('/disponibili', requireAuth, async (req, res) => {
       // Admin vede tutti gli oggetti
       result = await query(`
         SELECT
-          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.tipo_prestito,
+          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.tipo_prestito, i.location,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome,
           CAST((SELECT COUNT(*) FROM inventario_unita iu WHERE iu.inventario_id = i.id AND iu.stato = 'disponibile' AND iu.prestito_corrente_id IS NULL AND iu.richiesta_riservata_id IS NULL) AS INTEGER) AS unita_disponibili,
           CASE
@@ -85,7 +85,7 @@ r.get('/disponibili', requireAuth, async (req, res) => {
       // Utenti vedono tutti i libri (ogni libro è assegnato a tutti i corsi)
       result = await query(`
         SELECT
-          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.tipo_prestito,
+          i.id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.tipo_prestito, i.location,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome,
           CAST((SELECT COUNT(*) FROM inventario_unita iu WHERE iu.inventario_id = i.id AND iu.stato = 'disponibile' AND iu.prestito_corrente_id IS NULL AND iu.richiesta_riservata_id IS NULL) AS INTEGER) AS unita_disponibili,
           CASE
@@ -124,7 +124,7 @@ r.get('/unita-disponibili', requireAuth, async (req, res) => {
       result = await query(`
         SELECT
           iu.id, iu.codice_univoco, iu.stato,
-          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore,
+          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.location,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome
         FROM inventario_unita iu
         JOIN inventario i ON i.id = iu.inventario_id
@@ -140,7 +140,7 @@ r.get('/unita-disponibili', requireAuth, async (req, res) => {
       result = await query(`
         SELECT
           iu.id, iu.codice_univoco, iu.stato,
-          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore,
+          i.id as inventario_id, i.nome, i.categoria_madre, i.categoria_id, i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.location,
           CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome
         FROM inventario_unita iu
         JOIN inventario i ON i.id = iu.inventario_id
@@ -211,6 +211,7 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       settore = null,
       quantita_totale = 1, 
       tipo_prestito = 'solo_esterno',
+      location = null,
       corsi_assegnati = [], 
       unita = [] 
     } = req.body || {};
@@ -260,10 +261,10 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
     
     // Create inventory item
     const result = await query(`
-      INSERT INTO inventario (nome, categoria_madre, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita, in_manutenzione, tipo_prestito)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      INSERT INTO inventario (nome, categoria_madre, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita, in_manutenzione, tipo_prestito, location)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
       RETURNING *
-    `, [nome, categoriaMadreValue, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, false, tipo_prestito]);
+    `, [nome, categoriaMadreValue, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, false, tipo_prestito, location]);
     
     const newItem = result[0];
     
@@ -321,6 +322,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
       quantita_totale, 
       in_manutenzione,
       tipo_prestito = 'solo_esterno',
+      location = null,
       corsi_assegnati = [],
       unita = []
     } = req.body || {};
@@ -343,10 +345,10 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
       UPDATE inventario 
       SET nome = $1, categoria_madre = $2, categoria_id = $3, posizione = $4, autore = $5, 
           luogo_pubblicazione = $6, data_pubblicazione = $7, casa_editrice = $8, fondo = $9, settore = $10,
-          quantita_totale = $11, quantita = $12, in_manutenzione = $13, tipo_prestito = $14, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $15
+          quantita_totale = $11, quantita = $12, in_manutenzione = $13, tipo_prestito = $14, location = $15, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $16
       RETURNING *
-    `, [nome, categoria_madre || '', categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, in_manutenzione || false, tipo_prestito, id]);
+    `, [nome, categoria_madre || '', categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, in_manutenzione || false, tipo_prestito, location, id]);
 
     if (result.length === 0) {
       return res.status(404).json({ error: 'Elemento inventario non trovato' });
