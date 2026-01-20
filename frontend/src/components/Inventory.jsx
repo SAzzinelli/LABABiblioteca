@@ -6,7 +6,6 @@ import {
  importInventoryFromExcel 
 } from '../utils/excelUtils';
 import StepInventoryModal from './StepInventoryModal';
-import OperationsDropdown from './OperationsDropdown';
 import QRCodeGenerator from './QRCodeGenerator';
 import { TableSkeleton } from './SkeletonLoader';
 import AdvancedFilters from './AdvancedFilters';
@@ -641,11 +640,6 @@ const Inventory = () => {
                 <span>Gestisci Settori</span>
               </button>
               
-              <OperationsDropdown
-                onExport={handleExport}
-                onImport={handleImportExcel}
-                onTemplate={handleTemplate}
-              />
             </div>
           </div>
         </div>
