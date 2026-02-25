@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
-const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, categories = [], collane = [], courses = [] }) => {
+const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, collane = [] }) => {
   const [step, setStep] = useState(1); // 1: Basic Info, 2: Dati pubblicazione, 3: Tipo Utilizzo, 4: Categoria, 5: Codici Univoci
  const [courses, setCourses] = useState([]);
  const [categories, setCategories] = useState([]);
