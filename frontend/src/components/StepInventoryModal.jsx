@@ -34,7 +34,10 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
  fetchCourses();
  fetchCategories();
  if (editingItem) {
- // Carica dati per la modifica
+ // Carica dati per la modifica; precompila i codici univoci da editingItem.unita_codici (dal catalogo)
+        const unitaPrecompilate = (editingItem.unita_codici && editingItem.unita_codici.length > 0)
+          ? editingItem.unita_codici.map(codice => ({ codice_univoco: codice || '', note: '', stato: undefined }))
+          : [];
         setFormData({
           nome: editingItem.nome || '',
           quantita_totale: editingItem.quantita_totale || 1,
@@ -49,7 +52,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
           corsi_assegnati: editingItem.corsi_assegnati || [],
           categoria_madre: '', // Non serve, viene derivato automaticamente
           categoria_id: editingItem.categoria_id || '',
-          unita: []
+          unita: unitaPrecompilate
         });
  setUnitsLoading(true);
  fetchExistingUnits(editingItem.id);
@@ -91,13 +94,14 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
  });
  if (response.ok) {
  const units = await response.json();
+ const unitaFromApi = units.map(unit => ({
+   codice_univoco: unit.codice_univoco || '',
+   note: unit.note || '',
+   stato: unit.stato
+ }));
  setFormData(prev => ({
- ...prev,
- unita: units.map(unit => ({
- codice_univoco: unit.codice_univoco || '',
- note: unit.note || '',
- stato: unit.stato
- }))
+   ...prev,
+   unita: unitaFromApi.length > 0 ? unitaFromApi : prev.unita
  }));
  }
  } catch (err) {
