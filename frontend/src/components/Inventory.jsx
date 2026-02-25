@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
+import { MoreVertical, Download, Upload, Loader2, Plus, Tag, Search, AlertCircle, Package, CheckCircle, AlertTriangle, ChevronDown, Check, ChevronRight, ArrowUp, ArrowDown, X, Filter, QrCode, Pencil, Trash2, Info } from 'lucide-react';
 import { 
  exportInventoryToExcel, 
  generateInventoryTemplate, 
@@ -518,9 +519,7 @@ const Inventory = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center">
-          <svg className="icon text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <AlertCircle className="w-5 h-5 text-red-500 mr-3" />
           <p className="text-red-800 ">{error}</p>
         </div>
  </div>
@@ -550,9 +549,7 @@ const Inventory = () => {
                 <p className="text-sm text-gray-500">Catalogo completo</p>
               </div>
               <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
+                <Package className="w-6 h-6 text-teal-600" />
               </div>
             </div>
           </div>
@@ -567,9 +564,7 @@ const Inventory = () => {
                 <p className="text-sm text-gray-500">Unità disponibili</p>
               </div>
               <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <CheckCircle className="w-6 h-6 text-teal-600" />
               </div>
             </div>
           </div>
@@ -584,9 +579,7 @@ const Inventory = () => {
                 <p className="text-sm text-gray-500">Articoli in manutenzione</p>
               </div>
               <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                </svg>
+                <AlertTriangle className="w-6 h-6 text-orange-600" />
               </div>
             </div>
           </div>
@@ -608,9 +601,7 @@ const Inventory = () => {
                 onClick={() => setShowAddModal(true)}
                 className="group bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-3 rounded-xl font-medium hover:from-teal-600 hover:to-teal-700 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
               >
-                <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
+                <Plus className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
                 <span>Nuovo Articolo</span>
               </button>
               
@@ -618,9 +609,7 @@ const Inventory = () => {
                 onClick={() => setShowCategoryManager(true)}
                 className="group bg-white text-gray-700 px-6 py-3 rounded-xl font-medium border border-gray-300 hover:bg-gray-50 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center"
               >
-                <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
+                <Tag className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
                 <span>Gestisci Settori</span>
               </button>
 
@@ -641,7 +630,7 @@ const Inventory = () => {
                   aria-haspopup="true"
                   aria-expanded={showExportImportMenu}
                 >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>
+                  <MoreVertical className="w-5 h-5" />
                 </button>
                 {showExportImportMenu && (
                   <>
@@ -653,11 +642,7 @@ const Inventory = () => {
                         disabled={exportLoading}
                         className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-60"
                       >
-                        {exportLoading ? (
-                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                        ) : (
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                        )}
+                        {exportLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
                         <span>Esporta catalogo</span>
                       </button>
                       <button
@@ -666,11 +651,7 @@ const Inventory = () => {
                         disabled={importLoading}
                         className="w-full px-4 py-3 text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2 disabled:opacity-60"
                       >
-                        {importLoading ? (
-                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                        ) : (
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 16m4-4v12" /></svg>
-                        )}
+                        {importLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
                         <span>Importa catalogo</span>
                       </button>
                     </div>
@@ -690,9 +671,7 @@ const Inventory = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">Cerca elementi</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+                  <Search className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="text"
@@ -719,9 +698,7 @@ const Inventory = () => {
                     <span className={selectedCategoryFilter ? 'text-gray-900' : 'text-gray-500'}>
                       {selectedCategoryFilter || 'Tutti i settori'}
                     </span>
-                    <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''}`} />
                   </button>
                   
                   {showCategoryDropdown && (
@@ -738,9 +715,7 @@ const Inventory = () => {
                         >
                           <span>Tutti i settori</span>
                           {!selectedCategoryFilter && (
-                            <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
+                            <Check className="w-4 h-4 text-teal-600" />
                           )}
                         </button>
                         {categories.map(cat => (
@@ -756,9 +731,7 @@ const Inventory = () => {
                           >
                             <span>{cat.nome}</span>
                             {selectedCategoryFilter === cat.nome && (
-                              <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
+                              <Check className="w-4 h-4 text-teal-600" />
                             )}
                           </button>
                         ))}
@@ -783,9 +756,7 @@ const Inventory = () => {
                   <span className={selectedLocationFilter ? 'text-gray-900' : 'text-gray-500'}>
                     {selectedLocationFilter || 'Tutte le posizioni'}
                   </span>
-                  <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${showLocationDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${showLocationDropdown ? 'rotate-180' : ''}`} />
                 </button>
                 
                 {showLocationDropdown && (
@@ -802,9 +773,7 @@ const Inventory = () => {
                       >
                         <span>Tutte le posizioni</span>
                         {!selectedLocationFilter && (
-                          <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
+                          <Check className="w-4 h-4 text-teal-600" />
                         )}
                       </button>
                       <button
@@ -818,9 +787,7 @@ const Inventory = () => {
                       >
                         <span>Piazza di Badia a Ripoli</span>
                         {selectedLocationFilter === 'Piazza di Badia a Ripoli' && (
-                          <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
+                          <Check className="w-4 h-4 text-teal-600" />
                         )}
                       </button>
                       <button
@@ -834,9 +801,7 @@ const Inventory = () => {
                       >
                         <span>Via de' Vecchietti</span>
                         {selectedLocationFilter === "Via de' Vecchietti" && (
-                          <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
+                          <Check className="w-4 h-4 text-teal-600" />
                         )}
                       </button>
                     </div>
@@ -853,13 +818,9 @@ const Inventory = () => {
                 title={sortOrder === 'asc' ? 'Ordina decrescente (103 → 101)' : 'Ordina crescente (101 → 103)'}
               >
                 {sortOrder === 'asc' ? (
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                  </svg>
+                  <ArrowUp className="w-5 h-5 text-gray-600" />
                 ) : (
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
+                  <ArrowDown className="w-5 h-5 text-gray-600" />
                 )}
               </button>
             </div>
@@ -876,9 +837,7 @@ const Inventory = () => {
                   className="px-4 py-3 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all duration-200 flex items-center gap-2 hover:scale-105"
                   title="Cancella filtri"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <X className="w-4 h-4" />
                   <span className="hidden sm:inline">Cancella</span>
                 </button>
               </div>
@@ -891,9 +850,7 @@ const Inventory = () => {
           <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-teal-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
-                </svg>
+                <Filter className="w-5 h-5 text-teal-600 mr-2" />
                 <span className="text-teal-800 font-medium">
                   {filteredInventory.length} {filteredInventory.length === 1 ? 'risultato trovato' : 'risultati trovati'}
                   {selectedCategoryFilter && ` nella categoria "${selectedCategoryFilter}"`}
@@ -911,9 +868,7 @@ const Inventory = () => {
         <div className="space-y-4">
           {filteredInventory.length === 0 ? (
             <div className="bg-gray-50 rounded-xl p-12 text-center">
-              <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 009.586 13H7" />
-              </svg>
+              <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Nessun articolo trovato</h3>
               <p className="text-gray-600 mb-4">
                 {searchTerm && (selectedCategoryFilter || selectedLocationFilter)
@@ -952,14 +907,7 @@ const Inventory = () => {
                           className="mr-3 p-1 hover:bg-gray-100 rounded transition-colors"
  title={expandedItems.has(item.id) ? "Chiudi dettagli" : "Mostra dettagli"}
  >
- <svg 
- className={`w-4 h-4 text-gray-500 transition-transform ${expandedItems.has(item.id) ? 'rotate-90' : ''}`} 
- fill="none" 
- stroke="currentColor" 
- viewBox="0 0 24 24"
- >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
- </svg>
+ <ChevronRight className={`w-4 h-4 text-gray-500 transition-transform ${expandedItems.has(item.id) ? 'rotate-90' : ''}`} />
  </button>
  )}
                       <div className="flex-1">
@@ -1073,9 +1021,7 @@ const Inventory = () => {
                       className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
  title="Genera QR Code"
  >
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
- </svg>
+                      <QrCode className="w-4 h-4 mr-1" />
                       QR Code
                       </button>
                       <button
@@ -1083,9 +1029,7 @@ const Inventory = () => {
                       className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
  title="Modifica articolo"
  >
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
- </svg>
+                      <Pencil className="w-4 h-4 mr-1" />
                       Modifica
  </button>
                   </div>
@@ -1094,9 +1038,7 @@ const Inventory = () => {
                     className="text-red-600 hover:text-red-900 p-2 rounded hover:bg-red-50 transition-colors"
  title="Elimina articolo"
  >
- <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
- </svg>
+ <Trash2 className="w-4 h-4" />
  </button>
  </div>
               </div>
@@ -1162,9 +1104,7 @@ const Inventory = () => {
                             <div className="text-xs font-medium text-gray-900 mb-2 truncate" title={unit.codice_univoco || unit.id}>
                               {unit.codice_univoco || unit.id}
                               {unit.stato === 'prestato' && (
-                                <svg className="w-3 h-3 inline-block ml-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                                <Info className="w-3 h-3 inline-block ml-1 text-teal-500" />
                               )}
                             </div>
                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getStatusPillColor(unit.stato)}`}>
@@ -1198,9 +1138,7 @@ const Inventory = () => {
                   onClick={() => setQrCodeItem(null)}
                   className="text-muted hover:text-primary"
                 >
-                  <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <X className="icon w-5 h-5" />
                 </button>
  </div>
               <div className="modal-body">
@@ -1220,9 +1158,7 @@ const Inventory = () => {
                   onClick={() => setShowCategoryManager(false)}
                   className="text-muted hover:text-primary"
  >
-                  <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
- </svg>
+                  <X className="icon w-5 h-5" />
  </button>
  </div>
               <div className="modal-body">
@@ -1268,18 +1204,14 @@ const Inventory = () => {
                                 className="text-teal-600 hover:text-teal-800 p-1"
                                 title="Salva"
                               >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
+                                <Check className="w-4 h-4" />
                               </button>
                               <button
                                 onClick={cancelEditCategory}
                                 className="text-gray-600 hover:text-gray-800 p-1"
                                 title="Annulla"
                               >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
+                                <X className="w-4 h-4" />
                               </button>
                             </div>
                           ) : (
@@ -1291,18 +1223,14 @@ const Inventory = () => {
                                   className="text-teal-600 hover:text-teal-800 p-1"
                                   title="Modifica categoria"
                                 >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
+                                  <Pencil className="w-4 h-4" />
                                 </button>
                                 <button
                                   onClick={() => handleDeleteCategory(cat.id)}
                                   className="text-red-600 hover:text-red-800 p-1"
                                   title="Elimina categoria"
                                 >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
+                                  <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
                             </>
@@ -1362,9 +1290,7 @@ const Inventory = () => {
                   }}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <X className="w-6 h-6" />
                 </button>
               </div>
               
@@ -1424,9 +1350,7 @@ const Inventory = () => {
               <div className="flex items-center justify-between p-6 border-b border-gray-200">
                 <div className="flex items-center">
                   <div className="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                    </svg>
+                    <AlertTriangle className="w-6 h-6 text-red-600" />
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-gray-900">Elimina Categoria</h3>
@@ -1441,9 +1365,7 @@ const Inventory = () => {
                   }}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <X className="w-6 h-6" />
                 </button>
               </div>
               
@@ -1453,9 +1375,7 @@ const Inventory = () => {
                     <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                       <div className="flex items-start">
                         <div className="flex-shrink-0">
-                          <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                          </svg>
+                          <AlertTriangle className="w-5 h-5 text-amber-400" />
                         </div>
                         <div className="ml-3">
                           <h4 className="text-sm font-medium text-amber-800">Attenzione</h4>
@@ -1516,9 +1436,7 @@ const Inventory = () => {
               <div className="p-6">
                 <div className="flex items-center mb-4">
                   <div className="flex-shrink-0">
-                    <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                    </svg>
+                    <AlertTriangle className="w-8 h-8 text-red-600" />
                   </div>
                   <div className="ml-3">
                     <h3 className="text-lg font-medium text-gray-900">Impossibile Eliminare</h3>
