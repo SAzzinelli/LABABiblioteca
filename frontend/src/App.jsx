@@ -478,8 +478,10 @@ function NavButton({ icon, label, tab, currentTab, onClick }) {
   const isActive = currentTab === tab;
   return (
     <button
-      onClick={() => {
+      type="button"
+      onClick={(e) => {
         onClick(tab);
+        e.currentTarget.blur(); // evita il bordo nero di focus al click
         // Chiudi sidebar mobile dopo la selezione
         if (window.innerWidth < 1024) {
           setTimeout(() => {

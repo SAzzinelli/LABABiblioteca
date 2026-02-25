@@ -700,13 +700,17 @@ body {
   color: var(--text-secondary);
   font-weight: 500;
   font-size: 0.85rem;
-  outline: none;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
 }
 
+.nav-button:hover,
 .nav-button:focus,
-.nav-button:focus-visible {
-  outline: none;
-  box-shadow: none;
+.nav-button:focus-visible,
+.nav-button:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .nav-button:hover {
