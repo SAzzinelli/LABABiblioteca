@@ -1,9 +1,11 @@
 import * as XLSX from 'xlsx';
 
+const getApiBase = () => import.meta.env?.VITE_API_BASE_URL || '';
+
 // Export inventario to Excel - ora gestito dal backend
 export const exportInventoryToExcel = async (token) => {
   try {
-    const response = await fetch('/api/excel/inventario/export', {
+    const response = await fetch(`${getApiBase()}/api/excel/inventario/export`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -106,7 +108,7 @@ export const exportRepairsToExcel = (repairs, filename = 'segnalazioni_laba.xlsx
 // Generate template for inventory import - ora gestito dal backend
 export const generateInventoryTemplate = async (token) => {
   try {
-    const response = await fetch('/api/excel/inventario/template', {
+    const response = await fetch(`${getApiBase()}/api/excel/inventario/template`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -155,7 +157,7 @@ export const importInventoryFromExcel = async (file, token) => {
       reader.readAsDataURL(file);
     });
 
-    const response = await fetch('/api/excel/inventario/import', {
+    const response = await fetch(`${getApiBase()}/api/excel/inventario/import`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

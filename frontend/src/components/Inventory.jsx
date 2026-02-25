@@ -45,6 +45,9 @@ const Inventory = () => {
   const [itemUnits, setItemUnits] = useState({}); // Cache per le unità degli oggetti
   const [showDeleteWarningModal, setShowDeleteWarningModal] = useState(false);
   const [deleteWarningMessage, setDeleteWarningMessage] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
+  const [importLoading, setImportLoading] = useState(false);
+  const importFileInputRef = React.useRef(null);
  
  // New item form state
  const [newItem, setNewItem] = useState({
@@ -352,25 +355,28 @@ const Inventory = () => {
 
   // Handle import
   const handleImportExcel = async (file) => {
+    if (!file) return;
     try {
+      setImportLoading(true);
+      setError(null);
       const result = await importInventoryFromExcel(file, token);
       console.log('Import result:', result);
-      
-      // Refresh inventory after import
       await fetchInventory();
-      
-      // Show success message
       alert(`Import completato: ${result.success}/${result.total} elementi processati`);
-      
-      // Show errors if any
-      if (result.errors.length > 0) {
+      if (result.errors && result.errors.length > 0) {
         console.warn('Import errors:', result.errors);
         alert(`Errori durante l'import:\n${result.errors.join('\n')}`);
       }
     } catch (err) {
       setError(err.message);
+    } finally {
+      setImportLoading(false);
+      if (importFileInputRef.current) importFileInputRef.current.value = '';
     }
   };
+
+  const handleImportClick = () => importFileInputRef.current?.click();
+  const onImportFileChange = (e) => { const f = e.target.files?.[0]; if (f) handleImportExcel(f); };
 
   // Handle template
   const handleTemplate = async () => {
@@ -615,6 +621,42 @@ const Inventory = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
                 <span>Gestisci Settori</span>
+              </button>
+
+              <button
+                onClick={handleExport}
+                disabled={exportLoading}
+                className="group bg-white text-gray-700 px-6 py-3 rounded-xl font-medium border border-gray-300 hover:bg-gray-50 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center disabled:opacity-60"
+                title="Scarica il catalogo in Excel per backup o import successivo"
+              >
+                {exportLoading ? (
+                  <svg className="w-5 h-5 mr-2 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                ) : (
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                )}
+                <span>{exportLoading ? 'Export...' : 'Esporta catalogo'}</span>
+              </button>
+
+              <input
+                ref={importFileInputRef}
+                type="file"
+                accept=".xlsx,.xls"
+                onChange={onImportFileChange}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={handleImportClick}
+                disabled={importLoading}
+                className="group bg-white text-gray-700 px-6 py-3 rounded-xl font-medium border border-gray-300 hover:bg-gray-50 hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center disabled:opacity-60"
+                title="Importa catalogo da file Excel (es. da un export precedente)"
+              >
+                {importLoading ? (
+                  <svg className="w-5 h-5 mr-2 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                ) : (
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 16m4-4v12" /></svg>
+                )}
+                <span>{importLoading ? 'Import...' : 'Importa catalogo'}</span>
               </button>
               
             </div>
