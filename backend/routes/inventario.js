@@ -223,12 +223,8 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       return res.status(400).json({ error: 'tipo_prestito deve essere "solo_interno", "solo_esterno" o "entrambi"' });
     }
     
-    // Check if nome already exists
-    const existing = await query('SELECT id FROM inventario WHERE nome = $1', [nome]);
-    if (existing.length > 0) {
-      return res.status(400).json({ error: 'Un elemento con questo nome esiste già' });
-    }
-    
+    // Nome può essere duplicato: l'identificazione è tramite ID/codice univoco
+
     // Check for duplicate unit codes if provided
     if (unita && unita.length > 0) {
       const unitCodes = unita.map(u => u.codice_univoco);
@@ -334,11 +330,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
       return res.status(400).json({ error: 'tipo_prestito deve essere "solo_interno", "solo_esterno" o "entrambi"' });
     }
 
-    // Check if nome already exists for another item
-    const existing = await query('SELECT id FROM inventario WHERE nome = $1 AND id != $2', [nome, id]);
-    if (existing.length > 0) {
-      return res.status(400).json({ error: 'Un altro elemento con questo nome esiste già' });
-    }
+    // Nome può essere duplicato: l'identificazione è tramite ID/codice univoco
 
     // Update inventory item
     const result = await query(`

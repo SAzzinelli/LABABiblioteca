@@ -209,40 +209,17 @@ const Inventory = () => {
  fetchCourses();
   }, []);
 
-  // Group inventory by item name and add unit details
-  const groupedInventory = inventory.reduce((acc, item) => {
-    const existingItem = acc.find(group => group.nome === item.nome);
-    
-    if (existingItem) {
-      // Aggiungi la quantità dell'oggetto corrente alla quantità totale
-      existingItem.quantita_totale += (item.quantita_totale || 1);
-      // Unisci i codici univoci
-      if (item.unita_codici && item.unita_codici.length > 0) {
-        existingItem.unita_codici = [...(existingItem.unita_codici || []), ...item.unita_codici];
-      }
-      existingItem.unita.push({
-        id: item.id,
-        stato: item.stato_effettivo,
-        quantita: item.quantita_totale || 1
-      });
-    } else {
-      acc.push({
- ...item,
-        quantita_totale: item.quantita_totale || 1,
-        hasMultipleUnits: false,
-        unita_codici: item.unita_codici || [],
-        unita: [{
-          id: item.id,
-          stato: item.stato_effettivo,
-          quantita: item.quantita_totale || 1
-        }]
-      });
-    }
-    
-    return acc;
-  }, []).map(item => ({
- ...item,
-    hasMultipleUnits: item.quantita_totale > 1
+  // Ogni elemento inventario è una card (nomi duplicati ammessi, identificazione tramite ID univoco)
+  const groupedInventory = inventory.map(item => ({
+    ...item,
+    quantita_totale: item.quantita_totale || 1,
+    hasMultipleUnits: (item.quantita_totale || 1) > 1,
+    unita_codici: item.unita_codici || [],
+    unita: [{
+      id: item.id,
+      stato: item.stato_effettivo,
+      quantita: item.quantita_totale || 1
+    }]
   }));
 
   // Filter inventory based on search term and category

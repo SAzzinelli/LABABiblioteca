@@ -99,9 +99,10 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
    note: unit.note || '',
    stato: unit.stato
  }));
+ const hasCodici = unitaFromApi.some(u => u.codice_univoco && u.codice_univoco.trim() !== '');
  setFormData(prev => ({
    ...prev,
-   unita: unitaFromApi.length > 0 ? unitaFromApi : prev.unita
+   unita: (unitaFromApi.length > 0 && hasCodici) ? unitaFromApi : prev.unita
  }));
  }
  } catch (err) {
