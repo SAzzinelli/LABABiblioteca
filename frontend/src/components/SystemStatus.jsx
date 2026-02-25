@@ -111,7 +111,7 @@ const SystemStatus = () => {
               <div className="mt-2 flex items-center space-x-4">
                 <span className="text-sm text-gray-500">Build: 500</span>
                 <span className="text-sm text-gray-500">•</span>
-                <span className="text-sm text-gray-500">Versione: 1.3.11</span>
+                <span className="text-sm text-gray-500">Versione: 1.4</span>
                 <span className="text-sm text-gray-500">•</span>
                 <span className="text-sm text-gray-500">Ultimo aggiornamento: 15/09/2025</span>
               </div>

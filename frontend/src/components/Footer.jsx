@@ -15,7 +15,7 @@ const Footer = ({ onSystemClick }) => {
           </div>
           
           <div className="text-xs text-gray-600">
-            <p>Versione 1.3.11</p>
+            <p>Versione 1.4</p>
             <p>© 2026 LABA Firenze</p>
           </div>
         </div>
@@ -25,7 +25,7 @@ const Footer = ({ onSystemClick }) => {
           <div className="flex items-center space-x-2">
             <img src="/logoSito.svg" alt="LABA Logo" className="h-6 w-auto" />
             <div className="text-xs text-gray-600">
-              <p className="font-medium">v1.3.11</p>
+              <p className="font-medium">v1.4</p>
               <p>© 2026 LABA</p>
             </div>
           </div>

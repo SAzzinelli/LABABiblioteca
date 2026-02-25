@@ -99,6 +99,12 @@ export async function initDatabase() {
         nome VARCHAR(255) NOT NULL UNIQUE
       );
 
+      -- Tabella collane (raggruppa 2+ libri in inventario)
+      CREATE TABLE IF NOT EXISTS collane (
+        id SERIAL PRIMARY KEY,
+        nome VARCHAR(255) NOT NULL UNIQUE
+      );
+
       -- Tabella inventario
       CREATE TABLE IF NOT EXISTS inventario (
         id SERIAL PRIMARY KEY,
@@ -119,6 +125,7 @@ export async function initDatabase() {
         soglia_minima INTEGER DEFAULT 1,
         tipo_prestito VARCHAR(20) DEFAULT 'solo_esterno',
         location VARCHAR(255),
+        collana_id INTEGER REFERENCES collane(id),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -218,6 +225,7 @@ export async function initDatabase() {
       ALTER TABLE riparazioni ADD COLUMN IF NOT EXISTS priorita VARCHAR(50) DEFAULT 'media';
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS tipo_prestito VARCHAR(20) DEFAULT 'solo_esterno';
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS location VARCHAR(255);
+      ALTER TABLE inventario ADD COLUMN IF NOT EXISTS collana_id INTEGER REFERENCES collane(id);
       -- Migrazione campi inventario: fornitore -> autore, aggiungi nuovi campi pubblicazione
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS autore VARCHAR(255);
       ALTER TABLE inventario ADD COLUMN IF NOT EXISTS luogo_pubblicazione VARCHAR(255);

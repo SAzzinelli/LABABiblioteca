@@ -13,6 +13,7 @@ import AdvancedFilters from './AdvancedFilters';
 const Inventory = () => {
  const [inventory, setInventory] = useState([]);
  const [categories, setCategories] = useState([]);
+ const [collane, setCollane] = useState([]);
  const [courses, setCourses] = useState([]);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState(null);
@@ -166,6 +167,20 @@ const Inventory = () => {
  }
  };
 
+  // Fetch collane
+  const fetchCollane = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/collane`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Errore nel caricamento collane');
+      const data = await response.json();
+      setCollane(data);
+    } catch (err) {
+      console.error('Errore collane:', err);
+    }
+  };
+
  // Fetch courses
  const fetchCourses = async () => {
  try {
@@ -206,6 +221,7 @@ const Inventory = () => {
  useEffect(() => {
  fetchInventory();
  fetchCategories();
+ fetchCollane();
  fetchCourses();
   }, []);
 
@@ -733,7 +749,7 @@ const Inventory = () => {
 
             {/* Location Filter */}
             <div className="w-full lg:w-64">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Filtra per Location</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Filtra per Posizione</label>
               <div className="relative">
                 <button
                   onClick={() => {
@@ -743,7 +759,7 @@ const Inventory = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white text-left flex items-center justify-between hover:bg-gray-50"
                 >
                   <span className={selectedLocationFilter ? 'text-gray-900' : 'text-gray-500'}>
-                    {selectedLocationFilter || 'Tutte le location'}
+                    {selectedLocationFilter || 'Tutte le posizioni'}
                   </span>
                   <svg className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${showLocationDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -762,7 +778,7 @@ const Inventory = () => {
                           !selectedLocationFilter ? 'bg-teal-50 text-teal-700' : 'text-gray-900'
                         }`}
                       >
-                        <span>Tutte le location</span>
+                        <span>Tutte le posizioni</span>
                         {!selectedLocationFilter && (
                           <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -859,7 +875,7 @@ const Inventory = () => {
                 <span className="text-teal-800 font-medium">
                   {filteredInventory.length} {filteredInventory.length === 1 ? 'risultato trovato' : 'risultati trovati'}
                   {selectedCategoryFilter && ` nella categoria "${selectedCategoryFilter}"`}
-                  {selectedLocationFilter && ` nella location "${selectedLocationFilter}"`}
+                  {selectedLocationFilter && ` nella posizione "${selectedLocationFilter}"`}
                 </span>
               </div>
               {filteredInventory.length === 0 && (
@@ -879,11 +895,11 @@ const Inventory = () => {
               <h3 className="text-lg font-medium text-gray-900 mb-2">Nessun articolo trovato</h3>
               <p className="text-gray-600 mb-4">
                 {searchTerm && (selectedCategoryFilter || selectedLocationFilter)
-                  ? `Nessun articolo corrisponde alla ricerca "${searchTerm}"${selectedCategoryFilter ? ` nella categoria "${selectedCategoryFilter}"` : ''}${selectedLocationFilter ? ` nella location "${selectedLocationFilter}"` : ''}`
+                  ? `Nessun articolo corrisponde alla ricerca "${searchTerm}"${selectedCategoryFilter ? ` nella categoria "${selectedCategoryFilter}"` : ''}${selectedLocationFilter ? ` nella posizione "${selectedLocationFilter}"` : ''}`
                   : searchTerm 
                     ? `Nessun articolo corrisponde alla ricerca "${searchTerm}"`
                     : selectedCategoryFilter || selectedLocationFilter
-                      ? `Nessun articolo${selectedCategoryFilter ? ` nella categoria "${selectedCategoryFilter}"` : ''}${selectedLocationFilter ? ` nella location "${selectedLocationFilter}"` : ''}`
+                      ? `Nessun articolo${selectedCategoryFilter ? ` nella categoria "${selectedCategoryFilter}"` : ''}${selectedLocationFilter ? ` nella posizione "${selectedLocationFilter}"` : ''}`
                       : "Nessun articolo disponibile"
                 }
               </p>
@@ -925,26 +941,9 @@ const Inventory = () => {
  </button>
  )}
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
  {item.nome}
-                          </h3>
-                          {item.unita_codici && item.unita_codici.length > 0 ? (
-                            item.unita_codici.length === 1 ? (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                                ID: {item.unita_codici[0]}
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                                ID: {item.unita_codici.join(', ')}
-                              </span>
-                            )
-                          ) : (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                              ID: {item.id}
-                            </span>
-                          )}
-                        </div>
+                        </h3>
  {item.hasMultipleUnits && (
                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
  {item.quantita_totale} unità
@@ -953,10 +952,10 @@ const Inventory = () => {
                       </div>
  </div>
                   {/* Dati pubblicazione */}
-                  {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore || item.location) && (
+                  {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore || item.location || item.collana_nome) && (
                     <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1">
                       {item.location && (
-                        <p className="text-sm text-gray-600"><span className="font-medium">Location:</span> {item.location}</p>
+                        <p className="text-sm text-gray-600"><span className="font-medium">Posizione:</span> {item.location}</p>
                       )}
                       {item.data_pubblicazione && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Anno:</span> {item.data_pubblicazione}</p>
@@ -966,6 +965,9 @@ const Inventory = () => {
                       )}
                       {item.fondo && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Fondo:</span> {item.fondo}</p>
+                      )}
+                      {item.collana_nome && (
+                        <p className="text-sm text-gray-600"><span className="font-medium">Collana:</span> {item.collana_nome}</p>
                       )}
                       {item.luogo_pubblicazione && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Luogo:</span> {item.luogo_pubblicazione}</p>
@@ -1000,14 +1002,14 @@ const Inventory = () => {
 
               {/* Card Body */}
               <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-                  {/* Category */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Settore (ex Categoria) */}
                   <div>
-                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Categoria</label>
+                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Settore</label>
                     <p className="text-sm text-gray-900 mt-1">
                       {item.categoria_figlia || 
                        (item.categoria_nome ? item.categoria_nome.split(' - ')[1] : null) || 
-                       'Nessuna categoria'}
+                       'Nessuna'}
                     </p>
                   </div>
 
@@ -1015,12 +1017,6 @@ const Inventory = () => {
                   <div>
                     <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Fondo</label>
                     <p className="text-sm text-gray-900 mt-1">{item.fondo || 'N/A'}</p>
-                  </div>
-
-                  {/* Settore */}
-                  <div>
-                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Settore</label>
-                    <p className="text-sm text-gray-900 mt-1">{item.settore || 'N/A'}</p>
                   </div>
 
                   {/* Quantity */}
@@ -1319,6 +1315,7 @@ const Inventory = () => {
           }}
           editingItem={editingItem}
           categories={categories}
+          collane={collane}
           courses={courses}
         />
 

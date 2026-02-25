@@ -17,8 +17,9 @@ r.get('/', requireAuth, requireRole('admin'), async (req, res) => {
     let queryText = `
       SELECT
         i.id, i.nome, i.quantita_totale, i.categoria_madre, i.categoria_id,
-        i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.in_manutenzione, i.tipo_prestito, i.location, i.created_at, i.updated_at,
+        i.posizione, i.autore, i.luogo_pubblicazione, i.data_pubblicazione, i.casa_editrice, i.fondo, i.settore, i.in_manutenzione, i.tipo_prestito, i.location, i.collana_id, i.created_at, i.updated_at,
         CONCAT(COALESCE(i.categoria_madre, ''), ' - ', COALESCE(cs.nome, '')) as categoria_nome,
+        col.nome as collana_nome,
         COALESCE(json_agg(DISTINCT ic.corso) FILTER (WHERE ic.corso IS NOT NULL), '[]') AS corsi_assegnati,
         (SELECT COUNT(*) FROM inventario_unita iu WHERE iu.inventario_id = i.id AND iu.stato = 'disponibile') AS unita_disponibili,
         CASE
@@ -28,6 +29,7 @@ r.get('/', requireAuth, requireRole('admin'), async (req, res) => {
         END AS stato_effettivo
       FROM inventario i
       LEFT JOIN categorie_semplici cs ON cs.id = i.categoria_id
+      LEFT JOIN collane col ON col.id = i.collana_id
       LEFT JOIN inventario_corsi ic ON ic.inventario_id = i.id
     `;
     const queryParams = [];
@@ -46,7 +48,7 @@ r.get('/', requireAuth, requireRole('admin'), async (req, res) => {
       queryText += ` WHERE ${conditions.join(' AND ')}`;
     }
 
-    queryText += ` GROUP BY i.id, cs.nome ORDER BY COALESCE((SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id AND stato = 'disponibile'), (SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id), i.nome)`;
+    queryText += ` GROUP BY i.id, cs.nome, col.id, col.nome ORDER BY COALESCE((SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id AND stato = 'disponibile'), (SELECT MIN(codice_univoco) FROM inventario_unita WHERE inventario_id = i.id), i.nome)`;
 
     const rows = await query(queryText, queryParams);
     res.json(rows);
@@ -212,6 +214,7 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
       quantita_totale = 1, 
       tipo_prestito = 'solo_esterno',
       location = null,
+      collana_id = null,
       corsi_assegnati = [], 
       unita = [] 
     } = req.body || {};
@@ -261,10 +264,10 @@ r.post('/', requireAuth, requireRole('admin'), async (req, res) => {
     
     // Create inventory item
     const result = await query(`
-      INSERT INTO inventario (nome, categoria_madre, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita, in_manutenzione, tipo_prestito, location)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+      INSERT INTO inventario (nome, categoria_madre, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita, in_manutenzione, tipo_prestito, location, collana_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
       RETURNING *
-    `, [nome, categoriaMadreValue, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, false, tipo_prestito, location]);
+    `, [nome, categoriaMadreValue, categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, false, tipo_prestito, location, collana_id]);
     
     const newItem = result[0];
     
@@ -323,6 +326,7 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
       in_manutenzione,
       tipo_prestito = 'solo_esterno',
       location = null,
+      collana_id = null,
       corsi_assegnati = [],
       unita = []
     } = req.body || {};
@@ -345,10 +349,10 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
       UPDATE inventario 
       SET nome = $1, categoria_madre = $2, categoria_id = $3, posizione = $4, autore = $5, 
           luogo_pubblicazione = $6, data_pubblicazione = $7, casa_editrice = $8, fondo = $9, settore = $10,
-          quantita_totale = $11, quantita = $12, in_manutenzione = $13, tipo_prestito = $14, location = $15, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $16
+          quantita_totale = $11, quantita = $12, in_manutenzione = $13, tipo_prestito = $14, location = $15, collana_id = $16, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $17
       RETURNING *
-    `, [nome, categoria_madre || '', categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, in_manutenzione || false, tipo_prestito, location, id]);
+    `, [nome, categoria_madre || '', categoria_id, posizione, autore, luogo_pubblicazione, data_pubblicazione, casa_editrice, fondo, settore, quantita_totale, quantita_totale, in_manutenzione || false, tipo_prestito, location, collana_id, id]);
 
     if (result.length === 0) {
       return res.status(404).json({ error: 'Elemento inventario non trovato' });

@@ -10,6 +10,7 @@ import Login from "./auth/Login";
 import Dashboard from "./components/Dashboard.jsx";
 import UserDashboard from "./components/UserDashboard.jsx";
 import Inventory from "./components/Inventory.jsx";
+import Collane from "./components/Collane.jsx";
 import Loans from "./components/Loans.jsx";
 import Repairs from "./components/Repairs.jsx";
 import Statistics from "./components/Statistics.jsx";
@@ -32,6 +33,7 @@ function AppInner() {
   const adminSidebarItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> },
     { id: 'inventario', label: 'Catalogo', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg> },
+    { id: 'collane', label: 'Collane', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2v6M5 11a2 2 0 012 2v6a2 2 0 002 2h2a2 2 0 002-2v-6a2 2 0 012-2" /></svg> },
     { id: 'prestiti', label: 'Prestiti', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg> },
     { id: 'riparazioni', label: 'Segnalazioni', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg> },
     { id: 'utenti', label: 'Utenti', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" /></svg> },
@@ -279,6 +281,7 @@ function AppInner() {
               <>
                 <NavButton icon="📊" label="Dashboard" tab="dashboard" currentTab={tab} onClick={handleTabChange} />
                 <NavButton icon="📦" label="Catalogo" tab="inventario" currentTab={tab} onClick={handleTabChange} />
+                <NavButton icon="📚" label="Collane" tab="collane" currentTab={tab} onClick={handleTabChange} />
                 <NavButton icon="📝" label="Prestiti" tab="prestiti" currentTab={tab} onClick={handleTabChange} />
                 <NavButton icon="🚩" label="Segnalazioni" tab="riparazioni" currentTab={tab} onClick={handleTabChange} />
                 <NavButton
@@ -349,6 +352,13 @@ function AppInner() {
                   icon={<svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>}
                   label="Catalogo"
                   tab="inventario"
+                  currentTab={tab}
+                  onClick={handleTabChange}
+                />
+                <NavButton
+                  icon={<svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012 2v6M5 11a2 2 0 012 2v6a2 2 0 002 2h2a2 2 0 002-2v-6a2 2 0 012-2" /></svg>}
+                  label="Collane"
+                  tab="collane"
                   currentTab={tab}
                   onClick={handleTabChange}
                 />
@@ -484,6 +494,7 @@ onClick={handleTabChange}
               <div className="max-w-7xl mx-auto">
                 {tab === 'dashboard' && <Dashboard onNavigate={handleTabChange} />}
                 {tab === 'inventario' && <Inventory />}
+                {tab === 'collane' && <Collane />}
                 {tab === 'prestiti' && <Loans 
                   selectedRequestFromNotification={selectedRequestFromNotification} 
                   onRequestHandled={() => setSelectedRequestFromNotification(null)}
