@@ -9,6 +9,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
  const [error, setError] = useState(null);
  const [unitsLoading, setUnitsLoading] = useState(false); // in modifica: attesa caricamento unità/codici
  const prefillUnitaRef = useRef([]); // codici precompilati in modifica (per non perderli se la risposta API arriva prima del setState)
+ const step5FetchedRef = useRef(false); // fetch unità allo step 5 già fatto per questa apertura
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -56,6 +57,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
           categoria_id: editingItem.categoria_id || '',
           unita: unitaPrecompilate
         });
+ step5FetchedRef.current = false;
  setUnitsLoading(true);
  fetchExistingUnits(editingItem.id);
  } else {
@@ -81,12 +83,23 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
  setError(null);
  setUnitsLoading(false);
  }
- } else if (!isOpen) {
+} else if (!isOpen) {
  setStep(1);
  setError(null);
  setUnitsLoading(false);
- }
+ step5FetchedRef.current = false;
+}
  }, [isOpen, editingItem]);
+
+ // In modifica, allo step 5: se unita è ancora vuoto richiedi le unità dal backend (precompilano i codici)
+ useEffect(() => {
+   if (!isOpen || !editingItem || step !== 5 || unitsLoading || step5FetchedRef.current) return;
+   const hasAnyCode = formData.unita.some(u => u.codice_univoco && u.codice_univoco.trim() !== '');
+   if (formData.unita.length > 0 && hasAnyCode) return;
+   step5FetchedRef.current = true;
+   setUnitsLoading(true);
+   fetchExistingUnits(editingItem.id);
+ }, [isOpen, editingItem, step, formData.unita.length, unitsLoading]);
 
  // Fetch existing units for editing
  const fetchExistingUnits = async (itemId) => {
@@ -210,10 +223,11 @@ const handleSubmit = async () => {
     setError('Compila tutti i campi obbligatori');
     return;
   }
-  if (editingItem && (unitsLoading || formData.unita.some(u => !(u.codice_univoco && u.codice_univoco.trim())))) {
-    setError('Attendere il caricamento dei codici univoci prima di salvare, oppure compilare tutti gli ID.');
+  if (editingItem && unitsLoading) {
+    setError('Attendere il caricamento dei codici univoci.');
     return;
   }
+  // In modifica i codici vuoti sono inviati uguale: il backend conserva i valori esistenti
 
  try {
  setLoading(true);
@@ -296,7 +310,13 @@ const canProceed = () => {
     case 2: return true; // Dati pubblicazione opzionali
     case 3: return true; // Tipo di utilizzo sempre selezionabile
     case 4: return true; // Categoria non obbligatoria
-    case 5: return formData.unita.length > 0 && formData.unita.every(u => u.codice_univoco && u.codice_univoco.length <= 6 && /^[A-Za-z0-9]+$/.test(u.codice_univoco));
+    case 5:
+      if (formData.unita.length === 0) return false;
+      // In modifica: codici vuoti sono ok (il backend conserva quelli esistenti)
+      if (editingItem) {
+        return formData.unita.every(u => !u.codice_univoco || (u.codice_univoco.length <= 6 && /^[A-Za-z0-9]+$/.test(u.codice_univoco)));
+      }
+      return formData.unita.every(u => u.codice_univoco && u.codice_univoco.length <= 6 && /^[A-Za-z0-9]+$/.test(u.codice_univoco));
     default: return false;
   }
 };
@@ -717,6 +737,9 @@ Tipo di Utilizzo
      if (step === 1 && formData.nome && formData.quantita_totale && formData.quantita_totale > 0) {
        const units = generateUnitCodes(formData.quantita_totale);
        setFormData(prev => ({ ...prev, unita: units }));
+     }
+     if (step === 4 && editingItem && formData.unita.length === 0 && formData.quantita_totale > 0) {
+       setFormData(prev => ({ ...prev, unita: generateUnitCodes(prev.quantita_totale) }));
      }
      setStep(step + 1);
    }
