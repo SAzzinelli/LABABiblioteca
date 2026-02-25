@@ -700,7 +700,6 @@ Tipo di Utilizzo
 </div>
 </div>
 </div>
-</div>
 </>
 )}
 </div>
