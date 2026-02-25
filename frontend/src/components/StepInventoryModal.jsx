@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
-const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, collane = [] }) => {
+const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) => {
   const [step, setStep] = useState(1); // 1: Basic Info, 2: Dati pubblicazione, 3: Tipo Utilizzo, 4: Categoria, 5: Codici Univoci
  const [courses, setCourses] = useState([]);
  const [categories, setCategories] = useState([]);
@@ -20,7 +20,6 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, co
     fondo: '',
     tipo_prestito: 'solo_esterno',
     location: '',
-    collana_id: '',
     corsi_assegnati: [],
     categoria_madre: '',
     categoria_id: '',
@@ -47,7 +46,6 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, co
           fondo: editingItem.fondo || '',
           tipo_prestito: editingItem.tipo_prestito || 'solo_esterno',
           location: editingItem.location || '',
-          collana_id: editingItem.collana_id || '',
           corsi_assegnati: editingItem.corsi_assegnati || [],
           categoria_madre: '', // Non serve, viene derivato automaticamente
           categoria_id: editingItem.categoria_id || '',
@@ -69,7 +67,6 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, co
         settore: '',
         tipo_prestito: 'solo_esterno',
         location: '',
-        collana_id: '',
         corsi_assegnati: [],
         categoria_madre: '', // Non serve, viene derivato automaticamente
         categoria_id: '',
@@ -234,7 +231,6 @@ const handleSubmit = async () => {
     fondo: formData.fondo || null,
     settore: formData.settore || null,
     location: formData.location || null,
-    collana_id: formData.collana_id ? parseInt(formData.collana_id, 10) : null,
     corsi_assegnati: [] // Non più necessario, backend assegna automaticamente tutti i corsi
   };
 
@@ -465,30 +461,6 @@ return (
      />
    </div>
 
-   <div className="form-group">
-     <label className="flex items-center gap-2 cursor-pointer">
-       <input
-         type="checkbox"
-         checked={!!formData.collana_id}
-         onChange={(e) => setFormData(prev => ({ ...prev, collana_id: e.target.checked ? (prev.collana_id || (collane.length ? String(collane[0].id) : '')) : '' }))}
-         className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
-       />
-       <span className="form-label mb-0">Fa parte di una collana</span>
-     </label>
-     {formData.collana_id && (
-       <select
-         value={formData.collana_id}
-         onChange={(e) => setFormData(prev => ({ ...prev, collana_id: e.target.value }))}
-         className="select-field mt-2"
-       >
-         <option value="">Seleziona collana</option>
-         {collane.map((col) => (
-           <option key={col.id} value={col.id}>{col.nome}</option>
-         ))}
-       </select>
-     )}
-   </div>
-
    {/* Tipo di Utilizzo moved to Step 3 */}
  </div>
  </div>
@@ -651,7 +623,6 @@ Tipo di Utilizzo
                   <div className="col-span-2"><strong>Casa Editrice:</strong> {formData.casa_editrice || 'Non specificato'}</div>
                   <div><strong>Fondo:</strong> {formData.fondo || 'Non specificato'}</div>
                   <div><strong>Settore:</strong> {categories.find(c => c.id === formData.categoria_id)?.nome || 'Non specificato'}</div>
-                  <div><strong>Collana:</strong> {formData.collana_id ? (collane.find(c => c.id === parseInt(formData.collana_id, 10))?.nome || '—') : 'Nessuna'}</div>
                 </div>
  </div>
 

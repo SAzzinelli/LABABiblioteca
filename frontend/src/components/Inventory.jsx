@@ -13,7 +13,6 @@ import AdvancedFilters from './AdvancedFilters';
 const Inventory = () => {
  const [inventory, setInventory] = useState([]);
  const [categories, setCategories] = useState([]);
- const [collane, setCollane] = useState([]);
  const [courses, setCourses] = useState([]);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState(null);
@@ -167,20 +166,6 @@ const Inventory = () => {
  }
  };
 
-  // Fetch collane
-  const fetchCollane = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/collane`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Errore nel caricamento collane');
-      const data = await response.json();
-      setCollane(data);
-    } catch (err) {
-      console.error('Errore collane:', err);
-    }
-  };
-
  // Fetch courses
  const fetchCourses = async () => {
  try {
@@ -221,7 +206,6 @@ const Inventory = () => {
  useEffect(() => {
  fetchInventory();
  fetchCategories();
- fetchCollane();
  fetchCourses();
   }, []);
 
@@ -959,7 +943,7 @@ const Inventory = () => {
                       </div>
  </div>
                   {/* Dati pubblicazione */}
-                  {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore || item.location || item.collana_nome) && (
+                  {(item.luogo_pubblicazione || item.data_pubblicazione || item.casa_editrice || item.fondo || item.settore || item.location) && (
                     <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1">
                       {item.location && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Posizione:</span> {item.location}</p>
@@ -972,9 +956,6 @@ const Inventory = () => {
                       )}
                       {item.fondo && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Fondo:</span> {item.fondo}</p>
-                      )}
-                      {item.collana_nome && (
-                        <p className="text-sm text-gray-600"><span className="font-medium">Collana:</span> {item.collana_nome}</p>
                       )}
                       {item.luogo_pubblicazione && (
                         <p className="text-sm text-gray-600"><span className="font-medium">Luogo:</span> {item.luogo_pubblicazione}</p>
@@ -1322,7 +1303,6 @@ const Inventory = () => {
           }}
           editingItem={editingItem}
           categories={categories}
-          collane={collane}
           courses={courses}
         />
 
