@@ -12,8 +12,9 @@ r.get('/', requireAuth, async (req, res) => {
     let result;
     
     if (wantAll) {
-      if (req.user.ruolo !== 'admin') {
-        return res.status(403).json({ error: 'Solo admin' });
+      const role = (req.user.ruolo || '').toLowerCase();
+      if (role !== 'admin' && role !== 'supervisor') {
+        return res.status(403).json({ error: 'Solo admin o supervisori' });
       }
       result = await query(`
         SELECT r.*, 
