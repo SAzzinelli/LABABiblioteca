@@ -477,15 +477,18 @@ r.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
           `, [id, unit.codice_univoco, unit.note || null]);
         }
       } else {
-        // Update existing units
+        // Update existing units (preserve existing codice_univoco if the new one is empty)
         for (let i = 0; i < Math.min(existingUnits.length, unita.length); i++) {
           const existingUnit = existingUnits[i];
           const newUnit = unita[i];
+          const codiceUnivoco = (newUnit.codice_univoco != null && String(newUnit.codice_univoco).trim() !== '')
+            ? String(newUnit.codice_univoco).trim()
+            : existingUnit.codice_univoco;
           await query(`
             UPDATE inventario_unita 
             SET codice_univoco = $1, note = $2
             WHERE id = $3
-          `, [newUnit.codice_univoco, newUnit.note || null, existingUnit.id]);
+          `, [codiceUnivoco, newUnit.note || null, existingUnit.id]);
         }
         
         // Add new units if needed

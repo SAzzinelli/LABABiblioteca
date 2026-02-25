@@ -7,7 +7,8 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, co
  const [categories, setCategories] = useState([]);
  const [loading, setLoading] = useState(false);
  const [error, setError] = useState(null);
- 
+ const [unitsLoading, setUnitsLoading] = useState(false); // in modifica: attesa caricamento unità/codici
+
   const [formData, setFormData] = useState({
     nome: '',
     quantita_totale: 1,
@@ -52,7 +53,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, co
           categoria_id: editingItem.categoria_id || '',
           unita: []
         });
- // Carica le unità esistenti per la modifica
+ setUnitsLoading(true);
  fetchExistingUnits(editingItem.id);
  } else {
  // Solo per nuovo oggetto, resetta il form
@@ -76,11 +77,12 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, co
       });
  setStep(1);
  setError(null);
+ setUnitsLoading(false);
  }
  } else if (!isOpen) {
- // Solo reset step e error quando si chiude
  setStep(1);
  setError(null);
+ setUnitsLoading(false);
  }
  }, [isOpen, editingItem]);
 
@@ -95,14 +97,16 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null, co
  setFormData(prev => ({
  ...prev,
  unita: units.map(unit => ({
- codice_univoco: unit.codice_univoco,
- stato: unit.stato,
- prestito_corrente_id: unit.prestito_corrente_id
+ codice_univoco: unit.codice_univoco || '',
+ note: unit.note || '',
+ stato: unit.stato
  }))
  }));
  }
  } catch (err) {
  console.error('Errore caricamento unità:', err);
+ } finally {
+ setUnitsLoading(false);
  }
  };
 
@@ -194,6 +198,10 @@ const handleQuantityChange = (quantity) => {
 const handleSubmit = async () => {
   if (!formData.nome || !formData.quantita_totale || formData.quantita_totale <= 0 || formData.unita.length === 0) {
     setError('Compila tutti i campi obbligatori');
+    return;
+  }
+  if (editingItem && (unitsLoading || formData.unita.some(u => !(u.codice_univoco && u.codice_univoco.trim())))) {
+    setError('Attendere il caricamento dei codici univoci prima di salvare, oppure compilare tutti gli ID.');
     return;
   }
 
@@ -623,7 +631,14 @@ Tipo di Utilizzo
  <h3 className="text-lg font-semibold text-primary mb-4">
  Codici Univoci per: <span className="text-brand-primary">{formData.nome}</span>
  </h3>
- 
+
+ {editingItem && unitsLoading ? (
+   <div className="flex items-center justify-center py-12 text-gray-500">
+     <svg className="animate-spin h-8 w-8 text-teal-600 mr-2" fill="none" viewBox="0 0 24 24"> <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /> <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /> </svg>
+     Caricamento codici univoci...
+   </div>
+ ) : (
+ <>
  <div className="card bg-tertiary mb-4">
  <h4 className="font-medium text-primary mb-2">Riepilogo</h4>
                 <div className="grid grid-cols-2 gap-4 text-sm">
@@ -677,7 +692,7 @@ Tipo di Utilizzo
  </span>
  )}
  <span className="text-xs text-gray-500 bg-gray-100 px-1 py-0.5 rounded">
- {unit.codice_univoco.length}/6
+ {(unit.codice_univoco || '').length}/6
  </span>
  </div>
  </div>
@@ -685,6 +700,9 @@ Tipo di Utilizzo
 </div>
 </div>
 </div>
+</div>
+</>
+)}
 </div>
 )}
       </div>

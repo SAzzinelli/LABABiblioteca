@@ -944,11 +944,18 @@ const Inventory = () => {
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">
  {item.nome}
                         </h3>
- {item.hasMultipleUnits && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
- {item.quantita_totale} unità
- </span>
- )}
+                        <div className="flex flex-wrap items-center gap-2 mt-1">
+                          {item.id != null && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                              ID: {item.id}
+                            </span>
+                          )}
+                          {item.hasMultipleUnits && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                              {item.quantita_totale} unità
+                            </span>
+                          )}
+                        </div>
                       </div>
  </div>
                   {/* Dati pubblicazione */}
