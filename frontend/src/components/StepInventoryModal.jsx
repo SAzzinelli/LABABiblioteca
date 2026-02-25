@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../auth/AuthContext';
 
 const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) => {
@@ -8,6 +8,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
  const [loading, setLoading] = useState(false);
  const [error, setError] = useState(null);
  const [unitsLoading, setUnitsLoading] = useState(false); // in modifica: attesa caricamento unità/codici
+ const prefillUnitaRef = useRef([]); // codici precompilati in modifica (per non perderli se la risposta API arriva prima del setState)
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -38,6 +39,7 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
         const unitaPrecompilate = (editingItem.unita_codici && editingItem.unita_codici.length > 0)
           ? editingItem.unita_codici.map(codice => ({ codice_univoco: codice || '', note: '', stato: undefined }))
           : [];
+        prefillUnitaRef.current = unitaPrecompilate;
         setFormData({
           nome: editingItem.nome || '',
           quantita_totale: editingItem.quantita_totale || 1,
@@ -100,17 +102,23 @@ const StepInventoryModal = ({ isOpen, onClose, onSuccess, editingItem = null }) 
    stato: unit.stato
  }));
  const hasCodici = unitaFromApi.some(u => u.codice_univoco && u.codice_univoco.trim() !== '');
+ setFormData(prev => {
+   const unitaToSet = (unitaFromApi.length > 0 && hasCodici)
+     ? unitaFromApi
+     : (prefillUnitaRef.current.length > 0 ? prefillUnitaRef.current : prev.unita);
+   return { ...prev, unita: unitaToSet };
+ });
+ }
+} catch (err) {
+ console.error('Errore caricamento unità:', err);
  setFormData(prev => ({
    ...prev,
-   unita: (unitaFromApi.length > 0 && hasCodici) ? unitaFromApi : prev.unita
+   unita: prefillUnitaRef.current.length > 0 ? prefillUnitaRef.current : prev.unita
  }));
- }
- } catch (err) {
- console.error('Errore caricamento unità:', err);
- } finally {
+} finally {
  setUnitsLoading(false);
- }
- };
+}
+};
 
  const fetchCourses = async () => {
  try {
