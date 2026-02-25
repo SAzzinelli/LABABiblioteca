@@ -7,6 +7,7 @@ const UserManagement = () => {
  const [users, setUsers] = useState([]);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState(null);
+ const [successMessage, setSuccessMessage] = useState(null);
  const [showAddModal, setShowAddModal] = useState(false);
  const [showEditModal, setShowEditModal] = useState(false);
  const [editingUser, setEditingUser] = useState(null);
@@ -254,14 +255,9 @@ const adminUsers = useMemo(() => normalizedUsers.filter(user => normalizeRole(us
  setShowPasswordResetModal(false);
  setResetUser(null);
  setResetData({ newPassword: '', confirmPassword: '' });
- 
- // Mostra notifica di successo
- if ('Notification' in window && Notification.permission === 'granted') {
- new Notification('Password Reset', {
- body: `Password resettata per ${resetUser.name} ${resetUser.surname}`,
- icon: '/favicon.ico'
- });
- }
+ setError(null);
+ setSuccessMessage(`Password resettata per ${resetUser.name} ${resetUser.surname}. L'utente può accedere con la nuova password.`);
+ setTimeout(() => setSuccessMessage(null), 8000);
  } catch (err) {
  setError(err.message);
  }
@@ -269,6 +265,8 @@ const adminUsers = useMemo(() => normalizedUsers.filter(user => normalizeRole(us
 
  const openPasswordReset = (user) => {
  setResetUser(user);
+ setError(null);
+ setSuccessMessage(null);
  setShowPasswordResetModal(true);
  };
 
@@ -523,7 +521,12 @@ return (
     <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
 
  {/* Error Message */}
- {error && (
+ {successMessage && (
+   <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg mb-4">
+     {successMessage}
+   </div>
+ )}
+{error && (
    <div className="bg-red-50 /20 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
      {error}
    </div>

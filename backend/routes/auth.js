@@ -56,6 +56,11 @@ function signUser(user) {
   return jwt.sign(payload, getJWTSecret(), { expiresIn: '7d' });
 }
 
+// Normalizza email per confronto case-insensitive (evita 401 dopo reset password)
+function normalizeEmailForLookup(email) {
+  return (email || '').toString().trim().toLowerCase();
+}
+
 // POST /api/auth/login
 r.post('/login', async (req, res) => {
   try {
@@ -73,8 +78,9 @@ r.post('/login', async (req, res) => {
       });
     }
 
-    // Check database users
-    const result = await query('SELECT * FROM users WHERE email = $1', [email]);
+    // Check database users (confronto email case-insensitive)
+    const emailNorm = normalizeEmailForLookup(email);
+    const result = await query('SELECT * FROM users WHERE LOWER(TRIM(email)) = $1', [emailNorm]);
     if (result.length === 0) {
       return res.status(401).json({ error: 'Credenziali non valide' });
     }
@@ -252,25 +258,29 @@ r.post('/admin-reset-password', requireAuth, requireRole('admin'), async (req, r
       return res.status(400).json({ error: 'Email e nuova password sono obbligatorie' });
     }
     
-    // Verifica che l'utente esista
-    const user = await query('SELECT id, email FROM users WHERE email = $1', [email]);
+    // Cerca utente con email case-insensitive (stesso criterio del login)
+    const emailNorm = normalizeEmailForLookup(email);
+    const user = await query('SELECT id, email FROM users WHERE LOWER(TRIM(email)) = $1', [emailNorm]);
     if (user.length === 0) {
       return res.status(404).json({ error: 'Utente non trovato' });
     }
     
+    const userId = user[0].id;
+    const userEmail = user[0].email; // email reale nel DB (per UPDATE)
+    
     // Hash della nuova password
     const hashedPassword = bcrypt.hashSync(newPassword, 10);
     
-    // Aggiorna la password
+    // Aggiorna la password per id (evita ambiguità su maiuscole)
     await query(
-      'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE email = $2',
-      [hashedPassword, email]
+      'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2',
+      [hashedPassword, userId]
     );
     
-    // Marca la richiesta come completata
+    // Marca la richiesta come completata (usa email reale dal DB)
     await query(
       'UPDATE password_reset_requests SET status = $1 WHERE email = $2',
-      ['completed', email]
+      ['completed', userEmail]
     );
     
     res.json({ message: 'Password aggiornata con successo' });
