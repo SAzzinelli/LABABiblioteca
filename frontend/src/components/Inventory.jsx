@@ -929,11 +929,15 @@ const Inventory = () => {
  {item.nome}
                         </h3>
                         <div className="flex flex-wrap items-center gap-2 mt-1">
-                          {item.id != null && (
+                          {(item.unita_codici && item.unita_codici.length > 0) ? (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
+                              ID: {item.unita_codici.join(', ')}
+                            </span>
+                          ) : item.id != null ? (
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
                               ID: {item.id}
                             </span>
-                          )}
+                          ) : null}
                           {item.hasMultipleUnits && (
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
                               {item.quantita_totale} unità
